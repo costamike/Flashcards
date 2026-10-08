@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCards - Flashcards & Générateur de Prompt IA</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root[data-theme="light"] {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: #eff6ff;
+            --success: #10b981;
+            --success-light: #ecfdf5;
+            --warning: #f59e0b;
+            --warning-light: #fffbeb;
+            --danger: #ef4444;
+            --danger-light: #fef2f2;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        :root[data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --primary-light: #1e293b;
+            --success: #10b981;
+            --success-light: #064e3b;
+            --warning: #f59e0b;
+            --warning-light: #78350f;
+            --danger: #ef4444;
+            --danger-light: #7f1d1d;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: relative; z-index: 10; }
+        .logo { font-size: 1.4rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
+        
+        nav { display: flex; gap: 0.5rem; }
+        .nav-btn { background: none; border: none; color: var(--text-muted); padding: 0.6rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+        .nav-btn:hover { background-color: var(--primary-light); color: var(--primary); }
+        .nav-btn.active { background-color: var(--primary); color: white; }
+
+        .theme-selector { display: flex; align-items: center; gap: 0.5rem; background: var(--bg-color); padding: 0.2rem; border-radius: 0.5rem; border: 1px solid var(--border-color); }
+        .theme-btn { background: none; border: none; color: var(--text-muted); padding: 0.3rem 0.6rem; border-radius: 0.3rem; cursor: pointer; font-size: 0.85rem; }
+        .theme-btn.active { background: var(--card-bg); color: var(--primary); font-weight: bold; box-shadow: var(--shadow); }
+
+        main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 2rem; position: relative; z-index: 1; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s; }
+        .btn:hover { background: var(--primary-hover); }
+        .btn-secondary { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background: var(--border-color); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-sm { padding: 0.39rem 0.6rem; font-size: 0.85rem; }
+
+        /* FILTER BUTTONS BAR */
+        .filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem; }
+        .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .filter-count { background: rgba(0,0,0,0.08); padding: 0.1rem 0.4rem; border-radius: 0.8rem; font-size: 0.75rem; }
+        .filter-btn.active .filter-count { background: rgba(255,255,255,0.25); color: white; }
+
+        .card-container { perspective: 1000px; width: 100%; max-width: 650px; height: 380px; margin: 1rem auto; cursor: pointer; }
+        .flashcard { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-lg); border-radius: 1rem; border: 1px solid var(--border-color); }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; padding: 2rem; border-radius: 1rem; background: var(--card-bg); }
+        .card-front { justify-content: center; align-items: center; text-align: center; }
+        .card-back { transform: rotateY(180deg); overflow-y: auto; text-align: left; justify-content: space-between; }
+
+        .card-label { position: absolute; top: 1rem; left: 1.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--text-muted); }
+        .card-status-badge { position: absolute; top: 1rem; right: 1.5rem; font-size: 0.8rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 1rem; border: 1px solid var(--border-color); }
+        .card-question { font-size: 1.6rem; font-weight: 700; line-height: 1.4; }
+        .card-answer { font-size: 1.2rem; line-height: 1.5; margin-top: 1rem; font-weight: 500; }
+        .card-precision { margin-top: 1rem; padding: 0.8rem 1rem; background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0.4rem; font-size: 0.9rem; color: var(--text-main); white-space: pre-line; }
+
+        .navigation-bar { display: flex; justify-content: space-between; align-items: center; max-width: 650px; margin: 0 auto 1rem; gap: 1rem; }
+        .action-buttons { display: flex; justify-content: center; gap: 0.8rem; max-width: 650px; margin: 0 auto; }
+        .action-btn { flex: 1; padding: 0.8rem 0.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 0.4rem; font-size: 0.95rem; }
+        
+        .btn-status-review { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-status-reinforce { background: var(--warning-light); color: var(--warning); border: 1px solid var(--warning); }
+        .btn-status-known { background: var(--success-light); color: var(--success); border: 1px solid var(--success); }
+
+        .badge-key { font-size: 0.7rem; opacity: 0.65; background: rgba(0,0,0,0.08); padding: 0.1rem 0.35rem; border-radius: 0.3rem; font-weight: 700; text-transform: uppercase; margin-left: 0.2rem; }
+
+        .progress-bar-container { max-width: 650px; margin: 1.5rem auto 0; height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
+        .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+        .stats-summary { display: flex; justify-content: space-around; max-width: 650px; margin: 1rem auto; text-align: center; }
+        .stat-box { background: var(--card-bg); padding: 0.8rem 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border-color); min-width: 90px; flex: 1; margin: 0 0.2rem; }
+
+        .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .deck-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
+        .deck-card-header { display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.8rem; }
+        .deck-card-title { font-size: 1.1rem; font-weight: 700; flex: 1; }
+
+        .range-filter-container { background: var(--card-bg); border: 1px solid var(--border-color); padding: 0.8rem 1.2rem; border-radius: 0.6rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .dual-slider-box { position: relative; width: 180px; height: 30px; display: flex; align-items: center; }
+        .dual-slider-box input[type="range"] { position: absolute; width: 100%; pointer-events: none; -webkit-appearance: none; background: none; }
+        .dual-slider-box input[type="range"]::-webkit-slider-thumb { pointer-events: auto; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); -webkit-appearance: none; cursor: pointer; }
+
+        .deck-mastery-bar-bg { height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; margin-top: 0.6rem; }
+        .deck-mastery-bar-fill { height: 100%; background: var(--success); transition: width 0.3s; }
+
+        .backup-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+        .backup-card h3 { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .backup-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+        
+        select, input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 0.6rem 1rem; border-radius: 0.5rem; font-size: 0.95rem; outline: none; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 0.4rem; font-size: 0.9rem; }
+
+        /* PROMPT GENERATOR STYLES */
+        .prompt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 900px) { .prompt-grid { grid-template-columns: 1fr; } }
+        .prompt-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.5rem; box-shadow: var(--shadow); }
+        .prompt-panel-title { font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        .prompt-output-box { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1rem; position: relative; margin-top: 1rem; }
+        .prompt-text { font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; white-space: pre-wrap; word-break: break-word; max-height: 520px; overflow-y: auto; color: var(--text-main); }
+        
+        .radio-options { display: flex; gap: 1.5rem; margin-bottom: 0.8rem; }
+        .radio-label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.95rem; }
+
+        /* MODAL / AUTH STYLES */
+        .modal-backdrop { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display:flex; justify-content:center; align-items:center; z-index:1000; }
+        .modal-box { background: var(--card-bg); border-radius: 0.8rem; border: 1px solid var(--border-color); padding: 2rem; max-width: 450px; width: 90%; box-shadow: var(--shadow-lg); }
+        .auth-status { display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+    <!-- MODAL AUTHENTIFICATION OBLIGATOIRE -->
+    <div id="auth-modal" class="modal-backdrop">
+        <div class="modal-box">
+            <h2 style="margin-bottom:0.5rem; text-align:center; color:var(--primary);"><i class="fa-solid fa-layer-group"></i> SmartCards</h2>
+            <p style="text-align:center; color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">Connectez-vous pour synchroniser vos révisions en temps réel.</p>
+            <form onsubmit="handleAuth(event)">
+                <div class="form-group">
+                    <label for="auth-email">Adresse E-mail</label>
+                    <input type="email" id="auth-email" required style="width:100%;" placeholder="famille@exemple.com">
+                </div>
+                <div class="form-group">
+                    <label for="auth-password">Mot de passe</label>
+                    <input type="password" id="auth-password" required style="width:100%;" placeholder="••••••••">
+                </div>
+                <div id="auth-error" style="color:var(--danger); font-size:0.85rem; margin-bottom:1rem; display:none;"></div>
+                <button type="submit" class="btn" style="width:100%; justify-content:center;" id="btn-auth-submit">
+                    <i class="fa-solid fa-right-to-bracket"></i> Se connecter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo"><i class="fa-solid fa-layer-group"></i> SmartCards</div>
+        <nav>
+            <button class="nav-btn active" id="nav-revision" onclick="switchTab('revision')"><i class="fa-solid fa-graduation-cap"></i> Révision</button>
+            <button class="nav-btn" id="nav-library" onclick="switchTab('library')"><i class="fa-solid fa-book-bookmark"></i> Bibliothèque</button>
+            <button class="nav-btn" id="nav-import" onclick="switchTab('import')"><i class="fa-solid fa-plus"></i> Nouveau Deck IA</button>
+            <button class="nav-btn" id="nav-prompt" onclick="switchTab('prompt')"><i class="fa-solid fa-wand-magic-sparkles"></i> Générateur Prompt IA</button>
+            <button class="nav-btn" id="nav-backup" onclick="switchTab('backup')"><i class="fa-solid fa-floppy-disk"></i> Sauvegarde (Bulk)</button>
+        </nav>
+        <div style="display:flex; align-items:center; gap:1rem;">
+            <div class="auth-status" id="user-profile" style="display:none;">
+                <span id="user-email-display" style="font-weight:600; color:var(--text-main);"></span>
+                <button class="btn btn-secondary btn-sm" onclick="logoutFirebase()" title="Déconnexion"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </div>
+            <div class="theme-selector">
+                <button class="theme-btn active" onclick="setTheme('light')" id="theme-light"><i class="fa-solid fa-sun"></i></button>
+                <button class="theme-btn" onclick="setTheme('dark')" id="theme-dark"><i class="fa-solid fa-moon"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- TAB REVISION -->
+        <section id="tab-revision" class="tab-content active">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+                <div>
+                    <h2 id="current-deck-title">Sélectionnez un deck</h2>
+                    <span id="current-deck-category" style="background:var(--primary-light); color:var(--primary); padding:0.2rem 0.6rem; border-radius:1rem; font-size:0.8rem; font-weight:600;">--</span>
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                    <button class="btn btn-secondary btn-sm" id="btn-toggle-invert" onclick="toggleInvertFaces()"><i class="fa-solid fa-right-left"></i> Sens : Normal</button>
+                    <select id="select-shortcut-mode" onchange="setShortcutMode(this.value)" class="btn btn-secondary btn-sm" style="font-weight:600;">
+                        <option value="wxc">Clavier : W - X - C (Mac/AZERTY)</option>
+                        <option value="123">Clavier : 1 - 2 - 3 (Chiffres/PC)</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" onclick="shuffleCurrentDeck()"><i class="fa-solid fa-shuffle"></i> Mélanger le deck</button>
+                </div>
+            </div>
+
+            <!-- FILTRES HORIZONTAUX AVEC COMPTEURS -->
+            <div class="filter-bar" id="filter-buttons-container">
+                <button class="filter-btn active" id="filter-btn-unseen" onclick="setFilter('unseen')"><i class="fa-regular fa-circle"></i> Pas encore vus <span class="filter-count" id="count-unseen">0</span></button>
+                <button class="filter-btn" id="filter-btn-review" onclick="setFilter('review')"><i class="fa-solid fa-xmark" style="color:var(--danger);"></i> À revoir <span class="filter-count" id="count-review">0</span></button>
+                <button class="filter-btn" id="filter-btn-reinforce" onclick="setFilter('reinforce')"><i class="fa-solid fa-triangle-exclamation" style="color:var(--warning);"></i> À renforcer <span class="filter-count" id="count-reinforce">0</span></button>
+                <button class="filter-btn" id="filter-btn-known" onclick="setFilter('known')"><i class="fa-solid fa-check" style="color:var(--success);"></i> Maîtrisés <span class="filter-count" id="count-known">0</span></button>
+                <button class="filter-btn" id="filter-btn-all" onclick="setFilter('all')"><i class="fa-solid fa-layer-group"></i> Tous <span class="filter-count" id="count-all">0</span></button>
+            </div>
+
+            <div id="deck-view-container">
+                <div class="card-container" onclick="flipCard()">
+                    <div class="flashcard" id="flashcard">
+                        <div class="card-face card-front">
+                            <span class="card-label" id="label-front">Recto</span>
+                            <span class="card-status-badge" id="front-status-badge">--</span>
+                            <div class="card-question" id="card-question">Sélectionnez un deck dans la bibliothèque.</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; position:absolute; top:1rem; left:0; padding:0 1.5rem;">
+                                <span class="card-label" id="label-back" style="position:static;">Verso</span>
+                            </div>
+                            <div style="margin-top:1.5rem; width:100%;">
+                                <div class="card-answer" id="card-answer">--</div>
+                                <div class="card-precision" id="card-precision" style="display:none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation-bar">
+                    <button class="btn btn-secondary btn-sm" onclick="navigateCard(-1)"><i class="fa-solid fa-arrow-left"></i> Précédent</button>
+                    <span style="font-size:0.85rem; color:var(--text-muted);">Cliquer / Espace pour retourner</span>
+                    <button class="btn btn-secondary btn-sm" onclick="navigateCard(1)">Suivant <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-status-review" onclick="markCardStatus('review')"><i class="fa-solid fa-xmark"></i> À revoir <span class="badge-key" id="key-badge-1">W</span></button>
+                    <button class="action-btn btn-status-reinforce" onclick="markCardStatus('reinforce')"><i class="fa-solid fa-triangle-exclamation"></i> À renforcer <span class="badge-key" id="key-badge-2">X</span></button>
+                    <button class="action-btn btn-status-known" onclick="markCardStatus('known')"><i class="fa-solid fa-check"></i> Maîtrisé <span class="badge-key" id="key-badge-3">C</span></button>
+                </div>
+
+                <div class="progress-bar-container"><div class="progress-bar" id="progress-bar"></div></div>
+
+                <div class="stats-summary">
+                    <div class="stat-box"><div class="card-label">Index</div><div id="stat-index" style="font-weight:bold;">0/0</div></div>
+                    <div class="stat-box"><div class="card-label">Non vus</div><div id="stat-unseen-pct" style="color:var(--text-muted); font-weight:bold;">0%</div></div>
+                    <div class="stat-box"><div class="card-label">À revoir</div><div id="stat-review-pct" style="color:var(--danger); font-weight:bold;">0%</div></div>
+                    <div class="stat-box"><div class="card-label">À renforcer</div><div id="stat-reinforce-pct" style="color:var(--warning); font-weight:bold;">0%</div></div>
+                    <div class="stat-box"><div class="card-label">Maîtrisés</div><div id="stat-known-pct" style="color:var(--success); font-weight:bold;">0%</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB LIBRARY -->
+        <section id="tab-library" class="tab-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+                <h2>Bibliothèque de Decks</h2>
+                <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+                    <select id="library-category-filter" onchange="renderLibrary()">
+                        <option value="all">Toutes les catégories</option>
+                    </select>
+                </div>
+            </div>
+            <div class="library-grid" id="library-grid"></div>
+        </section>
+
+        <!-- TAB IMPORT NEW DECK -->
+        <section id="tab-import" class="tab-content">
+            <h2>Ajouter un seul nouveau Deck (Généré par IA)</h2>
+            <p style="color:var(--text-muted); margin-bottom:1.5rem;">Collez ici le JSON produit par votre prompt IA. Ce deck s'ajoutera à votre collection Cloud.</p>
+            <form onsubmit="handleImport(event)">
+                <div class="form-group">
+                    <textarea id="import-json" rows="10" required style="width:100%; font-family:monospace;" placeholder='{"deckName": "Vocabulaire Espagnol", "category": "Langues", "cards": []}'></textarea>
+                </div>
+                <button type="submit" class="btn"><i class="fa-solid fa-cloud-arrow-up"></i> Ajouter ce deck au Cloud</button>
+            </form>
+        </section>
+
+        <!-- TAB GENERATEUR PROMPT IA -->
+        <section id="tab-prompt" class="tab-content">
+            <div style="margin-bottom:1.5rem;">
+                <h2>Générateur de Prompt IA Pédagogique</h2>
+                <p style="color:var(--text-muted);">Configurez votre besoin pour obtenir un prompt sur-mesure. L'IA générera des cartes parfaitement structurées.</p>
+            </div>
+
+            <div class="prompt-grid">
+                <div class="prompt-panel">
+                    <div class="prompt-panel-title"><i class="fa-solid fa-sliders"></i> Paramètres du Deck</div>
+
+                    <div class="form-group">
+                        <label>1. Type de source :</label>
+                        <div class="radio-options">
+                            <label class="radio-label"><input type="radio" name="source-type" value="text" checked onchange="toggleSourceInput()"> Cours complet / Texte</label>
+                            <label class="radio-label"><input type="radio" name="source-type" value="topic" onchange="toggleSourceInput()"> Thème / Sujet seul</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="source-text-group">
+                        <label for="prompt-source-text">Collez votre texte / cours source *</label>
+                        <textarea id="prompt-source-text" rows="4" style="width:100%;" placeholder="ex: La Révolution française de 1789 marque la fin de la monarchie absolue..."></textarea>
+                    </div>
+
+                    <div class="form-group" id="source-topic-group" style="display:none;">
+                        <label for="prompt-source-topic">Précisez le thème ou sujet *</label>
+                        <input type="text" id="prompt-source-topic" style="width:100%;" placeholder="ex: Vocabulaire espagnol des voyages et de l'hôtel">
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                        <div class="form-group">
+                            <label for="prompt-theme-title">Nom du thème / Deck *</label>
+                            <input type="text" id="prompt-theme-title" style="width:100%;" placeholder="ex: Espagnol - Le Voyage">
+                        </div>
+                        <div class="form-group">
+                            <label for="prompt-category">Catégorie *</label>
+                            <input type="text" id="prompt-category" style="width:100%;" placeholder="ex: Espagnol">
+                        </div>
+                    </div>
+
+                    <button class="btn" style="width:100%; justify-content:center;" onclick="generatePrompt()"><i class="fa-solid fa-gears"></i> Générer le Prompt IA</button>
+                </div>
+
+                <div class="prompt-panel" style="display:flex; flex-direction:column;">
+                    <div class="prompt-panel-title"><i class="fa-solid fa-code"></i> Prompt Résultat Prêt à Copier</div>
+                    <div class="prompt-output-box" style="flex:1;">
+                        <button class="btn btn-secondary btn-sm" style="position:absolute; top:10px; right:10px;" onclick="copyPrompt()"><i class="fa-solid fa-copy"></i> Copier</button>
+                        <div class="prompt-text" id="prompt-output">Remplissez les champs à gauche et cliquez sur "Générer le Prompt".</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB BULK BACKUP -->
+        <section id="tab-backup" class="tab-content">
+            <h2>Gestion Globale des Sauvegardes Cloud</h2>
+            <p style="color:var(--text-muted); margin-bottom:1.5rem;">Exportez ou restaurez l'intégralité de votre espace dans Firestore.</p>
+
+            <div class="backup-card">
+                <h3><i class="fa-solid fa-download" style="color:var(--primary);"></i> Exporter l'intégralité de mes données</h3>
+                <p>Génère un fichier de sauvegarde `.json` de vos cartes Cloud actuelles.</p>
+                <button class="btn" onclick="exportFullBackup()"><i class="fa-solid fa-file-export"></i> Télécharger la sauvegarde (.json)</button>
+            </div>
+
+            <div class="backup-card">
+                <h3><i class="fa-solid fa-upload" style="color:var(--success);"></i> Restaurer une sauvegarde dans le Cloud</h3>
+                <p>Sélectionnez un fichier `.json` pour charger directement l'ensemble de vos decks dans Firestore.</p>
+                <input type="file" id="backup-file-input" accept=".json" style="display:none;" onchange="importFullBackup(event)">
+                <button class="btn btn-secondary" onclick="document.getElementById('backup-file-input').click()"><i class="fa-solid fa-file-import"></i> Charger une sauvegarde globale (.json)</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- SCRIPT FIREBASE SDK (Module CDN) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // CONFIGURATION FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyAoYob0N0hWGr1foq6_0Nv4tJB2u5gASVw",
+            authDomain: "flashcards-ebf9f.firebaseapp.com",
+            projectId: "flashcards-ebf9f",
+            storageBucket: "flashcards-ebf9f.firebasestorage.app",
+            messagingSenderId: "152443740745",
+            appId: "1:152443740745:web:b4f57d046490655b12d598"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let unsubscribeFirestore = null;
+
+        // APPLICATION STATE
+        window.appData = {
+            decks: [],
+            currentDeckIndex: -1,
+            currentCardIndex: 0,
+            activeFilter: 'unseen',
+            isInverted: false,
+            shortcutMode: 'wxc'
+        };
+
+        // AUTHENTIFICATION HANDLER
+        window.handleAuth = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const errorDiv = document.getElementById('auth-error');
+            errorDiv.style.display = 'none';
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (err) {
+                errorDiv.innerText = "Erreur de connexion : Vérifiez votre e-mail ou mot de passe.";
+                errorDiv.style.display = 'block';
+            }
+        };
+
+        window.logoutFirebase = () => {
+            signOut(auth);
+        };
+
+        // OBSERVATEUR DE CONNEXION FIREBASE
+        onAuthStateChanged(auth, (user) => {
+            const authModal = document.getElementById('auth-modal');
+            const userProfile = document.getElementById('user-profile');
+            const userEmailDisplay = document.getElementById('user-email-display');
+
+            if (user) {
+                currentUser = user;
+                authModal.style.display = 'none';
+                userProfile.style.display = 'flex';
+                userEmailDisplay.innerText = user.email;
+
+                // ÉCOUTEUR EN TEMPS RÉEL FIRESTORE
+                const userDocRef = doc(db, "users", user.uid);
+                unsubscribeFirestore = onSnapshot(userDocRef, (docSnap) => {
+                    if (docSnap.exists() && docSnap.data().decks) {
+                        window.appData.decks = docSnap.data().decks;
+                    } else {
+                        window.appData.decks = [];
+                    }
+                    window.renderLibrary();
+                    window.updateRevisionView();
+                });
+            } else {
+                currentUser = null;
+                if (unsubscribeFirestore) unsubscribeFirestore();
+                authModal.style.display = 'flex';
+                userProfile.style.display = 'none';
+                window.appData.decks = [];
+                window.renderLibrary();
+            }
+        });
+
+        // ENREGISTREMENT DANS FIRESTORE
+        window.saveToFirestore = async () => {
+            if (!currentUser) return;
+            try {
+                const userDocRef = doc(db, "users", currentUser.uid);
+                await setDoc(userDocRef, { decks: window.appData.decks }, { merge: true });
+            } catch (err) {
+                console.error("Erreur de sauvegarde Cloud :", err);
+            }
+        };
+    </script>
+
+    <!-- SCRIPT DE LOGIQUE METIER & UI -->
+    <script>
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.getElementById('theme-light').classList.toggle('active', theme === 'light');
+            document.getElementById('theme-dark').classList.toggle('active', theme === 'dark');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.getElementById(`nav-${tabId}`).classList.add('active');
+
+            if (tabId === 'library') renderLibrary();
+            if (tabId === 'revision') updateRevisionView();
+        }
+
+        function renderLibrary() {
+            const grid = document.getElementById('library-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            if (window.appData.decks.length === 0) {
+                grid.innerHTML = '<div class="empty-state">Aucun deck disponible. Ajoutez-en un dans l\'onglet "Nouveau Deck IA" ou restaurez une sauvegarde.</div>';
+                return;
+            }
+
+            window.appData.decks.forEach((deck, index) => {
+                const card = document.createElement('div');
+                card.className = 'deck-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="deck-card-header">
+                            <div class="deck-card-title">${deck.deckName}</div>
+                        </div>
+                        <span style="font-size:0.8rem; background:var(--primary-light); color:var(--primary); padding:0.2rem 0.5rem; border-radius:0.4rem;">${deck.category || 'Général'}</span>
+                        <p style="margin-top:0.8rem; font-size:0.85rem; color:var(--text-muted);">${deck.cards.length} cartes</p>
+                    </div>
+                    <button class="btn btn-sm" style="margin-top:1rem; width:100%; justify-content:center;" onclick="selectDeckForRevision(${index})">Réviser ce deck</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function selectDeckForRevision(index) {
+            window.appData.currentDeckIndex = index;
+            window.appData.currentCardIndex = 0;
+            switchTab('revision');
+        }
+
+        function updateRevisionView() {
+            const deck = window.appData.decks[window.appData.currentDeckIndex];
+            if (!deck) {
+                document.getElementById('current-deck-title').innerText = "Sélectionnez un deck";
+                document.getElementById('card-question').innerText = "Rendez-vous dans la bibliothèque pour ouvrir un deck.";
+                return;
+            }
+
+            document.getElementById('current-deck-title').innerText = deck.deckName;
+            document.getElementById('current-deck-category').innerText = deck.category || 'Général';
+
+            const filteredCards = getFilteredCards();
+            if (filteredCards.length === 0) {
+                document.getElementById('card-question').innerText = "Aucune carte dans ce filtre.";
+                document.getElementById('card-answer').innerText = "--";
+                return;
+            }
+
+            if (window.appData.currentCardIndex >= filteredCards.length) {
+                window.appData.currentCardIndex = 0;
+            }
+
+            const currentCard = filteredCards[window.appData.currentCardIndex];
+            document.getElementById('card-question').innerText = window.appData.isInverted ? currentCard.answer : currentCard.question;
+            document.getElementById('card-answer').innerText = window.appData.isInverted ? currentCard.question : currentCard.answer;
+            
+            const precisionBox = document.getElementById('card-precision');
+            if (currentCard.precision) {
+                precisionBox.innerText = currentCard.precision;
+                precisionBox.style.display = 'block';
+            } else {
+                precisionBox.style.display = 'none';
+            }
+
+            document.getElementById('stat-index').innerText = `${window.appData.currentCardIndex + 1}/${filteredCards.length}`;
+            updateFilterCounts();
+        }
+
+        function getFilteredCards() {
+            const deck = window.appData.decks[window.appData.currentDeckIndex];
+            if (!deck) return [];
+            const filter = window.appData.activeFilter;
+            if (filter === 'all') return deck.cards;
+            return deck.cards.filter(c => (c.status || 'unseen') === filter);
+        }
+
+        function updateFilterCounts() {
+            const deck = window.appData.decks[window.appData.currentDeckIndex];
+            if (!deck) return;
+            
+            const counts = { unseen: 0, review: 0, reinforce: 0, known: 0, all: deck.cards.length };
+            deck.cards.forEach(c => {
+                const st = c.status || 'unseen';
+                if (counts[st] !== undefined) counts[st]++;
+            });
+
+            document.getElementById('count-unseen').innerText = counts.unseen;
+            document.getElementById('count-review').innerText = counts.review;
+            document.getElementById('count-reinforce').innerText = counts.reinforce;
+            document.getElementById('count-known').innerText = counts.known;
+            document.getElementById('count-all').innerText = counts.all;
+        }
+
+        function setFilter(filter) {
+            window.appData.activeFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`filter-btn-${filter}`).classList.add('active');
+            window.appData.currentCardIndex = 0;
+            updateRevisionView();
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function navigateCard(direction) {
+            document.getElementById('flashcard').classList.remove('flipped');
+            const filteredCards = getFilteredCards();
+            if (filteredCards.length === 0) return;
+            
+            window.appData.currentCardIndex = (window.appData.currentCardIndex + direction + filteredCards.length) % filteredCards.length;
+            updateRevisionView();
+        }
+
+        function markCardStatus(status) {
+            const filteredCards = getFilteredCards();
+            if (filteredCards.length === 0) return;
+            
+            const currentCard = filteredCards[window.appData.currentCardIndex];
+            currentCard.status = status;
+            
+            // Sauvegarde Cloud Firestore
+            if (window.saveToFirestore) window.saveToFirestore();
+            
+            navigateCard(1);
+        }
+
+        function toggleInvertFaces() {
+            window.appData.isInverted = !window.appData.isInverted;
+            document.getElementById('btn-toggle-invert').innerHTML = `<i class="fa-solid fa-right-left"></i> Sens : ${window.appData.isInverted ? 'Inversé' : 'Normal'}`;
+            updateRevisionView();
+        }
+
+        function setShortcutMode(mode) {
+            window.appData.shortcutMode = mode;
+            if (mode === 'wxc') {
+                document.getElementById('key-badge-1').innerText = 'W';
+                document.getElementById('key-badge-2').innerText = 'X';
+                document.getElementById('key-badge-3').innerText = 'C';
+            } else {
+                document.getElementById('key-badge-1').innerText = '1';
+                document.getElementById('key-badge-2').innerText = '2';
+                document.getElementById('key-badge-3').innerText = '3';
+            }
+        }
+
+        function handleImport(e) {
+            e.preventDefault();
+            const jsonText = document.getElementById('import-json').value;
+            try {
+                const parsed = JSON.parse(jsonText);
+                if (!parsed.deckName || !Array.isArray(parsed.cards)) throw new Error("Format invalide.");
+                
+                window.appData.decks.push(parsed);
+                if (window.saveToFirestore) window.saveToFirestore();
+                
+                alert("Deck ajouté avec succès dans votre espace Cloud !");
+                document.getElementById('import-json').value = '';
+                switchTab('library');
+            } catch (err) {
+                alert("Erreur lors de l'import : Vérifiez la structure de votre JSON.");
+            }
+        }
+
+        function exportFullBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.appData.decks, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `smartcards_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importFullBackup(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const parsed = JSON.parse(evt.target.result);
+                    if (Array.isArray(parsed)) {
+                        window.appData.decks = parsed;
+                        if (window.saveToFirestore) window.saveToFirestore();
+                        alert("Sauvegarde globale restaurée avec succès dans Firestore !");
+                        switchTab('library');
+                    }
+                } catch (err) {
+                    alert("Erreur de fichier JSON.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function generatePrompt() {
+            const sourceType = document.querySelector('input[name="source-type"]:checked').value;
+            const sourceText = sourceType === 'text' ? document.getElementById('prompt-source-text').value : document.getElementById('prompt-source-topic').value;
+            const title = document.getElementById('prompt-theme-title').value || "Général";
+            const category = document.getElementById('prompt-category').value || "Général";
+
+            const prompt = `Génère un jeu de cartes mémoires (flashcards) au format JSON pour l'application SmartCards.
+
+Nom du deck : "${title}"
+Catégorie : "${category}"
+Source / Thème : "${sourceText}"
+
+STRUCTURE JSON STRICTE À RENVOYER :
+{
+  "deckName": "${title}",
+  "category": "${category}",
+  "cards": [
+    {
+      "question": "Question courte et claire",
+      "answer": "Réponse précise",
+      "precision": "Explication complémentaire (optionnel)"
+    }
+  ]
+}`;
+            document.getElementById('prompt-output').innerText = prompt;
+        }
+
+        function copyPrompt() {
+            const text = document.getElementById('prompt-output').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Prompt copié dans le presse-papier !");
+        }
+
+        function toggleSourceInput() {
+            const type = document.querySelector('input[name="source-type"]:checked').value;
+            document.getElementById('source-text-group').style.display = type === 'text' ? 'block' : 'none';
+            document.getElementById('source-topic-group').style.display = type === 'topic' ? 'block' : 'none';
+        }
+
+        // Raccourcis clavier
+        document.addEventListener('keydown', (e) => {
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+            if (e.code === 'Space') {
+                e.preventDefault();
+                flipCard();
+            } else if (e.code === 'ArrowRight') {
+                navigateCard(1);
+            } else if (e.code === 'ArrowLeft') {
+                navigateCard(-1);
+            } else {
+                const mode = window.appData.shortcutMode;
+                if ((mode === 'wxc' && e.key.toLowerCase() === 'w') || (mode === '123' && e.key === '1')) markCardStatus('review');
+                if ((mode === 'wxc' && e.key.toLowerCase() === 'x') || (mode === '123' && e.key === '2')) markCardStatus('reinforce');
+                if ((mode === 'wxc' && e.key.toLowerCase() === 'c') || (mode === '123' && e.key === '3')) markCardStatus('known');
+            }
+        });
+    </script>
+</body>
+</html>
