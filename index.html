@@ -47,135 +47,154 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; min-height: 100vh; display: flex; flex-direction: column; }
         
-        header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: relative; z-index: 10; }
-        .logo { font-size: 1.4rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
+        header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: relative; z-index: 10; flex-wrap: wrap; gap: 1rem; }
+        .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
         
-        nav { display: flex; gap: 0.5rem; }
-        .nav-btn { background: none; border: none; color: var(--text-muted); padding: 0.6rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+        nav { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .nav-btn { background: none; border: none; color: var(--text-muted); padding: 0.5rem 0.8rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; transition: all 0.2s; font-size: 0.9rem; }
         .nav-btn:hover { background-color: var(--primary-light); color: var(--primary); }
         .nav-btn.active { background-color: var(--primary); color: white; }
 
-        .theme-selector { display: flex; align-items: center; gap: 0.5rem; background: var(--bg-color); padding: 0.2rem; border-radius: 0.5rem; border: 1px solid var(--border-color); }
-        .theme-btn { background: none; border: none; color: var(--text-muted); padding: 0.3rem 0.6rem; border-radius: 0.3rem; cursor: pointer; font-size: 0.85rem; }
+        .theme-selector { display: flex; align-items: center; gap: 0.4rem; background: var(--bg-color); padding: 0.2rem; border-radius: 0.5rem; border: 1px solid var(--border-color); }
+        .theme-btn { background: none; border: none; color: var(--text-muted); padding: 0.3rem 0.5rem; border-radius: 0.3rem; cursor: pointer; font-size: 0.85rem; }
         .theme-btn.active { background: var(--card-bg); color: var(--primary); font-weight: bold; box-shadow: var(--shadow); }
 
-        main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 2rem; position: relative; z-index: 1; }
+        main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 1.5rem; position: relative; z-index: 1; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s; }
+        .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s; font-size: 0.95rem; }
         .btn:hover { background: var(--primary-hover); }
         .btn-secondary { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); }
         .btn-secondary:hover { background: var(--border-color); }
         .btn-danger { background: var(--danger); color: white; }
         .btn-danger:hover { background: #dc2626; }
-        .btn-sm { padding: 0.39rem 0.6rem; font-size: 0.85rem; }
+        .btn-sm { padding: 0.35rem 0.6rem; font-size: 0.85rem; }
 
-        .filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-        .filter-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem; }
+        .filter-bar { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 0.4rem 0.7rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.3rem; }
         .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
         .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .filter-count { background: rgba(0,0,0,0.08); padding: 0.1rem 0.4rem; border-radius: 0.8rem; font-size: 0.75rem; }
+        .filter-count { background: rgba(0,0,0,0.08); padding: 0.1rem 0.35rem; border-radius: 0.8rem; font-size: 0.7rem; }
         .filter-btn.active .filter-count { background: rgba(255,255,255,0.25); color: white; }
 
-        .card-container { perspective: 1000px; width: 100%; max-width: 650px; height: 380px; margin: 1rem auto; cursor: pointer; }
+        .card-container { perspective: 1000px; width: 100%; max-width: 650px; height: 350px; margin: 1rem auto; cursor: pointer; }
         .flashcard { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-lg); border-radius: 1rem; border: 1px solid var(--border-color); }
         .flashcard.flipped { transform: rotateY(180deg); }
         
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; padding: 2rem; border-radius: 1rem; background: var(--card-bg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; padding: 1.5rem; border-radius: 1rem; background: var(--card-bg); }
         .card-front { justify-content: center; align-items: center; text-align: center; }
         .card-back { transform: rotateY(180deg); overflow-y: auto; text-align: left; justify-content: space-between; }
 
-        .card-label { position: absolute; top: 1rem; left: 1.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--text-muted); }
-        .card-status-badge { position: absolute; top: 1rem; right: 1.5rem; font-size: 0.8rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 1rem; border: 1px solid var(--border-color); }
-        .card-question { font-size: 1.6rem; font-weight: 700; line-height: 1.4; }
-        .card-answer { font-size: 1.2rem; line-height: 1.5; margin-top: 1rem; font-weight: 500; }
-        .card-precision { margin-top: 1rem; padding: 0.8rem 1rem; background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0.4rem; font-size: 0.9rem; color: var(--text-main); white-space: pre-line; }
+        .card-label { position: absolute; top: 1rem; left: 1.2rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--text-muted); }
+        .card-status-badge { position: absolute; top: 1rem; right: 1.2rem; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 1rem; border: 1px solid var(--border-color); }
+        .card-question { font-size: 1.4rem; font-weight: 700; line-height: 1.3; }
+        .card-answer { font-size: 1.1rem; line-height: 1.4; margin-top: 0.8rem; font-weight: 500; }
+        .card-precision { margin-top: 0.8rem; padding: 0.6rem 0.8rem; background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0.4rem; font-size: 0.85rem; color: var(--text-main); white-space: pre-line; }
 
-        .navigation-bar { display: flex; justify-content: space-between; align-items: center; max-width: 650px; margin: 0 auto 1rem; gap: 1rem; }
-        .action-buttons { display: flex; justify-content: center; gap: 0.8rem; max-width: 650px; margin: 0 auto; }
-        .action-btn { flex: 1; padding: 0.8rem 0.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 0.4rem; font-size: 0.95rem; }
+        .navigation-bar { display: flex; justify-content: space-between; align-items: center; max-width: 650px; margin: 0 auto 1rem; gap: 0.5rem; }
+        .action-buttons { display: flex; justify-content: center; gap: 0.6rem; max-width: 650px; margin: 0 auto; }
+        .action-btn { flex: 1; padding: 0.7rem 0.4rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 0.3rem; font-size: 0.9rem; }
         
         .btn-status-review { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger); }
         .btn-status-reinforce { background: var(--warning-light); color: var(--warning); border: 1px solid var(--warning); }
         .btn-status-known { background: var(--success-light); color: var(--success); border: 1px solid var(--success); }
 
-        .badge-key { font-size: 0.7rem; opacity: 0.65; background: rgba(0,0,0,0.08); padding: 0.1rem 0.35rem; border-radius: 0.3rem; font-weight: 700; text-transform: uppercase; margin-left: 0.2rem; }
+        .badge-key { font-size: 0.65rem; opacity: 0.65; background: rgba(0,0,0,0.08); padding: 0.1rem 0.3rem; border-radius: 0.3rem; font-weight: 700; text-transform: uppercase; margin-left: 0.2rem; }
 
-        .progress-bar-container { max-width: 650px; margin: 1.5rem auto 0; height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
+        .progress-bar-container { max-width: 650px; margin: 1.2rem auto 0; height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
         .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
-        .stats-summary { display: flex; justify-content: space-around; max-width: 650px; margin: 1rem auto; text-align: center; }
-        .stat-box { background: var(--card-bg); padding: 0.8rem 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border-color); min-width: 90px; flex: 1; margin: 0 0.2rem; }
+        
+        .stats-summary { display: flex; justify-content: space-around; max-width: 650px; margin: 0.8rem auto; text-align: center; gap: 0.3rem; }
+        .stat-box { background: var(--card-bg); padding: 0.6rem 0.3rem; border-radius: 0.5rem; border: 1px solid var(--border-color); min-width: 70px; flex: 1; }
+        .stat-box div:last-child { font-size: 0.9rem; }
 
-        .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; margin-top: 1.2rem; }
         .deck-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
         .deck-card-header { display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.8rem; }
-        .deck-card-title { font-size: 1.1rem; font-weight: 700; flex: 1; }
+        .deck-card-title { font-size: 1.05rem; font-weight: 700; flex: 1; word-break: break-word; }
         .deck-card-checkbox { width: 18px; height: 18px; cursor: pointer; margin-top: 3px; }
 
-        /* SLIDER COMPONENT VISUEL AMÉLIORÉ */
-        .range-filter-container { background: var(--card-bg); border: 1px solid var(--border-color); padding: 0.8rem 1.2rem; border-radius: 0.6rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-        .dual-slider-box { position: relative; width: 180px; height: 30px; display: flex; align-items: center; }
+        /* SLIDER COMPONENT AVEC BARRE VISUELLE */
+        .range-filter-container { background: var(--card-bg); border: 1px solid var(--border-color); padding: 0.6rem 1rem; border-radius: 0.6rem; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+        .dual-slider-box { position: relative; width: 150px; height: 30px; display: flex; align-items: center; }
         .slider-track-visual { position: absolute; width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; top: 12px; }
         .dual-slider-box input[type="range"] { position: absolute; width: 100%; pointer-events: none; -webkit-appearance: none; background: none; top: 7px; }
         .dual-slider-box input[type="range"]::-webkit-slider-thumb { pointer-events: auto; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); -webkit-appearance: none; cursor: pointer; border: 2px solid var(--card-bg); box-shadow: var(--shadow); }
 
-        .deck-mastery-bar-bg { height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; margin-top: 0.6rem; }
+        .deck-mastery-bar-bg { height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; margin-top: 0.5rem; }
         .deck-mastery-bar-fill { height: 100%; background: var(--success); transition: width 0.3s; }
 
-        .cards-preview-list { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-color); display: none; max-height: 250px; overflow-y: auto; }
+        .cards-preview-list { margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px dashed var(--border-color); display: none; max-height: 220px; overflow-y: auto; }
         .cards-preview-list.active { display: block; }
-        .card-preview-item { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; gap: 0.5rem; }
+        .card-preview-item { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0; border-bottom: 1px solid var(--border-color); font-size: 0.8rem; gap: 0.4rem; }
         .card-preview-item:last-child { border-bottom: none; }
-        .status-select { font-size: 0.75rem; padding: 0.2rem 0.4rem; border-radius: 0.3rem; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); }
+        .status-select { font-size: 0.7rem; padding: 0.15rem 0.3rem; border-radius: 0.3rem; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); }
 
-        .backup-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
-        .backup-card h3 { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
-        .backup-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+        .backup-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.2rem; margin-bottom: 1.2rem; box-shadow: var(--shadow); }
+        .backup-card h3 { margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.05rem; }
+        .backup-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem; }
         
-        select, input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 0.6rem 1rem; border-radius: 0.5rem; font-size: 0.95rem; outline: none; }
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 0.4rem; font-size: 0.9rem; }
-        .checkbox-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.6rem; margin-top: 0.4rem; }
-        .checkbox-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: normal; cursor: pointer; }
+        select, input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 0.6rem 0.9rem; border-radius: 0.5rem; font-size: 0.95rem; outline: none; width: 100%; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 0.3rem; font-size: 0.85rem; }
+        .checkbox-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; margin-top: 0.3rem; }
+        .checkbox-label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: normal; cursor: pointer; }
         
-        .prompt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .prompt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         @media (max-width: 900px) { .prompt-grid { grid-template-columns: 1fr; } }
-        .prompt-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.5rem; box-shadow: var(--shadow); }
-        .prompt-panel-title { font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-        .prompt-output-box { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1rem; position: relative; margin-top: 1rem; }
-        .prompt-text { font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; white-space: pre-wrap; word-break: break-word; max-height: 520px; overflow-y: auto; color: var(--text-main); }
+        .prompt-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.2rem; box-shadow: var(--shadow); }
+        .prompt-panel-title { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; }
+        .prompt-output-box { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.8rem; position: relative; margin-top: 0.8rem; }
+        .prompt-text { font-family: 'Courier New', Courier, monospace; font-size: 0.8rem; white-space: pre-wrap; word-break: break-word; max-height: 450px; overflow-y: auto; color: var(--text-main); }
         
-        .radio-options { display: flex; gap: 1.5rem; margin-bottom: 0.8rem; }
-        .radio-label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.95rem; }
-        .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); grid-column: 1/-1; }
+        .radio-options { display: flex; gap: 1.2rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
+        .radio-label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.9rem; }
+        .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--text-muted); grid-column: 1/-1; }
         
-        .shortcut-hint { font-size: 0.75rem; opacity: 0.75; font-weight: normal; }
+        .shortcut-hint { font-size: 0.7rem; opacity: 0.75; font-weight: normal; }
 
-        .modal-backdrop { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display:none; justify-content:center; align-items:center; z-index:1000; }
+        .modal-backdrop { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display:none; justify-content:center; align-items:center; z-index:1000; padding: 1rem; }
         .modal-backdrop.active { display:flex; }
-        .modal-box { background: var(--card-bg); border-radius: 0.8rem; border: 1px solid var(--border-color); padding: 1.5rem; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .auth-status { display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; color: var(--text-muted); }
+        .modal-box { background: var(--card-bg); border-radius: 0.8rem; border: 1px solid var(--border-color); padding: 1.2rem; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+        .auth-status { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: var(--text-muted); }
+
+        /* ADAPTATIONS RESPONSIVES MOBILE / IPHONE */
+        @media (max-width: 768px) {
+            header { padding: 0.8rem 1rem; justify-content: center; }
+            .logo { font-size: 1.1rem; }
+            nav { justify-content: center; width: 100%; gap: 0.3rem; }
+            .nav-btn { padding: 0.4rem 0.6rem; font-size: 0.8rem; }
+            main { padding: 1rem 0.8rem; }
+            .card-container { height: 320px; }
+            .card-question { font-size: 1.2rem; }
+            .card-answer { font-size: 1rem; }
+            .action-btn { font-size: 0.8rem; padding: 0.6rem 0.2rem; }
+            .stats-summary { font-size: 0.75rem; }
+            .stat-box { min-width: 55px; padding: 0.4rem 0.2rem; }
+            .library-grid { grid-template-columns: 1fr; }
+            .range-filter-container { width: 100%; justify-content: space-between; }
+        }
     </style>
 </head>
 <body>
 
     <!-- MODAL AUTHENTIFICATION FIREBASE -->
     <div id="auth-modal" class="modal-backdrop">
-        <div class="modal-box" style="max-width: 420px;">
-            <h2 style="margin-bottom:0.5rem; text-align:center; color:var(--primary);"><i class="fa-solid fa-layer-group"></i> SmartCards</h2>
-            <p style="text-align:center; color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">Connexion requise pour synchroniser les révisions familiales dans le Cloud.</p>
+        <div class="modal-box" style="max-width: 380px;">
+            <h2 style="margin-bottom:0.4rem; text-align:center; color:var(--primary);"><i class="fa-solid fa-layer-group"></i> SmartCards</h2>
+            <p style="text-align:center; color:var(--text-muted); margin-bottom:1.2rem; font-size:0.85rem;">Connexion requise pour synchroniser vos révisions dans le Cloud.</p>
             <form onsubmit="handleAuth(event)">
                 <div class="form-group">
                     <label for="auth-email">Adresse E-mail</label>
-                    <input type="email" id="auth-email" required style="width:100%;" placeholder="famille@exemple.com">
+                    <input type="email" id="auth-email" required placeholder="famille@exemple.com">
                 </div>
                 <div class="form-group">
                     <label for="auth-password">Mot de passe</label>
-                    <input type="password" id="auth-password" required style="width:100%;" placeholder="••••••••">
+                    <input type="password" id="auth-password" required placeholder="••••••••">
                 </div>
-                <div id="auth-error" style="color:var(--danger); font-size:0.85rem; margin-bottom:1rem; display:none;"></div>
+                <div id="auth-error" style="color:var(--danger); font-size:0.8rem; margin-bottom:0.8rem; display:none;"></div>
                 <button type="submit" class="btn" style="width:100%; justify-content:center;" id="btn-auth-submit">
                     <i class="fa-solid fa-right-to-bracket"></i> Se connecter
                 </button>
@@ -188,13 +207,13 @@
         <nav>
             <button class="nav-btn active" id="nav-revision" onclick="switchTab('revision')"><i class="fa-solid fa-graduation-cap"></i> Révision</button>
             <button class="nav-btn" id="nav-library" onclick="switchTab('library')"><i class="fa-solid fa-book-bookmark"></i> Bibliothèque</button>
-            <button class="nav-btn" id="nav-import" onclick="switchTab('import')"><i class="fa-solid fa-plus"></i> Nouveau Deck IA</button>
-            <button class="nav-btn" id="nav-prompt" onclick="switchTab('prompt')"><i class="fa-solid fa-wand-magic-sparkles"></i> Générateur Prompt IA</button>
-            <button class="nav-btn" id="nav-backup" onclick="switchTab('backup')"><i class="fa-solid fa-floppy-disk"></i> Sauvegarde (Bulk)</button>
+            <button class="nav-btn" id="nav-import" onclick="switchTab('import')"><i class="fa-solid fa-plus"></i> Deck IA</button>
+            <button class="nav-btn" id="nav-prompt" onclick="switchTab('prompt')"><i class="fa-solid fa-wand-magic-sparkles"></i> Prompt</button>
+            <button class="nav-btn" id="nav-backup" onclick="switchTab('backup')"><i class="fa-solid fa-floppy-disk"></i> Sauvegarde</button>
         </nav>
-        <div style="display:flex; align-items:center; gap:1rem;">
+        <div style="display:flex; align-items:center; gap:0.8rem;">
             <div class="auth-status" id="user-profile" style="display:none;">
-                <span id="user-email-display" style="font-weight:600; color:var(--text-main);"></span>
+                <span id="user-email-display" style="font-weight:600; color:var(--text-main); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
                 <button class="btn btn-secondary btn-sm" onclick="logoutFirebase()" title="Déconnexion"><i class="fa-solid fa-right-from-bracket"></i></button>
             </div>
             <div class="theme-selector">
@@ -207,25 +226,25 @@
     <main>
         <!-- TAB REVISION -->
         <section id="tab-revision" class="tab-content active">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.8rem;">
                 <div>
-                    <h2 id="current-deck-title">Sélectionnez un deck</h2>
-                    <span id="current-deck-category" style="background:var(--primary-light); color:var(--primary); padding:0.2rem 0.6rem; border-radius:1rem; font-size:0.8rem; font-weight:600;">--</span>
+                    <h2 id="current-deck-title" style="font-size: 1.3rem;">Sélectionnez un deck</h2>
+                    <span id="current-deck-category" style="background:var(--primary-light); color:var(--primary); padding:0.15rem 0.5rem; border-radius:1rem; font-size:0.75rem; font-weight:600;">--</span>
                 </div>
-                <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-                    <button class="btn btn-secondary btn-sm" id="btn-toggle-invert" onclick="toggleInvertFaces()"><i class="fa-solid fa-right-left"></i> Sens : Normal</button>
-                    <select id="select-shortcut-mode" onchange="setShortcutMode(this.value)" class="btn btn-secondary btn-sm" style="font-weight:600;">
-                        <option value="wxc">Clavier : W - X - C (Mac/AZERTY)</option>
-                        <option value="123">Clavier : 1 - 2 - 3 (Chiffres/PC)</option>
+                <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+                    <button class="btn btn-secondary btn-sm" id="btn-toggle-invert" onclick="toggleInvertFaces()"><i class="fa-solid fa-right-left"></i> Sens</button>
+                    <select id="select-shortcut-mode" onchange="setShortcutMode(this.value)" class="btn btn-secondary btn-sm" style="font-weight:600; padding: 0.35rem;">
+                        <option value="wxc">Clavier : W-X-C</option>
+                        <option value="123">Clavier : 1-2-3</option>
                     </select>
-                    <button class="btn btn-secondary btn-sm" onclick="shuffleCurrentDeck()"><i class="fa-solid fa-shuffle"></i> Mélanger le deck</button>
+                    <button class="btn btn-secondary btn-sm" onclick="shuffleCurrentDeck()"><i class="fa-solid fa-shuffle"></i> Mélanger</button>
                 </div>
             </div>
 
             <div class="filter-bar" id="filter-buttons-container">
-                <button class="filter-btn active" id="filter-btn-unseen" onclick="setFilter('unseen')"><i class="fa-regular fa-circle"></i> Pas encore vus <span class="filter-count" id="count-unseen">0</span></button>
+                <button class="filter-btn active" id="filter-btn-unseen" onclick="setFilter('unseen')"><i class="fa-regular fa-circle"></i> Non vus <span class="filter-count" id="count-unseen">0</span></button>
                 <button class="filter-btn" id="filter-btn-review" onclick="setFilter('review')"><i class="fa-solid fa-xmark" style="color:var(--danger);"></i> À revoir <span class="filter-count" id="count-review">0</span></button>
-                <button class="filter-btn" id="filter-btn-reinforce" onclick="setFilter('reinforce')"><i class="fa-solid fa-triangle-exclamation" style="color:var(--warning);"></i> À renforcer <span class="filter-count" id="count-reinforce">0</span></button>
+                <button class="filter-btn" id="filter-btn-reinforce" onclick="setFilter('reinforce')"><i class="fa-solid fa-triangle-exclamation" style="color:var(--warning);"></i> Renforcer <span class="filter-count" id="count-reinforce">0</span></button>
                 <button class="filter-btn" id="filter-btn-known" onclick="setFilter('known')"><i class="fa-solid fa-check" style="color:var(--success);"></i> Maîtrisés <span class="filter-count" id="count-known">0</span></button>
                 <button class="filter-btn" id="filter-btn-all" onclick="setFilter('all')"><i class="fa-solid fa-layer-group"></i> Tous <span class="filter-count" id="count-all">0</span></button>
             </div>
@@ -239,13 +258,13 @@
                             <div class="card-question" id="card-question">Sélectionnez un deck dans la bibliothèque.</div>
                         </div>
                         <div class="card-face card-back">
-                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; position:absolute; top:1rem; left:0; padding:0 1.5rem;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; position:absolute; top:0.8rem; left:0; padding:0 1.2rem;">
                                 <span class="card-label" id="label-back" style="position:static;">Verso</span>
-                                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editCurrentCardFromRevision();" title="Éditer cette carte" style="padding:0.2rem 0.5rem;">
+                                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editCurrentCardFromRevision();" title="Éditer cette carte" style="padding:0.15rem 0.4rem;">
                                     <i class="fa-solid fa-pen"></i>
                                 </button>
                             </div>
-                            <div style="margin-top:1.5rem; width:100%;">
+                            <div style="margin-top:1.2rem; width:100%;">
                                 <div class="card-answer" id="card-answer">--</div>
                                 <div class="card-precision" id="card-precision" style="display:none;"></div>
                             </div>
@@ -254,14 +273,14 @@
                 </div>
 
                 <div class="navigation-bar">
-                    <button class="btn btn-secondary btn-sm" onclick="navigateCard(-1)"><i class="fa-solid fa-arrow-left"></i> Précédent <span class="shortcut-hint">[←]</span></button>
-                    <span style="font-size:0.85rem; color:var(--text-muted);">Cliquer / Espace pour retourner</span>
-                    <button class="btn btn-secondary btn-sm" onclick="navigateCard(1)">Suivant <i class="fa-solid fa-arrow-right"></i> <span class="shortcut-hint">[→]</span></button>
+                    <button class="btn btn-secondary btn-sm" onclick="navigateCard(-1)"><i class="fa-solid fa-arrow-left"></i> Précédent</button>
+                    <span style="font-size:0.75rem; color:var(--text-muted); text-align: center;">Cliquer / Espace pour retourner</span>
+                    <button class="btn btn-secondary btn-sm" onclick="navigateCard(1)">Suivant <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
 
                 <div class="action-buttons">
                     <button class="action-btn btn-status-review" onclick="markCardStatus('review')"><i class="fa-solid fa-xmark"></i> À revoir <span class="badge-key" id="key-badge-1">W</span></button>
-                    <button class="action-btn btn-status-reinforce" onclick="markCardStatus('reinforce')"><i class="fa-solid fa-triangle-exclamation"></i> À renforcer <span class="badge-key" id="key-badge-2">X</span></button>
+                    <button class="action-btn btn-status-reinforce" onclick="markCardStatus('reinforce')"><i class="fa-solid fa-triangle-exclamation"></i> Renforcer <span class="badge-key" id="key-badge-2">X</span></button>
                     <button class="action-btn btn-status-known" onclick="markCardStatus('known')"><i class="fa-solid fa-check"></i> Maîtrisé <span class="badge-key" id="key-badge-3">C</span></button>
                 </div>
 
@@ -271,7 +290,7 @@
                     <div class="stat-box"><div class="card-label">Index</div><div id="stat-index" style="font-weight:bold;">0/0</div></div>
                     <div class="stat-box"><div class="card-label">Non vus</div><div id="stat-unseen-pct" style="color:var(--text-muted); font-weight:bold;">0%</div></div>
                     <div class="stat-box"><div class="card-label">À revoir</div><div id="stat-review-pct" style="color:var(--danger); font-weight:bold;">0%</div></div>
-                    <div class="stat-box"><div class="card-label">À renforcer</div><div id="stat-reinforce-pct" style="color:var(--warning); font-weight:bold;">0%</div></div>
+                    <div class="stat-box"><div class="card-label">Renforcer</div><div id="stat-reinforce-pct" style="color:var(--warning); font-weight:bold;">0%</div></div>
                     <div class="stat-box"><div class="card-label">Maîtrisés</div><div id="stat-known-pct" style="color:var(--success); font-weight:bold;">0%</div></div>
                 </div>
             </div>
@@ -279,16 +298,16 @@
 
         <!-- TAB LIBRARY -->
         <section id="tab-library" class="tab-content">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
-                <h2>Bibliothèque de Decks</h2>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem; margin-bottom:1.2rem;">
+                <h2 style="font-size: 1.3rem;">Bibliothèque</h2>
                 
-                <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
-                    <select id="library-category-filter" onchange="renderLibrary()">
+                <div style="display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap; width: 100%;">
+                    <select id="library-category-filter" onchange="renderLibrary()" style="flex: 1; min-width: 140px;">
                         <option value="all">Toutes les catégories</option>
                     </select>
 
-                    <div class="range-filter-container">
-                        <span style="font-size:0.85rem; font-weight:600;"><i class="fa-solid fa-chart-line" style="color:var(--primary);"></i> Maîtrise : <span id="slider-range-val">0% - 100%</span></span>
+                    <div class="range-filter-container" style="flex: 1; min-width: 220px;">
+                        <span style="font-size:0.8rem; font-weight:600;"><i class="fa-solid fa-chart-line" style="color:var(--primary);"></i> <span id="slider-range-val">0% - 100%</span></span>
                         <div class="dual-slider-box">
                             <div class="slider-track-visual"></div>
                             <input type="range" id="slider-min" min="0" max="100" step="5" value="0" oninput="handleSliderInput()">
@@ -297,7 +316,7 @@
                     </div>
 
                     <button class="btn btn-danger btn-sm" id="btn-delete-selected" onclick="deleteSelectedDecks()" style="display:none;">
-                        <i class="fa-solid fa-trash"></i> Supprimer cochés (<span id="selected-count">0</span>)
+                        <i class="fa-solid fa-trash"></i> Suppr. (<span id="selected-count">0</span>)
                     </button>
                 </div>
             </div>
@@ -307,101 +326,101 @@
 
         <!-- TAB IMPORT NEW DECK -->
         <section id="tab-import" class="tab-content">
-            <h2>Ajouter un seul nouveau Deck (Généré par IA)</h2>
-            <p style="color:var(--text-muted); margin-bottom:1.5rem;">Collez ici le JSON produit par votre prompt IA. Ce deck s'ajoutera à votre collection Cloud.</p>
+            <h2 style="font-size: 1.3rem;">Ajouter un Deck (IA)</h2>
+            <p style="color:var(--text-muted); margin-bottom:1rem; font-size: 0.85rem;">Collez le JSON produit par votre prompt IA pour l'ajouter au Cloud.</p>
             <form onsubmit="handleImport(event)">
                 <div class="form-group">
-                    <textarea id="import-json" rows="10" required style="width:100%; font-family:monospace;" placeholder='{"deckName": "Vocabulaire Espagnol", "category": "Langues", "cards": []}'></textarea>
+                    <textarea id="import-json" rows="8" required style="font-family:monospace;" placeholder='{"deckName": "Vocabulaire", "category": "Langues", "cards": []}'></textarea>
                 </div>
-                <button type="submit" class="btn"><i class="fa-solid fa-cloud-arrow-up"></i> Ajouter ce deck au Cloud</button>
+                <button type="submit" class="btn"><i class="fa-solid fa-cloud-arrow-up"></i> Ajouter au Cloud</button>
             </form>
         </section>
 
         <!-- TAB GENERATEUR PROMPT IA -->
         <section id="tab-prompt" class="tab-content">
-            <div style="margin-bottom:1.5rem;">
-                <h2>Générateur de Prompt IA Pédagogique</h2>
-                <p style="color:var(--text-muted);">Configurez votre besoin pour obtenir un prompt sur-mesure. L'IA générera des cartes parfaitement structurées.</p>
+            <div style="margin-bottom:1.2rem;">
+                <h2>Générateur de Prompt IA</h2>
+                <p style="color:var(--text-muted); font-size: 0.85rem;">Configurez votre besoin pour obtenir un prompt sur-mesure.</p>
             </div>
 
             <div class="prompt-grid">
                 <div class="prompt-panel">
-                    <div class="prompt-panel-title"><i class="fa-solid fa-sliders"></i> Paramètres du Deck</div>
+                    <div class="prompt-panel-title"><i class="fa-solid fa-sliders"></i> Paramètres</div>
 
                     <div class="form-group">
                         <label>1. Type de source :</label>
                         <div class="radio-options">
-                            <label class="radio-label"><input type="radio" name="source-type" value="text" checked onchange="toggleSourceInput()"> Cours complet / Texte</label>
-                            <label class="radio-label"><input type="radio" name="source-type" value="topic" onchange="toggleSourceInput()"> Thème / Sujet seul</label>
+                            <label class="radio-label"><input type="radio" name="source-type" value="text" checked onchange="toggleSourceInput()"> Texte / Cours</label>
+                            <label class="radio-label"><input type="radio" name="source-type" value="topic" onchange="toggleSourceInput()"> Thème seul</label>
                         </div>
                     </div>
 
                     <div class="form-group" id="source-text-group">
-                        <label for="prompt-source-text">Collez votre texte / cours source *</label>
-                        <textarea id="prompt-source-text" rows="4" style="width:100%;" placeholder="ex: La Révolution française de 1789 marque la fin de la monarchie absolue..."></textarea>
+                        <label for="prompt-source-text">Cours source *</label>
+                        <textarea id="prompt-source-text" rows="3" placeholder="Collez votre cours..."></textarea>
                     </div>
 
                     <div class="form-group" id="source-topic-group" style="display:none;">
-                        <label for="prompt-source-topic">Précisez le thème ou sujet *</label>
-                        <input type="text" id="prompt-source-topic" style="width:100%;" placeholder="ex: Vocabulaire espagnol des voyages et de l'hôtel">
+                        <label for="prompt-source-topic">Thème ou sujet *</label>
+                        <input type="text" id="prompt-source-topic" placeholder="ex: Vocabulaire espagnol">
                     </div>
 
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem;">
                         <div class="form-group">
-                            <label for="prompt-theme-title">Nom du thème / Deck *</label>
-                            <input type="text" id="prompt-theme-title" style="width:100%;" placeholder="ex: Espagnol - Le Voyage">
+                            <label for="prompt-theme-title">Nom du Deck *</label>
+                            <input type="text" id="prompt-theme-title" placeholder="ex: Voyage">
                         </div>
                         <div class="form-group">
                             <label for="prompt-category">Catégorie *</label>
-                            <input type="text" id="prompt-category" style="width:100%;" placeholder="ex: Espagnol">
+                            <input type="text" id="prompt-category" placeholder="ex: Espagnol">
                         </div>
                     </div>
 
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem;">
                         <div class="form-group">
-                            <label for="prompt-preset">2. Preset Domaine / Matière *</label>
-                            <select id="prompt-preset" style="width:100%; font-weight:600;" onchange="updateDynamicPrecisions()">
-                                <option value="langues" selected>🌐 Langues Vivantes</option>
-                                <option value="tech">🧠 Concepts Tech, IA & Pro</option>
-                                <option value="histoire">📜 Histoire, Géo & SES</option>
-                                <option value="sciences">🔬 Sciences & Formules (Maths, Phys, SVT)</option>
-                                <option value="litterature">📚 Français, Littérature & Philo</option>
-                                <option value="general">🎓 Général / Multi-matières</option>
+                            <label for="prompt-preset">Domaine *</label>
+                            <select id="prompt-preset" style="font-weight:600;" onchange="updateDynamicPrecisions()">
+                                <option value="langues" selected>🌐 Langues</option>
+                                <option value="tech">🧠 Tech & IA</option>
+                                <option value="histoire">📜 Histoire & Géo</option>
+                                <option value="sciences">🔬 Sciences</option>
+                                <option value="litterature">📚 Littérature</option>
+                                <option value="general">🎓 Général</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="prompt-level">Niveau / Exigence *</label>
-                            <select id="prompt-level" style="width:100%;">
-                                <option value="college">Collège (Accessible & Visuel)</option>
-                                <option value="lycee" selected>Lycée / Bac (Mots-clés officiels)</option>
-                                <option value="pro">Supérieur / Pro / Expert</option>
+                            <label for="prompt-level">Niveau *</label>
+                            <select id="prompt-level">
+                                <option value="college">Collège</option>
+                                <option value="lycee" selected>Lycée / Bac</option>
+                                <option value="pro">Supérieur / Pro</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="prompt-max-cards">3. Nombre max de flashcards (Vide = Exhaustif)</label>
-                        <input type="number" id="prompt-max-cards" min="1" placeholder="Exhaustif par défaut (ou ex: 20)" style="width:100%;">
+                        <label for="prompt-max-cards">Max cartes (Vide = Exhaustif)</label>
+                        <input type="number" id="prompt-max-cards" min="1" placeholder="Ex: 20">
                     </div>
 
                     <div class="form-group">
-                        <label for="prompt-custom-details">Consignes spécifiques (Prompt Libre) :</label>
-                        <textarea id="prompt-custom-details" rows="2" style="width:100%;" placeholder="ex: Mettre le mot en français au recto et sa traduction en espagnol au verso."></textarea>
+                        <label for="prompt-custom-details">Consignes spécifiques :</label>
+                        <textarea id="prompt-custom-details" rows="2" placeholder="Instructions particulières..."></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label>4. Éléments de précision spécifiques <span style="font-weight:normal; opacity:0.8;">(Adaptés au preset choisi)</span> :</label>
+                        <label>Précisions spécifiques :</label>
                         <div class="checkbox-group" id="dynamic-precision-container"></div>
                     </div>
 
-                    <button class="btn" style="width:100%; justify-content:center;" onclick="generatePrompt()"><i class="fa-solid fa-gears"></i> Générer le Prompt IA</button>
+                    <button class="btn" style="width:100%; justify-content:center;" onclick="generatePrompt()"><i class="fa-solid fa-gears"></i> Générer le Prompt</button>
                 </div>
 
                 <div class="prompt-panel" style="display:flex; flex-direction:column;">
-                    <div class="prompt-panel-title"><i class="fa-solid fa-code"></i> Prompt Résultat Prêt à Copier</div>
+                    <div class="prompt-panel-title"><i class="fa-solid fa-code"></i> Résultat Prêt à Copier</div>
                     <div class="prompt-output-box" style="flex:1;">
-                        <button class="btn btn-secondary btn-sm" style="position:absolute; top:10px; right:10px;" onclick="copyPrompt()"><i class="fa-solid fa-copy"></i> Copier</button>
-                        <div class="prompt-text" id="prompt-output">Remplissez les champs à gauche et cliquez sur "Générer le Prompt".</div>
+                        <button class="btn btn-secondary btn-sm" style="position:absolute; top:8px; right:8px;" onclick="copyPrompt()"><i class="fa-solid fa-copy"></i></button>
+                        <div class="prompt-text" id="prompt-output">Remplissez les champs à gauche...</div>
                     </div>
                 </div>
             </div>
@@ -409,20 +428,20 @@
 
         <!-- TAB BULK BACKUP -->
         <section id="tab-backup" class="tab-content">
-            <h2>Gestion Globale des Sauvegardes Cloud</h2>
-            <p style="color:var(--text-muted); margin-bottom:1.5rem;">Exportez ou restaurez l'intégralité de vos decks et de votre avancement dans Firestore.</p>
+            <h2 style="font-size: 1.3rem;">Sauvegardes Cloud (Bulk)</h2>
+            <p style="color:var(--text-muted); margin-bottom:1.2rem; font-size: 0.85rem;">Exportez ou restaurez l'intégralité de vos decks et progressions dans Firestore.</p>
 
             <div class="backup-card">
-                <h3><i class="fa-solid fa-download" style="color:var(--primary);"></i> Exporter l'intégralité de mes données</h3>
-                <p>Génère un fichier de sauvegarde `.json` complet de vos cartes et statuts Cloud actuels.</p>
-                <button class="btn" onclick="exportFullBackup()"><i class="fa-solid fa-file-export"></i> Télécharger la sauvegarde (.json)</button>
+                <h3><i class="fa-solid fa-download" style="color:var(--primary);"></i> Exporter mes données</h3>
+                <p>Télécharge un fichier `.json` de vos cartes Cloud.</p>
+                <button class="btn" onclick="exportFullBackup()"><i class="fa-solid fa-file-export"></i> Télécharger (.json)</button>
             </div>
 
             <div class="backup-card">
-                <h3><i class="fa-solid fa-upload" style="color:var(--success);"></i> Restaurer une sauvegarde globale</h3>
-                <p>Sélectionnez un fichier `.json` pour charger directement l'ensemble de vos decks et avancements dans Firestore.</p>
+                <h3><i class="fa-solid fa-upload" style="color:var(--success);"></i> Restaurer une sauvegarde</h3>
+                <p>Charge un fichier `.json` pour remplacer vos decks Cloud.</p>
                 <input type="file" id="backup-file-input" accept=".json" style="display:none;" onchange="importFullBackup(event)">
-                <button class="btn btn-secondary" onclick="document.getElementById('backup-file-input').click()"><i class="fa-solid fa-file-import"></i> Charger une sauvegarde globale (.json)</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('backup-file-input').click()"><i class="fa-solid fa-file-import"></i> Charger (.json)</button>
             </div>
         </section>
     </main>
@@ -439,15 +458,15 @@
                 <input type="hidden" id="edit-card-id">
                 <div class="form-group">
                     <label>Question (Recto)</label>
-                    <input type="text" id="edit-card-question" required style="width:100%;">
+                    <input type="text" id="edit-card-question" required>
                 </div>
                 <div class="form-group">
                     <label>Réponse (Verso)</label>
-                    <textarea id="edit-card-answer" rows="4" required style="width:100%;"></textarea>
+                    <textarea id="edit-card-answer" rows="3" required></textarea>
                 </div>
                 <div class="form-group">
                     <label>Précision</label>
-                    <textarea id="edit-card-precision" rows="4" style="width:100%;"></textarea>
+                    <textarea id="edit-card-precision" rows="3"></textarea>
                 </div>
                 <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('modal-edit-card')">Annuler</button>
@@ -459,15 +478,15 @@
 
     <!-- MODAL EDIT DECK JSON -->
     <div class="modal-backdrop" id="modal-edit-json">
-        <div class="modal-box" style="max-width:800px;">
+        <div class="modal-box" style="max-width:750px;">
             <div class="modal-header">
-                <h3>Éditer le JSON brut du Deck</h3>
+                <h3>Éditer le JSON brut</h3>
                 <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-edit-json')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="saveDeckJsonEdit(event)">
                 <input type="hidden" id="edit-json-deck-id">
                 <div class="form-group">
-                    <textarea id="edit-json-textarea" rows="15" style="width:100%; font-family:monospace; font-size:0.85rem;" required></textarea>
+                    <textarea id="edit-json-textarea" rows="12" style="font-family:monospace; font-size:0.8rem;" required></textarea>
                 </div>
                 <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('modal-edit-json')">Annuler</button>
@@ -488,11 +507,11 @@
                 <input type="hidden" id="edit-deck-info-id">
                 <div class="form-group">
                     <label>Titre du Deck</label>
-                    <input type="text" id="edit-deck-info-title" required style="width:100%;">
+                    <input type="text" id="edit-deck-info-title" required>
                 </div>
                 <div class="form-group">
                     <label>Catégorie</label>
-                    <input type="text" id="edit-deck-info-category" required style="width:100%;">
+                    <input type="text" id="edit-deck-info-category" required>
                 </div>
                 <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('modal-edit-deck')">Annuler</button>
@@ -534,7 +553,7 @@
             try {
                 await signInWithEmailAndPassword(auth, email, password);
             } catch (err) {
-                errorDiv.innerText = "Erreur de connexion : Vérifiez votre e-mail ou mot de passe.";
+                errorDiv.innerText = "Erreur de connexion : Vérifiez vos identifiants.";
                 errorDiv.style.display = 'block';
             }
         };
@@ -590,47 +609,47 @@
     <!-- SCRIPT LOGIQUE DE L'APPLICATION -->
     <script>
         const STATUS_CONFIG = {
-            unseen: { label: 'Pas encore vu', icon: 'fa-regular fa-circle', color: 'var(--text-muted)' },
+            unseen: { label: 'Non vu', icon: 'fa-regular fa-circle', color: 'var(--text-muted)' },
             review: { label: 'À revoir', icon: 'fa-solid fa-xmark', color: 'var(--danger)' },
-            reinforce: { label: 'À renforcer', icon: 'fa-solid fa-triangle-exclamation', color: 'var(--warning)' },
+            reinforce: { label: 'Renforcer', icon: 'fa-solid fa-triangle-exclamation', color: 'var(--warning)' },
             known: { label: 'Maîtrisé', icon: 'fa-solid fa-check', color: 'var(--success)' }
         };
 
         const PRESET_PRECISIONS = {
             langues: [
                 { value: "Racine / Étymologie", label: "Racine / Étymologie", checked: true },
-                { value: "Mots dérivés et famille de mots", label: "Mots dérivés & famille de mots", checked: true },
-                { value: "Moyen mnémotechnique de mémorisation", label: "Moyen mnémotechnique", checked: true },
-                { value: "Exemple d'utilisation en phrase", label: "Phrase d'exemple en contexte", checked: true },
+                { value: "Mots dérivés et famille de mots", label: "Mots dérivés", checked: true },
+                { value: "Moyen mnémotechnique de mémorisation", label: "Mnémotechnique", checked: true },
+                { value: "Exemple d'utilisation en phrase", label: "Phrase d'exemple", checked: true },
                 { value: "Piège de prononciation ou faux-ami", label: "Piège / Faux-ami", checked: false }
             ],
             tech: [
-                { value: "Analogie ou métaphore simple de compréhension", label: "Analogie / Métaphore simple", checked: true },
-                { value: "Cas d'usage concret dans le monde réel", label: "Cas d'usage concret (Monde réel)", checked: true },
-                { value: "Distinction avec un concept proche (A vs B)", label: "Distinction avec un concept proche", checked: true },
-                { value: "Limites ou pièges classiques", label: "Limites & pièges du concept", checked: false }
+                { value: "Analogie ou métaphore simple de compréhension", label: "Analogie simple", checked: true },
+                { value: "Cas d'usage concret dans le monde réel", label: "Cas d'usage réel", checked: true },
+                { value: "Distinction avec un concept proche (A vs B)", label: "Distinction conceptuelle", checked: true },
+                { value: "Limites ou pièges classiques", label: "Limites & pièges", checked: false }
             ],
             histoire: [
-                { value: "Acteurs clés et repères chronologiques", label: "Acteurs clés & Chronologie", checked: true },
+                { value: "Acteurs clés et repères chronologiques", label: "Acteurs & Chronologie", checked: true },
                 { value: "Causes et conséquences directes", label: "Causes & Conséquences", checked: true },
-                { value: "Mots-clés officiels obligatoires pour examen", label: "Mots-clés officiels du programme", checked: true },
+                { value: "Mots-clés officiels obligatoires pour examen", label: "Mots-clés officiels", checked: true },
                 { value: "Portée géopolitique ou sociétale", label: "Portée géopolitique", checked: false }
             ],
             sciences: [
-                { value: "Signification des variables et leurs unités de mesure", label: "Signification des variables & unités", checked: true },
-                { value: "Exemple concret d'illustration et d'application numérique", label: "Exemple d'application numérique", checked: true },
+                { value: "Signification des variables et leurs unités de mesure", label: "Variables & Unités", checked: true },
+                { value: "Exemple concret d'illustration et d'application numérique", label: "Application numérique", checked: true },
                 { value: "Conditions de validité et domaine d'application", label: "Conditions de validité", checked: true },
-                { value: "Piège classique dans les calculs", label: "Piège classique dans les calculs", checked: false }
+                { value: "Piège classique dans les calculs", label: "Piège de calcul", checked: false }
             ],
             litterature: [
-                { value: "Citation clé ou exemple d'œuvre référente", label: "Citation clé ou exemple d'œuvre", checked: true },
+                { value: "Citation clé ou exemple d'œuvre référente", label: "Citation / Œuvre", checked: true },
                 { value: "Figure de style ou mouvement littéraire/philosophique", label: "Figure de style / Mouvement", checked: true },
-                { value: "Argument principal réutilisable en dissertation", label: "Argument réutilisable pour dissertation", checked: true },
-                { value: "Thèse adverse ou nuance philosophique", label: "Thèse adverse / Nuance", checked: false }
+                { value: "Argument principal réutilisable en dissertation", label: "Argument dissertation", checked: true },
+                { value: "Thèse adverse ou nuance philosophique", label: "Thèse adverse", checked: false }
             ],
             general: [
                 { value: "Nuance importante ou contexte d'usage", label: "Nuance importante", checked: true },
-                { value: "Moyen mnémotechnique de mémorisation", label: "Moyen mnémotechnique", checked: true },
+                { value: "Moyen mnémotechnique de mémorisation", label: "Mnémotechnique", checked: true },
                 { value: "Exemple d'illustration concret", label: "Exemple concret", checked: true },
                 { value: "Piège classique à éviter", label: "Piège à éviter", checked: false }
             ]
@@ -704,11 +723,11 @@
         function updateInvertUI() {
             const btn = document.getElementById('btn-toggle-invert');
             if (window.appState.isInverted) {
-                btn.innerHTML = `<i class="fa-solid fa-right-left" style="color:var(--primary);"></i> Sens : Inversé`;
-                document.getElementById('label-front').innerText = "Verso (Réponse)";
-                document.getElementById('label-back').innerText = "Recto (Question)";
+                btn.innerHTML = `<i class="fa-solid fa-right-left" style="color:var(--primary);"></i> Inversé`;
+                document.getElementById('label-front').innerText = "Verso";
+                document.getElementById('label-back').innerText = "Recto";
             } else {
-                btn.innerHTML = `<i class="fa-solid fa-right-left"></i> Sens : Normal`;
+                btn.innerHTML = `<i class="fa-solid fa-right-left"></i> Normal`;
                 document.getElementById('label-front').innerText = "Recto";
                 document.getElementById('label-back').innerText = "Verso";
             }
@@ -978,15 +997,15 @@
                     const cardSt = card.status || 'unseen';
                     cardsListHTML += `
                         <div class="card-preview-item">
-                            <span style="font-weight:600; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; max-width:140px;">${card.question}</span>
-                            <div style="display:flex; gap:0.3rem; align-items:center;">
+                            <span style="font-weight:600; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; max-width:120px;">${card.question}</span>
+                            <div style="display:flex; gap:0.2rem; align-items:center;">
                                 <select class="status-select" onchange="changeIndividualCardStatus('${deck.id}', '${card.id}', this.value)">
-                                    <option value="unseen" ${cardSt === 'unseen' ? 'selected' : ''}>Pas encore vu</option>
+                                    <option value="unseen" ${cardSt === 'unseen' ? 'selected' : ''}>Non vu</option>
                                     <option value="review" ${cardSt === 'review' ? 'selected' : ''}>À revoir</option>
-                                    <option value="reinforce" ${cardSt === 'reinforce' ? 'selected' : ''}>À renforcer</option>
+                                    <option value="reinforce" ${cardSt === 'reinforce' ? 'selected' : ''}>Renforcer</option>
                                     <option value="known" ${cardSt === 'known' ? 'selected' : ''}>Maîtrisé</option>
                                 </select>
-                                <button class="btn btn-secondary btn-sm" onclick="openEditCardModal('${deck.id}', '${card.id}')" title="Éditer la carte"><i class="fa-solid fa-pen"></i></button>
+                                <button class="btn btn-secondary btn-sm" onclick="openEditCardModal('${deck.id}', '${card.id}')" title="Éditer" style="padding:0.15rem 0.3rem;"><i class="fa-solid fa-pen"></i></button>
                             </div>
                         </div>
                     `;
@@ -1000,10 +1019,10 @@
                             <input type="checkbox" class="deck-card-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleDeckSelection('${deck.id}', this.checked)">
                             <div class="deck-card-title">${deckTitle}</div>
                         </div>
-                        <p style="font-size:0.85rem; color:var(--text-muted);">${deck.category || "Général"} • ${totalCards} cartes</p>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">${deck.category || "Général"} • ${totalCards} cartes</p>
                         
-                        <div style="margin-top:0.6rem;">
-                            <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:700;">
+                        <div style="margin-top:0.5rem;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-weight:700;">
                                 <span>Maîtrise globale</span>
                                 <span style="color:var(--success);">${masteryPct}%</span>
                             </div>
@@ -1012,7 +1031,7 @@
                             </div>
                         </div>
 
-                        <p style="font-size:0.8rem; margin-top:0.6rem; display:flex; gap:0.4rem; flex-wrap:wrap;">
+                        <p style="font-size:0.75rem; margin-top:0.5rem; display:flex; gap:0.4rem; flex-wrap:wrap;">
                             <span style="color:var(--text-muted);"><i class="fa-regular fa-circle"></i> ${unseenCount}</span>
                             <span style="color:var(--danger);"><i class="fa-solid fa-xmark"></i> ${reviewCount}</span>
                             <span style="color:var(--warning);"><i class="fa-solid fa-triangle-exclamation"></i> ${reinforceCount}</span>
@@ -1020,13 +1039,13 @@
                         </p>
                     </div>
 
-                    <div style="margin-top:1rem;">
-                        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
-                            <button class="btn" style="flex:1;" onclick="selectDeck('${deck.id}')"><i class="fa-solid fa-play"></i> Réviser</button>
-                            <button class="btn btn-secondary btn-sm" onclick="openEditDeckInfoModal('${deck.id}')" title="Renommer / Catégorie"><i class="fa-solid fa-pen"></i></button>
-                            <button class="btn btn-secondary btn-sm" onclick="openEditJsonModal('${deck.id}')" title="Éditer JSON"><i class="fa-solid fa-code"></i></button>
+                    <div style="margin-top:0.8rem;">
+                        <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
+                            <button class="btn btn-sm" style="flex:1;" onclick="selectDeck('${deck.id}')"><i class="fa-solid fa-play"></i> Réviser</button>
+                            <button class="btn btn-secondary btn-sm" onclick="openEditDeckInfoModal('${deck.id}')" title="Renommer"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn btn-secondary btn-sm" onclick="openEditJsonModal('${deck.id}')" title="JSON"><i class="fa-solid fa-code"></i></button>
                             <button class="btn btn-secondary btn-sm" onclick="toggleCardsPreview('${deck.id}')" title="Cartes"><i class="fa-solid fa-list-check"></i></button>
-                            <button class="btn btn-secondary btn-sm" onclick="resetDeckProgress('${deck.id}')" title="Réinitialiser progression"><i class="fa-solid fa-rotate-left"></i></button>
+                            <button class="btn btn-secondary btn-sm" onclick="resetDeckProgress('${deck.id}')" title="Reset"><i class="fa-solid fa-rotate-left"></i></button>
                             <button class="btn btn-secondary btn-sm" style="color:var(--danger);" onclick="deleteSingleDeck('${deck.id}')" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
                         </div>
 
