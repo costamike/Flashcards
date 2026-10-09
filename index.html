@@ -84,10 +84,8 @@
         .filter-count { background: rgba(0,0,0,0.08); padding: 0.1rem 0.3rem; border-radius: 0.8rem; font-size: 0.65rem; }
         .filter-btn.active .filter-count { background: rgba(255,255,255,0.25); color: white; }
 
-        /* Conteneur de carte optimisé (Desktop paysage & Mobile portrait) */
+        /* Conteneur carte responsive avec transition fluide de swipe */
         .card-container { perspective: 1000px; width: 100%; max-width: 750px; flex: 1; min-height: 320px; max-height: 480px; margin: 0.4rem auto; cursor: pointer; transition: transform 0.25s ease, opacity 0.25s ease; }
-        
-        /* Classes pour l'animation de swipe fluide et visuelle */
         .card-container.swipe-left { transform: translateX(-60px) rotate(-4deg); opacity: 0; }
         .card-container.swipe-right { transform: translateX(60px) rotate(4deg); opacity: 0; }
 
@@ -101,7 +99,6 @@
         .card-label { position: absolute; top: 0.8rem; left: 1rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--text-muted); }
         .card-status-badge { position: absolute; top: 0.8rem; right: 1rem; font-size: 0.7rem; font-weight: 600; padding: 0.15rem 0.4rem; border-radius: 1rem; border: 1px solid var(--border-color); }
         
-        /* Taille de police adaptative pour recto/verso */
         .card-question { font-size: 1.6rem; font-weight: 700; line-height: 1.35; word-break: break-word; }
         .card-answer { font-size: 1.2rem; line-height: 1.35; margin-top: 0.5rem; font-weight: 500; word-break: break-word; }
         .card-precision { margin-top: 0.8rem; padding: 0.6rem 0.9rem; background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0.4rem; font-size: 0.85rem; color: var(--text-main); white-space: pre-line; }
@@ -171,7 +168,6 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
         .auth-status { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: var(--text-muted); }
 
-        /* ADAPTATIONS RESPONSIVES MOBILE (ZERO SCROLL SUR REVISION & PLEIN ÉCRAN) */
         @media (max-width: 768px) {
             header { padding: 0.6rem 1rem; }
             .logo { font-size: 1.1rem; }
@@ -187,7 +183,6 @@
             #tab-revision h2 { font-size: 1.1rem; line-height: 1.2; }
             #current-deck-category { font-size: 0.7rem; padding: 0.1rem 0.4rem; }
             
-            /* Masquage des badges clavier sur mobile tactile */
             .badge-key { display: none !important; }
             #select-shortcut-mode { display: none !important; }
 
@@ -209,7 +204,6 @@
 </head>
 <body>
 
-    <!-- MODAL AUTHENTIFICATION FIREBASE -->
     <div id="auth-modal" class="modal-backdrop">
         <div class="modal-box" style="max-width: 380px;">
             <h2 style="margin-bottom:0.4rem; text-align:center; color:var(--primary);"><i class="fa-solid fa-layer-group"></i> SmartCards</h2>
@@ -258,7 +252,6 @@
     </header>
 
     <main>
-        <!-- TAB REVISION -->
         <section id="tab-revision" class="tab-content active">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; flex-wrap:wrap; gap:0.5rem;">
                 <div>
@@ -275,7 +268,6 @@
                 </div>
             </div>
 
-            <!-- Filtres horizontaux épurés sur une seule ligne -->
             <div class="filter-bar" id="filter-buttons-container">
                 <button class="filter-btn active" id="filter-btn-unseen" onclick="setFilter('unseen')"><i class="fa-regular fa-circle"></i> Non vus <span class="filter-count" id="count-unseen">0</span></button>
                 <button class="filter-btn" id="filter-btn-review" onclick="setFilter('review')"><i class="fa-solid fa-xmark" style="color:var(--danger);"></i> À revoir <span class="filter-count" id="count-review">0</span></button>
@@ -285,7 +277,7 @@
             </div>
 
             <div id="deck-view-container" style="display:flex; flex-direction:column; flex:1; justify-content:space-between;">
-                <div class="card-container" id="card-touch-area" onclick="flipCard()">
+                <div class="card-container" id="card-container" onclick="flipCard()">
                     <div class="flashcard" id="flashcard">
                         <div class="card-face card-front">
                             <span class="card-label" id="label-front">Recto</span>
@@ -331,7 +323,6 @@
             </div>
         </section>
 
-        <!-- TAB LIBRARY -->
         <section id="tab-library" class="tab-content">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem; margin-bottom:1.2rem;">
                 <h2 style="font-size: 1.3rem;">Bibliothèque</h2>
@@ -364,7 +355,6 @@
             <div class="library-grid" id="library-grid"></div>
         </section>
 
-        <!-- TAB IMPORT NEW DECK -->
         <section id="tab-import" class="tab-content">
             <h2 style="font-size: 1.3rem;">Ajouter un Deck (IA)</h2>
             <p style="color:var(--text-muted); margin-bottom:1rem; font-size: 0.85rem;">Collez le JSON produit par votre prompt IA ou importez un fichier de partage.</p>
@@ -376,7 +366,6 @@
             </form>
         </section>
 
-        <!-- TAB GENERATEUR PROMPT IA -->
         <section id="tab-prompt" class="tab-content">
             <div style="margin-bottom:1.2rem;">
                 <h2>Générateur de Prompt IA</h2>
@@ -466,7 +455,6 @@
             </div>
         </section>
 
-        <!-- TAB BULK BACKUP -->
         <section id="tab-backup" class="tab-content">
             <h2 style="font-size: 1.3rem;">Sauvegardes Cloud (Bulk)</h2>
             <p style="color:var(--text-muted); margin-bottom:1.2rem; font-size: 0.85rem;">Exportez ou restaurez l'intégralité de vos decks et progressions dans Firestore.</p>
@@ -486,7 +474,6 @@
         </section>
     </main>
 
-    <!-- MODAL EDIT CARD -->
     <div class="modal-backdrop" id="modal-edit-card">
         <div class="modal-box">
             <div class="modal-header">
@@ -516,7 +503,6 @@
         </div>
     </div>
 
-    <!-- MODAL EDIT DECK JSON -->
     <div class="modal-backdrop" id="modal-edit-json">
         <div class="modal-box" style="max-width:750px;">
             <div class="modal-header">
@@ -536,7 +522,6 @@
         </div>
     </div>
 
-    <!-- MODAL EDIT DECK TITLE/CATEGORY -->
     <div class="modal-backdrop" id="modal-edit-deck">
         <div class="modal-box">
             <div class="modal-header">
@@ -561,7 +546,6 @@
         </div>
     </div>
 
-    <!-- SCRIPT FIREBASE SDK (Module) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -646,7 +630,6 @@
         };
     </script>
 
-    <!-- SCRIPT LOGIQUE DE L'APPLICATION -->
     <script>
         const STATUS_CONFIG = {
             unseen: { label: 'Non vu', icon: 'fa-regular fa-circle', color: 'var(--text-muted)' },
@@ -747,11 +730,12 @@
             });
         }
 
-        /* GESTION DU SWIPE TACTILE FLUIDE ET VISUEL */
         function setupTouchSwipe() {
-            const touchArea = document.getElementById('card-touch-area');
+            const touchArea = document.getElementById('card-container');
             let touchStartX = 0;
             let touchEndX = 0;
+
+            if (!touchArea) return;
 
             touchArea.addEventListener('touchstart', (e) => {
                 touchStartX = e.changedTouches[0].screenX;
@@ -773,7 +757,11 @@
         }
 
         function animateSwipeAndNavigate(direction, animClass) {
-            const container = document.getElementById('card-container') || document.getElementById('card-touch-area');
+            const container = document.getElementById('card-container');
+            if (!container) {
+                navigateCard(direction);
+                return;
+            }
             container.classList.add(animClass);
             setTimeout(() => {
                 navigateCard(direction);
@@ -1311,7 +1299,7 @@
             }
         }
 
-        /* EXPORTATION MULTI-DECKS EN JSON (Statuts réinitialisés à unseen pour le partage) */
+        /* 1. EXPORTATION MULTI-DECKS EN JSON (Statuts réinitialisés à unseen pour le partage) */
         function exportSelectedDecks() {
             if (selectedDeckIds.size === 0) return;
             const decksToExport = window.appState.decks
@@ -1324,7 +1312,7 @@
                         question: c.question,
                         answer: c.answer,
                         precision: c.precision || "",
-                        status: "unseen" // Réinitialisé pour le partage sans toucher au deck d'origine
+                        status: "unseen"
                     }))
                 }));
 
@@ -1343,7 +1331,7 @@
             switchTab('revision');
         }
 
-        /* IMPORTATION NON DESTRUCTIVE (Incrémente/Fusionne avec la bibliothèque existante) */
+        /* 2. IMPORTATION NON DESTRUCTIVE (Fusion / Incrémentation) */
         function handleImport(e) {
             e.preventDefault();
             try {
