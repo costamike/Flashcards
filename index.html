@@ -1468,7 +1468,8 @@ ${sourceContent}`;
                     else if (parsed && Array.isArray(parsed.decks)) rawDecks = parsed.decks;
                     else throw new Error("Format de sauvegarde non reconnu.");
 
-                    window.appState.decks = rawDecks.map(deck => ({
+                    // Transformation des decks du fichier de sauvegarde
+                    const importedDecks = rawDecks.map(deck => ({
                         id: deck.id || ('deck_' + Math.random()),
                         title: deck.title || deck.deckName || "Sans titre",
                         category: deck.category || "Général",
@@ -1481,8 +1482,12 @@ ${sourceContent}`;
                         }))
                     }));
 
+                    // FUSION NON DESTRUCTIVE : On ajoute les decks importés à la liste existante 
+                    // au lieu de remplacer complètement window.appState.decks
+                    window.appState.decks = [...window.appState.decks, ...importedDecks];
+
                     if (window.saveToFirestore) await window.saveToFirestore();
-                    alert(`Succès ! ${window.appState.decks.length} deck(s) et toute votre progression ont été restaurés dans le Cloud.`);
+                    alert(`Succès ! ${importedDecks.length} deck(s) ont été fusionnés avec votre bibliothèque Cloud.`);
                     switchTab('library');
                 } catch (err) {
                     alert("Erreur lors de l'importation : " + err.message);
@@ -1490,7 +1495,6 @@ ${sourceContent}`;
             };
             reader.readAsText(file);
         }
-
         updateDynamicPrecisions();
     </script>
 </body>
