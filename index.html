@@ -329,6 +329,9 @@
                     </div>
 
                     <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                        <button class="btn btn-secondary btn-sm" id="btn-toggle-select-all" onclick="toggleSelectAllFilteredDecks()">
+                            <i class="fa-solid fa-square-check"></i> <span id="toggle-select-all-label">Tout sélectionner</span>
+                        </button>
                         <button class="btn btn-secondary btn-sm" id="btn-export-selected" onclick="exportSelectedDecks()" style="display:none;">
                             <i class="fa-solid fa-file-export"></i> Exporter (<span id="selected-export-count">0</span>)
                         </button>
@@ -453,8 +456,8 @@
             </div>
 
             <div class="backup-card">
-                <h3><i class="fa-solid fa-upload" style="color:var(--success);"></i> Ajouter des decks ou une sauvegarde</h3>
-                <p>Charge un fichier `.json` pour ajouter et/ou fusionner les decks à votre bibliothèque Cloud.</p>
+                <h3><i class="fa-solid fa-upload" style="color:var(--success);"></i> Importer une sauvegarde</h3>
+                <p>Charge un fichier `.json` pour fusionner et ajouter les decks à votre bibliothèque Cloud.</p>
                 <input type="file" id="backup-file-input" accept=".json" style="display:none;" onchange="importFullBackup(event)">
                 <button class="btn btn-secondary" onclick="document.getElementById('backup-file-input').click()"><i class="fa-solid fa-file-import"></i> Charger (.json)</button>
             </div>
@@ -988,24 +991,16 @@
             renderLibrary();
         }
 
-        function renderLibrary() {
-            const grid = document.getElementById('library-grid');
+        /* FONCTION DE RECUPERATION DES DECKS VISIBLES (FILTRES APPLIQUES) */
+        function getFilteredDecks() {
             const categorySelect = document.getElementById('library-category-filter');
-            const currentCategory = categorySelect.value;
+            const currentCategory = categorySelect ? categorySelect.value : 'all';
+            const minPct = document.getElementById('slider-min') ? parseInt(document.getElementById('slider-min').value) : 0;
+            const maxPct = document.getElementById('slider-max') ? parseInt(document.getElementById('slider-max').value) : 100;
 
-            const minPct = parseInt(document.getElementById('slider-min').value);
-            const maxPct = parseInt(document.getElementById('slider-max').value);
-
-            const categories = [...new Set(window.appState.decks.map(d => d.category || "Général"))];
-            categorySelect.innerHTML = '<option value="all">Toutes les catégories</option>';
-            categories.forEach(cat => {
-                categorySelect.innerHTML += `<option value="${cat}" ${cat === currentCategory ? 'selected' : ''}>${cat}</option>`;
-            });
-
-            const selectedCat = categorySelect.value;
-            let filteredDecks = selectedCat === 'all' 
+            let filteredDecks = currentCategory === 'all' 
                 ? window.appState.decks 
-                : window.appState.decks.filter(d => (d.category || "Général") === selectedCat);
+                : window.appState.decks.filter(d => (d.category || "Général") === currentCategory);
 
             filteredDecks = filteredDecks.filter(deck => {
                 const total = deck.cards.length;
@@ -1016,6 +1011,22 @@
                 const high = Math.max(minPct, maxPct);
                 return masteryPct >= low && masteryPct <= high;
             });
+
+            return filteredDecks;
+        }
+
+        function renderLibrary() {
+            const grid = document.getElementById('library-grid');
+            const categorySelect = document.getElementById('library-category-filter');
+            const currentCategory = categorySelect.value;
+
+            const categories = [...new Set(window.appState.decks.map(d => d.category || "Général"))];
+            categorySelect.innerHTML = '<option value="all">Toutes les catégories</option>';
+            categories.forEach(cat => {
+                categorySelect.innerHTML += `<option value="${cat}" ${cat === currentCategory ? 'selected' : ''}>${cat}</option>`;
+            });
+
+            const filteredDecks = getFilteredDecks();
 
             grid.innerHTML = '';
             if (filteredDecks.length === 0) {
@@ -1103,6 +1114,25 @@
             });
 
             updateLibraryActionButtonsUI();
+        }
+
+        /* GESTION DU BOUTON "TOUT SÉLECTIONNER / DÉSELECTIONNER" SUR LES FILTRÉS */
+        function toggleSelectAllFilteredDecks() {
+            const filteredDecks = getFilteredDecks();
+            if (filteredDecks.length === 0) return;
+
+            // Vérifie si tous les decks actuellement filtrés sont déjà sélectionnés
+            const allFilteredSelected = filteredDecks.every(deck => selectedDeckIds.has(deck.id));
+
+            if (allFilteredSelected) {
+                // Si tout est déjà sélectionné, on les désélectionne
+                filteredDecks.forEach(deck => selectedDeckIds.delete(deck.id));
+            } else {
+                // Sinon, on sélectionne tous les decks filtrés
+                filteredDecks.forEach(deck => selectedDeckIds.add(deck.id));
+            }
+
+            renderLibrary();
         }
 
         function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
@@ -1237,18 +1267,27 @@
         function toggleDeckSelection(deckId, isChecked) {
             if (isChecked) selectedDeckIds.add(deckId);
             else selectedDeckIds.delete(deckId);
-            updateLibraryActionButtonsUI();
+            renderLibrary(); // Met à jour l'état du bouton "Tout sélectionner" en temps réel
         }
 
         function updateLibraryActionButtonsUI() {
             const deleteBtn = document.getElementById('btn-delete-selected');
             const exportBtn = document.getElementById('btn-export-selected');
+            const toggleSelectBtnLabel = document.getElementById('toggle-select-all-label');
             
             document.getElementById('selected-count').innerText = selectedDeckIds.size;
             document.getElementById('selected-export-count').innerText = selectedDeckIds.size;
 
             deleteBtn.style.display = selectedDeckIds.size > 0 ? 'inline-flex' : 'none';
             exportBtn.style.display = selectedDeckIds.size > 0 ? 'inline-flex' : 'none';
+
+            // Met à jour le texte du bouton de sélection globale selon si les filtrés sont tous cochés ou non
+            const filteredDecks = getFilteredDecks();
+            if (filteredDecks.length > 0 && filteredDecks.every(deck => selectedDeckIds.has(deck.id))) {
+                toggleSelectBtnLabel.innerText = "Tout désélectionner";
+            } else {
+                toggleSelectBtnLabel.innerText = "Tout sélectionner";
+            }
         }
 
         function deleteSingleDeck(deckId) {
@@ -1276,7 +1315,6 @@
             }
         }
 
-        /* EXPORT MULTI-DECKS EN JSON (Statuts réinitialisés à unseen) */
         function exportSelectedDecks() {
             if (selectedDeckIds.size === 0) return;
             const decksToExport = window.appState.decks
@@ -1308,7 +1346,6 @@
             switchTab('revision');
         }
 
-        /* IMPORTATION NON DESTRUCTIVE (Incrémentation) */
         function handleImport(e) {
             e.preventDefault();
             try {
@@ -1468,7 +1505,6 @@ ${sourceContent}`;
                     else if (parsed && Array.isArray(parsed.decks)) rawDecks = parsed.decks;
                     else throw new Error("Format de sauvegarde non reconnu.");
 
-                    // Transformation des decks du fichier de sauvegarde
                     const importedDecks = rawDecks.map(deck => ({
                         id: deck.id || ('deck_' + Math.random()),
                         title: deck.title || deck.deckName || "Sans titre",
@@ -1482,8 +1518,6 @@ ${sourceContent}`;
                         }))
                     }));
 
-                    // FUSION NON DESTRUCTIVE : On ajoute les decks importés à la liste existante 
-                    // au lieu de remplacer complètement window.appState.decks
                     window.appState.decks = [...window.appState.decks, ...importedDecks];
 
                     if (window.saveToFirestore) await window.saveToFirestore();
@@ -1495,6 +1529,7 @@ ${sourceContent}`;
             };
             reader.readAsText(file);
         }
+
         updateDynamicPrecisions();
     </script>
 </body>
