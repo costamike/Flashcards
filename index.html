@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartCards - Flashcards & Générateur de Prompt IA</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-        <link rel="icon" type="image/png" sizes="64x64" href="favicon-FC.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon-FC.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-FC.png">
     <style>
         :root[data-theme="light"] {
@@ -47,27 +47,25 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; min-height: 100vh; display: flex; flex-direction: column; }
+        body { background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
         
         header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: relative; z-index: 10; gap: 1rem; }
         .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
         
-        /* Navigation desktop / standard */
         nav { display: flex; gap: 0.4rem; align-items: center; }
         .nav-btn { background: none; border: none; color: var(--text-muted); padding: 0.5rem 0.8rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; transition: all 0.2s; font-size: 0.9rem; }
         .nav-btn:hover { background-color: var(--primary-light); color: var(--primary); }
         .nav-btn.active { background-color: var(--primary); color: white; }
 
-        /* Bouton Menu Hamburger Mobile */
         .mobile-menu-toggle { display: none; background: none; border: 1px solid var(--border-color); color: var(--text-main); font-size: 1.2rem; padding: 0.4rem 0.6rem; border-radius: 0.5rem; cursor: pointer; }
 
         .theme-selector { display: flex; align-items: center; gap: 0.4rem; background: var(--bg-color); padding: 0.2rem; border-radius: 0.5rem; border: 1px solid var(--border-color); }
         .theme-btn { background: none; border: none; color: var(--text-muted); padding: 0.3rem 0.5rem; border-radius: 0.3rem; cursor: pointer; font-size: 0.85rem; }
         .theme-btn.active { background: var(--card-bg); color: var(--primary); font-weight: bold; box-shadow: var(--shadow); }
 
-        main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 1.5rem; position: relative; z-index: 1; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 1.5rem; position: relative; z-index: 1; display: flex; flex-direction: column; }
+        .tab-content { display: none; flex: 1; flex-direction: column; }
+        .tab-content.active { display: flex; }
 
         .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s; font-size: 0.95rem; }
         .btn:hover { background: var(--primary-hover); }
@@ -77,8 +75,8 @@
         .btn-danger:hover { background: #dc2626; }
         .btn-sm { padding: 0.35rem 0.6rem; font-size: 0.85rem; }
 
-        /* Filtres horizontaux compacts */
-        .filter-bar { display: flex; gap: 0.4rem; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 0.8rem; padding-bottom: 0.2rem; -webkit-overflow-scrolling: touch; }
+        /* Filtres horizontaux épurés sur une seule ligne */
+        .filter-bar { display: flex; gap: 0.4rem; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 0.8rem; padding-bottom: 0.2rem; -webkit-overflow-scrolling: touch; width: 100%; }
         .filter-bar::-webkit-scrollbar { display: none; }
         .filter-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 0.35rem 0.6rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.3rem; white-space: nowrap; flex-shrink: 0; }
         .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
@@ -86,36 +84,44 @@
         .filter-count { background: rgba(0,0,0,0.08); padding: 0.1rem 0.3rem; border-radius: 0.8rem; font-size: 0.65rem; }
         .filter-btn.active .filter-count { background: rgba(255,255,255,0.25); color: white; }
 
-        .card-container { perspective: 1000px; width: 100%; max-width: 650px; height: 310px; margin: 0.5rem auto; cursor: pointer; }
+        /* Conteneur de carte optimisé (Desktop paysage & Mobile portrait) */
+        .card-container { perspective: 1000px; width: 100%; max-width: 750px; flex: 1; min-height: 320px; max-height: 480px; margin: 0.4rem auto; cursor: pointer; transition: transform 0.25s ease, opacity 0.25s ease; }
+        
+        /* Classes pour l'animation de swipe fluide et visuelle */
+        .card-container.swipe-left { transform: translateX(-60px) rotate(-4deg); opacity: 0; }
+        .card-container.swipe-right { transform: translateX(60px) rotate(4deg); opacity: 0; }
+
         .flashcard { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-lg); border-radius: 1rem; border: 1px solid var(--border-color); }
         .flashcard.flipped { transform: rotateY(180deg); }
         
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; padding: 1.2rem; border-radius: 1rem; background: var(--card-bg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; padding: 1.5rem; border-radius: 1rem; background: var(--card-bg); }
         .card-front { justify-content: center; align-items: center; text-align: center; }
         .card-back { transform: rotateY(180deg); overflow-y: auto; text-align: left; justify-content: space-between; }
 
         .card-label { position: absolute; top: 0.8rem; left: 1rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--text-muted); }
         .card-status-badge { position: absolute; top: 0.8rem; right: 1rem; font-size: 0.7rem; font-weight: 600; padding: 0.15rem 0.4rem; border-radius: 1rem; border: 1px solid var(--border-color); }
-        .card-question { font-size: 1.3rem; font-weight: 700; line-height: 1.3; }
-        .card-answer { font-size: 1.05rem; line-height: 1.3; margin-top: 0.5rem; font-weight: 500; }
-        .card-precision { margin-top: 0.5rem; padding: 0.5rem 0.7rem; background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0.4rem; font-size: 0.8rem; color: var(--text-main); white-space: pre-line; }
+        
+        /* Taille de police adaptative pour recto/verso */
+        .card-question { font-size: 1.6rem; font-weight: 700; line-height: 1.35; word-break: break-word; }
+        .card-answer { font-size: 1.2rem; line-height: 1.35; margin-top: 0.5rem; font-weight: 500; word-break: break-word; }
+        .card-precision { margin-top: 0.8rem; padding: 0.6rem 0.9rem; background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0.4rem; font-size: 0.85rem; color: var(--text-main); white-space: pre-line; }
 
-        .navigation-bar { display: flex; justify-content: space-between; align-items: center; max-width: 650px; margin: 0.4rem auto; gap: 0.5rem; }
-        .action-buttons { display: flex; justify-content: center; gap: 0.5rem; max-width: 650px; margin: 0 auto; }
-        .action-btn { flex: 1; padding: 0.6rem 0.3rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 0.3rem; font-size: 0.85rem; }
+        .navigation-bar { display: flex; justify-content: space-between; align-items: center; max-width: 750px; margin: 0.4rem auto; gap: 0.5rem; width: 100%; }
+        .action-buttons { display: flex; justify-content: center; gap: 0.6rem; max-width: 750px; margin: 0.4rem auto; width: 100%; }
+        .action-btn { flex: 1; padding: 0.8rem 0.4rem; border-radius: 0.6rem; font-weight: 600; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 0.4rem; font-size: 0.95rem; }
         
         .btn-status-review { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger); }
         .btn-status-reinforce { background: var(--warning-light); color: var(--warning); border: 1px solid var(--warning); }
         .btn-status-known { background: var(--success-light); color: var(--success); border: 1px solid var(--success); }
 
-        .badge-key { font-size: 0.6rem; opacity: 0.65; background: rgba(0,0,0,0.08); padding: 0.1rem 0.25rem; border-radius: 0.3rem; font-weight: 700; text-transform: uppercase; margin-left: 0.2rem; }
+        .badge-key { font-size: 0.65rem; opacity: 0.65; background: rgba(0,0,0,0.08); padding: 0.1rem 0.25rem; border-radius: 0.3rem; font-weight: 700; text-transform: uppercase; margin-left: 0.3rem; }
 
-        .progress-bar-container { max-width: 650px; margin: 0.6rem auto 0; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; }
+        .progress-bar-container { max-width: 750px; margin: 0.4rem auto; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; width: 100%; }
         .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
         
-        .stats-summary { display: flex; justify-content: space-around; max-width: 650px; margin: 0.4rem auto 0; text-align: center; gap: 0.2rem; }
-        .stat-box { background: var(--card-bg); padding: 0.3rem 0.2rem; border-radius: 0.4rem; border: 1px solid var(--border-color); min-width: 60px; flex: 1; font-size: 0.75rem; }
-        .stat-box div:last-child { font-size: 0.8rem; }
+        .stats-summary { display: flex; justify-content: space-around; max-width: 750px; margin: 0.2rem auto 0.4rem; text-align: center; gap: 0.3rem; width: 100%; }
+        .stat-box { background: var(--card-bg); padding: 0.4rem 0.3rem; border-radius: 0.4rem; border: 1px solid var(--border-color); min-width: 65px; flex: 1; font-size: 0.75rem; }
+        .stat-box div:last-child { font-size: 0.85rem; }
 
         .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; margin-top: 1.2rem; }
         .deck-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
@@ -165,32 +171,37 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
         .auth-status { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: var(--text-muted); }
 
-        /* ADAPTATIONS RESPONSIVES MOBILE (ZERO SCROLL SUR REVISION) */
+        /* ADAPTATIONS RESPONSIVES MOBILE (ZERO SCROLL SUR REVISION & PLEIN ÉCRAN) */
         @media (max-width: 768px) {
             header { padding: 0.6rem 1rem; }
             .logo { font-size: 1.1rem; }
             
-            /* Menu hamburger & dropdown mobile */
             .mobile-menu-toggle { display: block; }
             nav { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg); flex-direction: column; padding: 0.8rem 1rem; border-bottom: 1px solid var(--border-color); box-shadow: var(--shadow-lg); gap: 0.4rem; z-index: 20; }
             nav.mobile-open { display: flex; }
             .nav-btn { width: 100%; padding: 0.6rem 0.8rem; font-size: 0.9rem; }
 
-            main { padding: 0.6rem 0.5rem; }
+            main { padding: 0.5rem; justify-content: space-between; height: calc(100vh - 60px); }
             
-            /* Optimisation compacte de l'onglet révision sur mobile */
+            #tab-revision { justify-content: space-between; }
             #tab-revision h2 { font-size: 1.1rem; line-height: 1.2; }
             #current-deck-category { font-size: 0.7rem; padding: 0.1rem 0.4rem; }
             
-            /* Masquage du sélecteur de raccourcis clavier inutile sur tactile */
+            /* Masquage des badges clavier sur mobile tactile */
+            .badge-key { display: none !important; }
             #select-shortcut-mode { display: none !important; }
 
-            .card-container { height: 260px; margin: 0.3rem auto; }
-            .card-question { font-size: 1.1rem; }
-            .card-answer { font-size: 0.95rem; }
-            .action-btn { font-size: 0.8rem; padding: 0.5rem 0.2rem; }
-            .stats-summary { font-size: 0.7rem; margin-top: 0.3rem; }
-            .stat-box { min-width: 50px; padding: 0.2rem; }
+            .card-container { flex: 1; max-height: none; margin: 0.2rem auto; min-height: 220px; }
+            .card-question { font-size: 1.3rem; }
+            .card-answer { font-size: 1.05rem; }
+            
+            .action-buttons { gap: 0.4rem; margin: 0.2rem auto; }
+            .action-btn { padding: 0.7rem 0.2rem; font-size: 0.85rem; }
+            
+            .navigation-bar { margin: 0.2rem auto; }
+            .stats-summary { font-size: 0.7rem; margin-top: 0.2rem; }
+            .stat-box { min-width: 45px; padding: 0.2rem; }
+            
             .library-grid { grid-template-columns: 1fr; }
             .range-filter-container { width: 100%; justify-content: space-between; }
         }
@@ -249,7 +260,7 @@
     <main>
         <!-- TAB REVISION -->
         <section id="tab-revision" class="tab-content active">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem; flex-wrap:wrap; gap:0.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; flex-wrap:wrap; gap:0.5rem;">
                 <div>
                     <h2 id="current-deck-title" style="font-size: 1.2rem;">Sélectionnez un deck</h2>
                     <span id="current-deck-category" style="background:var(--primary-light); color:var(--primary); padding:0.1rem 0.4rem; border-radius:1rem; font-size:0.75rem; font-weight:600;">--</span>
@@ -264,7 +275,7 @@
                 </div>
             </div>
 
-            <!-- Filtres horizontaux compacts -->
+            <!-- Filtres horizontaux épurés sur une seule ligne -->
             <div class="filter-bar" id="filter-buttons-container">
                 <button class="filter-btn active" id="filter-btn-unseen" onclick="setFilter('unseen')"><i class="fa-regular fa-circle"></i> Non vus <span class="filter-count" id="count-unseen">0</span></button>
                 <button class="filter-btn" id="filter-btn-review" onclick="setFilter('review')"><i class="fa-solid fa-xmark" style="color:var(--danger);"></i> À revoir <span class="filter-count" id="count-review">0</span></button>
@@ -273,7 +284,7 @@
                 <button class="filter-btn" id="filter-btn-all" onclick="setFilter('all')"><i class="fa-solid fa-layer-group"></i> Tous <span class="filter-count" id="count-all">0</span></button>
             </div>
 
-            <div id="deck-view-container">
+            <div id="deck-view-container" style="display:flex; flex-direction:column; flex:1; justify-content:space-between;">
                 <div class="card-container" id="card-touch-area" onclick="flipCard()">
                     <div class="flashcard" id="flashcard">
                         <div class="card-face card-front">
@@ -282,13 +293,13 @@
                             <div class="card-question" id="card-question">Sélectionnez un deck dans la bibliothèque.</div>
                         </div>
                         <div class="card-face card-back">
-                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; position:absolute; top:0.6rem; left:0; padding:0 1rem;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; position:absolute; top:0.6rem; left:0; padding:0 1.2rem;">
                                 <span class="card-label" id="label-back" style="position:static;">Verso</span>
                                 <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editCurrentCardFromRevision();" title="Éditer cette carte" style="padding:0.15rem 0.4rem;">
                                     <i class="fa-solid fa-pen"></i>
                                 </button>
                             </div>
-                            <div style="margin-top:1rem; width:100%;">
+                            <div style="margin-top:1.5rem; width:100%;">
                                 <div class="card-answer" id="card-answer">--</div>
                                 <div class="card-precision" id="card-precision" style="display:none;"></div>
                             </div>
@@ -339,9 +350,14 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-danger btn-sm" id="btn-delete-selected" onclick="deleteSelectedDecks()" style="display:none;">
-                        <i class="fa-solid fa-trash"></i> Suppr. (<span id="selected-count">0</span>)
-                    </button>
+                    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                        <button class="btn btn-secondary btn-sm" id="btn-export-selected" onclick="exportSelectedDecks()" style="display:none;">
+                            <i class="fa-solid fa-file-export"></i> Exporter (<span id="selected-export-count">0</span>)
+                        </button>
+                        <button class="btn btn-danger btn-sm" id="btn-delete-selected" onclick="deleteSelectedDecks()" style="display:none;">
+                            <i class="fa-solid fa-trash"></i> Suppr. (<span id="selected-count">0</span>)
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -351,7 +367,7 @@
         <!-- TAB IMPORT NEW DECK -->
         <section id="tab-import" class="tab-content">
             <h2 style="font-size: 1.3rem;">Ajouter un Deck (IA)</h2>
-            <p style="color:var(--text-muted); margin-bottom:1rem; font-size: 0.85rem;">Collez le JSON produit par votre prompt IA pour l'ajouter au Cloud.</p>
+            <p style="color:var(--text-muted); margin-bottom:1rem; font-size: 0.85rem;">Collez le JSON produit par votre prompt IA ou importez un fichier de partage.</p>
             <form onsubmit="handleImport(event)">
                 <div class="form-group">
                     <textarea id="import-json" rows="8" required style="font-family:monospace;" placeholder='{"deckName": "Vocabulaire", "category": "Langues", "cards": []}'></textarea>
@@ -731,7 +747,7 @@
             });
         }
 
-        /* GESTION DU SWIPE TACTILE SUR MOBILE */
+        /* GESTION DU SWIPE TACTILE FLUIDE ET VISUEL */
         function setupTouchSwipe() {
             const touchArea = document.getElementById('card-touch-area');
             let touchStartX = 0;
@@ -747,16 +763,22 @@
             }, {passive: true});
 
             function handleSwipeGesture() {
-                const threshold = 50; // distance minimale en pixels
+                const threshold = 45;
                 if (touchEndX < touchStartX - threshold) {
-                    // Swipe vers la gauche -> Carte suivante
-                    navigateCard(1);
-                }
-                if (touchEndX > touchStartX + threshold) {
-                    // Swipe vers la droite -> Carte précédente
-                    navigateCard(-1);
+                    animateSwipeAndNavigate(1, 'swipe-left');
+                } else if (touchEndX > touchStartX + threshold) {
+                    animateSwipeAndNavigate(-1, 'swipe-right');
                 }
             }
+        }
+
+        function animateSwipeAndNavigate(direction, animClass) {
+            const container = document.getElementById('card-container') || document.getElementById('card-touch-area');
+            container.classList.add(animClass);
+            setTimeout(() => {
+                navigateCard(direction);
+                container.classList.remove(animClass);
+            }, 200);
         }
 
         function setShortcutMode(mode) {
@@ -808,7 +830,6 @@
             document.getElementById(`tab-${tabName}`).classList.add('active');
             document.getElementById(`nav-${tabName}`).classList.add('active');
 
-            // Fermer le menu mobile s'il est ouvert
             document.getElementById('main-nav').classList.remove('mobile-open');
 
             if (tabName === 'library') renderLibrary();
@@ -958,7 +979,7 @@
             window.appState.currentIndex += direction;
             if (window.appState.currentIndex >= filtered.length) window.appState.currentIndex = 0;
             if (window.appState.currentIndex < 0) window.appState.currentIndex = filtered.length - 1;
-            setTimeout(() => { renderCard(); }, 150);
+            renderCard();
         }
 
         function markCardStatus(status) {
@@ -969,18 +990,16 @@
             filtered[window.appState.currentIndex].status = status;
             if (window.saveToFirestore) window.saveToFirestore();
 
-            setTimeout(() => {
-                if (window.appState.filter !== 'all') {
-                    const newFiltered = getFilteredCards();
-                    if (window.appState.currentIndex >= newFiltered.length) {
-                        window.appState.currentIndex = 0;
-                    }
-                } else {
-                    window.appState.currentIndex++;
-                    if (window.appState.currentIndex >= filtered.length) window.appState.currentIndex = 0;
+            if (window.appState.filter !== 'all') {
+                const newFiltered = getFilteredCards();
+                if (window.appState.currentIndex >= newFiltered.length) {
+                    window.appState.currentIndex = 0;
                 }
-                renderCard();
-            }, 150);
+            } else {
+                window.appState.currentIndex++;
+                if (window.appState.currentIndex >= filtered.length) window.appState.currentIndex = 0;
+            }
+            renderCard();
         }
 
         function editCurrentCardFromRevision() {
@@ -1036,7 +1055,7 @@
             grid.innerHTML = '';
             if (filteredDecks.length === 0) {
                 grid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-box-open" style="font-size:2rem; margin-bottom:0.5rem;"></i><p>Aucun deck ne correspond à ces critères.</p></div>`;
-                updateDeleteButtonUI();
+                updateLibraryActionButtonsUI();
                 return;
             }
 
@@ -1118,7 +1137,7 @@
                 grid.appendChild(deckEl);
             });
 
-            updateDeleteButtonUI();
+            updateLibraryActionButtonsUI();
         }
 
         function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
@@ -1253,13 +1272,18 @@
         function toggleDeckSelection(deckId, isChecked) {
             if (isChecked) selectedDeckIds.add(deckId);
             else selectedDeckIds.delete(deckId);
-            updateDeleteButtonUI();
+            updateLibraryActionButtonsUI();
         }
 
-        function updateDeleteButtonUI() {
-            const btn = document.getElementById('btn-delete-selected');
+        function updateLibraryActionButtonsUI() {
+            const deleteBtn = document.getElementById('btn-delete-selected');
+            const exportBtn = document.getElementById('btn-export-selected');
+            
             document.getElementById('selected-count').innerText = selectedDeckIds.size;
-            btn.style.display = selectedDeckIds.size > 0 ? 'inline-flex' : 'none';
+            document.getElementById('selected-export-count').innerText = selectedDeckIds.size;
+
+            deleteBtn.style.display = selectedDeckIds.size > 0 ? 'inline-flex' : 'none';
+            exportBtn.style.display = selectedDeckIds.size > 0 ? 'inline-flex' : 'none';
         }
 
         function deleteSingleDeck(deckId) {
@@ -1287,33 +1311,76 @@
             }
         }
 
+        /* EXPORTATION MULTI-DECKS EN JSON (Statuts réinitialisés à unseen pour le partage) */
+        function exportSelectedDecks() {
+            if (selectedDeckIds.size === 0) return;
+            const decksToExport = window.appState.decks
+                .filter(d => selectedDeckIds.has(d.id))
+                .map(deck => ({
+                    deckName: deck.title || deck.deckName,
+                    category: deck.category || "Général",
+                    cards: deck.cards.map(c => ({
+                        id: c.id,
+                        question: c.question,
+                        answer: c.answer,
+                        precision: c.precision || "",
+                        status: "unseen" // Réinitialisé pour le partage sans toucher au deck d'origine
+                    }))
+                }));
+
+            const payload = decksToExport.length === 1 ? decksToExport[0] : { decks: decksToExport };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+            const a = document.createElement('a');
+            a.href = dataStr;
+            a.download = `smartcards_share_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+
         function selectDeck(deckId) {
             window.appState.currentDeckId = deckId;
             switchTab('revision');
         }
 
+        /* IMPORTATION NON DESTRUCTIVE (Incrémente/Fusionne avec la bibliothèque existante) */
         function handleImport(e) {
             e.preventDefault();
             try {
                 const parsed = JSON.parse(document.getElementById('import-json').value.trim());
-                let rawCards = parsed.cards || (Array.isArray(parsed) ? parsed : []);
-                
-                const newDeck = {
-                    id: 'deck_' + Date.now(),
-                    title: parsed.deckName || parsed.title || "Nouveau Deck",
-                    category: parsed.category || "Général",
-                    cards: rawCards.map((c, idx) => ({
-                        id: c.id || ('c_' + Date.now() + '_' + idx),
-                        question: c.question || 'Sans question',
-                        answer: c.answer || 'Sans réponse',
-                        precision: c.precision || '',
-                        status: c.status || 'unseen'
-                    }))
-                };
-                window.appState.decks.push(newDeck);
-                window.appState.currentDeckId = newDeck.id;
+                let rawDecks = [];
+                if (Array.isArray(parsed)) {
+                    rawDecks = parsed;
+                } else if (parsed && Array.isArray(parsed.decks)) {
+                    rawDecks = parsed.decks;
+                } else if (parsed && (parsed.deckName || parsed.title)) {
+                    rawDecks = [parsed];
+                } else {
+                    throw new Error("Format de deck non reconnu.");
+                }
+
+                let addedCount = 0;
+                rawDecks.forEach(deckData => {
+                    let rawCards = deckData.cards || [];
+                    const newDeck = {
+                        id: 'deck_' + Date.now() + '_' + Math.random().toString(36.substr(2, 5)),
+                        title: deckData.title || deckData.deckName || "Deck partagé",
+                        category: deckData.category || "Général",
+                        cards: rawCards.map((c, idx) => ({
+                            id: c.id || ('c_' + Date.now() + '_' + idx),
+                            question: c.question || 'Sans question',
+                            answer: c.answer || 'Sans réponse',
+                            precision: c.precision || '',
+                            status: c.status || 'unseen'
+                        }))
+                    };
+                    window.appState.decks.push(newDeck);
+                    window.appState.currentDeckId = newDeck.id;
+                    addedCount++;
+                });
+
                 if (window.saveToFirestore) window.saveToFirestore();
-                alert("Deck ajouté au Cloud !");
+                alert(`Succès ! ${addedCount} deck(s) ont été ajoutés à votre bibliothèque.`);
                 document.getElementById('import-json').value = '';
                 switchTab('revision');
             } catch (err) {
