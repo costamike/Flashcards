@@ -977,15 +977,18 @@
                 filtered[window.appState.currentIndex].status = status;
                 if (window.saveToFirestore) window.saveToFirestore();
 
-                if (window.appState.filter !== 'all') {
-                    const newFiltered = getFilteredCards();
-                    if (window.appState.currentIndex >= newFiltered.length) {
-                        window.appState.currentIndex = 0;
-                    }
-                } else {
-                    window.appState.currentIndex++;
-                    if (window.appState.currentIndex >= filtered.length) window.appState.currentIndex = 0;
+                // Récupération de la nouvelle liste filtrée après changement de statut
+                const newFiltered = getFilteredCards();
+                
+                if (newFiltered.length === 0) {
+                    window.appState.currentIndex = 0;
+                } else if (window.appState.currentIndex >= newFiltered.length) {
+                    // Si on était sur la toute dernière carte, on recule d'un cran pour ne pas être hors limites
+                    window.appState.currentIndex = newFiltered.length - 1;
                 }
+                // Si on est au milieu de la liste, window.appState.currentIndex NE CHANGE PAS,
+                // ce qui fait passer automatiquement à la carte suivante !
+
                 renderCard();
                 cardEl.classList.remove('fade-out');
             }, 150);
