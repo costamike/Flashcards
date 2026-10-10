@@ -975,41 +975,29 @@
             setTimeout(() => {
                 resetFlipState();
                 
-                // 1. On récupère l'identifiant unique de la carte active actuelle
-                const currentFilteredList = getFilteredCards();
-                const currentCardId = currentFilteredList[window.appState.currentIndex].id;
+                // On mémorise l'index actuel
+                let currentIndex = window.appState.currentIndex;
 
-                // 2. On met à jour son statut dans le deck global
-                const deck = getCurrentDeck();
-                const cardInDeck = deck.cards.find(c => c.id === currentCardId);
-                if (cardInDeck) {
-                    cardInDeck.status = status;
-                }
+                // On change le statut de la carte actuelle
+                filtered[currentIndex].status = status;
                 if (window.saveToFirestore) window.saveToFirestore();
 
-                // 3. On récupère la nouvelle liste filtrée
+                // On récupère le nouveau filtre
                 const newFiltered = getFilteredCards();
 
-                // 4. On ajuste l'index pour qu'il reste sur la carte suivante sans sauter au début
-                if (newFiltered.length === 0) {
-                    window.appState.currentIndex = 0;
-                } else if (window.appState.currentIndex >= newFiltered.length) {
-                    window.appState.currentIndex = newFiltered.length - 1;
+                // Si l'index dépasse la nouvelle taille (ex: on était sur la dernière), on recule d'un cran
+                if (currentIndex >= newFiltered.length) {
+                    window.appState.currentIndex = Math.max(0, newFiltered.length - 1);
+                } else {
+                    // Sinon, on garde STRICTEMENT le même index. 
+                    // Comme la carte précédente est partie, la carte suivante occupe maintenant cette position.
+                    window.appState.currentIndex = currentIndex;
                 }
-                // Si on était au milieu (ex: index 6), la carte suivante monte 
-                // automatiquement à l'index 6 et s'affiche instantanément.
 
                 renderCard();
                 cardEl.classList.remove('fade-out');
             }, 150);
         }
-        function editCurrentCardFromRevision() {
-            const filtered = getFilteredCards();
-            if (filtered.length === 0) return;
-            const currentCard = filtered[window.appState.currentIndex];
-            openEditCardModal(window.appState.currentDeckId, currentCard.id);
-        }
-
         function handleSliderInput() {
             let minVal = parseInt(document.getElementById('slider-min').value);
             let maxVal = parseInt(document.getElementById('slider-max').value);
