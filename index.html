@@ -972,36 +972,38 @@
             const cardEl = document.getElementById('flashcard');
             cardEl.classList.add('fade-out');
 
+            // On capture immédiatement l'index et l'ID de la carte active
+            const currentIndex = window.appState.currentIndex;
+            const targetCard = filtered[currentIndex];
+
             setTimeout(() => {
                 resetFlipState();
                 
-                // On cible précisément l'ID de la carte actuelle
-                const currentCard = filtered[window.appState.currentIndex];
-                if (!currentCard) {
-                    cardEl.classList.remove('fade-out');
-                    return;
+                if (targetCard) {
+                    targetCard.status = status;
+                    if (window.saveToFirestore) window.saveToFirestore();
                 }
-
-                // On change son statut dans le deck
-                currentCard.status = status;
-                if (window.saveToFirestore) window.saveToFirestore();
 
                 // On récupère la nouvelle liste filtrée
                 const newFiltered = getFilteredCards();
 
-                // Gestion directe de l'index : 
-                // Si l'index actuel est supérieur ou égal au nouveau nombre de cartes, 
-                // on se cale sur le dernier élément valide. 
-                // Sinon, l'index ne bouge pas (la carte suivante a pris la place).
-                if (window.appState.currentIndex >= newFiltered.length) {
-                    window.appState.currentIndex = Math.max(0, newFiltered.length - 1);
+                // Gestion stricte de l'index sans retour à zéro intempestif
+                if (newFiltered.length === 0) {
+                    window.appState.currentIndex = 0;
+                } else if (currentIndex >= newFiltered.length) {
+                    // Si on était sur la toute dernière carte, on se met sur la nouvelle fin
+                    window.appState.currentIndex = newFiltered.length - 1;
+                } else {
+                    // On force l'index à rester exactement au même numéro d'index,
+                    // ce qui fait que la carte suivante (qui a pris la place) s'affiche.
+                    window.appState.currentIndex = currentIndex;
                 }
 
                 renderCard();
                 cardEl.classList.remove('fade-out');
             }, 150);
         }
-
+        
         function getFilteredDecks() {
             const categorySelect = document.getElementById('library-category-filter');
             const currentCategory = categorySelect ? categorySelect.value : 'all';
