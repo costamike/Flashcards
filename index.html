@@ -975,22 +975,27 @@
             setTimeout(() => {
                 resetFlipState();
                 
-                // 1. On change le statut de la carte actuelle
+                // 1. On modifie le statut de la carte active
                 filtered[window.appState.currentIndex].status = status;
                 if (window.saveToFirestore) window.saveToFirestore();
 
-                // 2. On récupère la nouvelle liste selon le filtre actif
+                // 2. On récupère la liste rafraîchie après le changement de filtre
                 const newFiltered = getFilteredCards();
 
-                // 3. Gestion de l'index : 
-                // Si la carte a quitté le filtre actuel (ex: passage de "Non vu" à "À revoir"),
-                // la carte suivante a pris la même position (currentIndex). 
-                // On vérifie juste qu'on ne dépasse pas la nouvelle fin de tableau.
-                if (window.appState.currentIndex >= newFiltered.length) {
-                    window.appState.currentIndex = Math.max(0, newFiltered.length - 1);
+                // 3. Gestion rigoureuse de l'index :
+                // Si la liste est vide, on remet à 0.
+                if (newFiltered.length === 0) {
+                    window.appState.currentIndex = 0;
+                } 
+                // Si l'index actuel dépasse ou égale la nouvelle taille du tableau 
+                // (parce qu'on a modifié la toute dernière carte de la liste), 
+                // on recule d'un cran.
+                else if (window.appState.currentIndex >= newFiltered.length) {
+                    window.appState.currentIndex = newFiltered.length - 1;
                 }
-                // Si on était au milieu, window.appState.currentIndex reste identique, 
-                // ce qui affiche directement la carte suivante à la même position !
+                // Sinon, window.appState.currentIndex reste strictement identique. 
+                // Puisque la carte active a quitté le filtre, la carte suivante occupe 
+                // exactement cet index, ce qui permet de continuer de parcourir la liste sans saut !
 
                 renderCard();
                 cardEl.classList.remove('fade-out');
