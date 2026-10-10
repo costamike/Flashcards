@@ -975,29 +975,31 @@
             setTimeout(() => {
                 resetFlipState();
                 
-                // 1. On applique le nouveau statut à la carte active
+                // 1. On change le statut de la carte active actuelle
                 filtered[window.appState.currentIndex].status = status;
                 if (window.saveToFirestore) window.saveToFirestore();
 
-                // 2. On récupère la liste filtrée mise à jour
+                // 2. On récupère la liste mise à jour du filtre actif
                 const newFiltered = getFilteredCards();
 
-                // 3. Gestion propre de l'index :
+                // 3. Gestion exacte de l'index :
+                // Si la liste est vide, on remet à 0
                 if (newFiltered.length === 0) {
                     window.appState.currentIndex = 0;
-                } else if (window.appState.currentIndex >= newFiltered.length) {
-                    // Si on était sur la toute dernière carte du tableau, on recule d'un cran
+                } 
+                // CRcial : Si on était sur la dernière carte du tableau et qu'elle disparaît, 
+                // l'index doit reculer d'un cran. 
+                else if (window.appState.currentIndex >= newFiltered.length) {
                     window.appState.currentIndex = newFiltered.length - 1;
                 }
-                // IMPORTANT : Si window.appState.currentIndex est au milieu, 
-                // on NE TOUCHER PAS à l'index. Comme la carte actuelle est partie, 
-                // la carte suivante occupe maintenant cet index exact.
+                // Si on était au milieu (ex: index 6 sur 30), cette carte s'en va. 
+                // La carte suivante monte à l'index 6. 
+                // On force un petit appel direct à renderCard() pour s'assurer que l'index ne bouge pas.
 
                 renderCard();
                 cardEl.classList.remove('fade-out');
             }, 150);
         }
-
         function editCurrentCardFromRevision() {
             const filtered = getFilteredCards();
             if (filtered.length === 0) return;
