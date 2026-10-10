@@ -975,27 +975,23 @@
             setTimeout(() => {
                 resetFlipState();
                 
-                // 1. On modifie le statut de la carte active
+                // 1. On applique le nouveau statut à la carte active
                 filtered[window.appState.currentIndex].status = status;
                 if (window.saveToFirestore) window.saveToFirestore();
 
-                // 2. On récupère la liste rafraîchie après le changement de filtre
+                // 2. On récupère la liste filtrée mise à jour
                 const newFiltered = getFilteredCards();
 
-                // 3. Gestion rigoureuse de l'index :
-                // Si la liste est vide, on remet à 0.
+                // 3. Gestion propre de l'index :
                 if (newFiltered.length === 0) {
                     window.appState.currentIndex = 0;
-                } 
-                // Si l'index actuel dépasse ou égale la nouvelle taille du tableau 
-                // (parce qu'on a modifié la toute dernière carte de la liste), 
-                // on recule d'un cran.
-                else if (window.appState.currentIndex >= newFiltered.length) {
+                } else if (window.appState.currentIndex >= newFiltered.length) {
+                    // Si on était sur la toute dernière carte du tableau, on recule d'un cran
                     window.appState.currentIndex = newFiltered.length - 1;
                 }
-                // Sinon, window.appState.currentIndex reste strictement identique. 
-                // Puisque la carte active a quitté le filtre, la carte suivante occupe 
-                // exactement cet index, ce qui permet de continuer de parcourir la liste sans saut !
+                // IMPORTANT : Si window.appState.currentIndex est au milieu, 
+                // on NE TOUCHER PAS à l'index. Comme la carte actuelle est partie, 
+                // la carte suivante occupe maintenant cet index exact.
 
                 renderCard();
                 cardEl.classList.remove('fade-out');
