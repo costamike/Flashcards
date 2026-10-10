@@ -975,37 +975,26 @@
             setTimeout(() => {
                 resetFlipState();
                 
-                // 1. On récupère la carte active actuelle avant modification
-                const currentFiltered = getFilteredCards();
-                const activeCard = currentFiltered[window.appState.currentIndex];
-
-                if (!activeCard) {
+                // On cible précisément l'ID de la carte actuelle
+                const currentCard = filtered[window.appState.currentIndex];
+                if (!currentCard) {
                     cardEl.classList.remove('fade-out');
                     return;
                 }
 
-                // 2. On met à jour son statut dans le deck global
-                const deck = getCurrentDeck();
-                const targetCard = deck.cards.find(c => c.id === activeCard.id);
-                if (targetCard) {
-                    targetCard.status = status;
-                    if (window.saveToFirestore) window.saveToFirestore();
-                }
+                // On change son statut dans le deck
+                currentCard.status = status;
+                if (window.saveToFirestore) window.saveToFirestore();
 
-                // 3. On récupère la nouvelle liste filtrée
+                // On récupère la nouvelle liste filtrée
                 const newFiltered = getFilteredCards();
 
-                // 4. On ajuste l'index intelligemment :
-                // Si la liste est vide, on met à 0.
-                if (newFiltered.length === 0) {
-                    window.appState.currentIndex = 0;
-                } else {
-                    // Si l'index actuel dépasse la nouvelle taille, on recule d'un cran.
-                    if (window.appState.currentIndex >= newFiltered.length) {
-                        window.appState.currentIndex = newFiltered.length - 1;
-                    }
-                    // Sinon, l'index reste identique. Comme la carte précédente est sortie 
-                    // du filtre, la carte suivante occupe exactement cette position numérique.
+                // Gestion directe de l'index : 
+                // Si l'index actuel est supérieur ou égal au nouveau nombre de cartes, 
+                // on se cale sur le dernier élément valide. 
+                // Sinon, l'index ne bouge pas (la carte suivante a pris la place).
+                if (window.appState.currentIndex >= newFiltered.length) {
+                    window.appState.currentIndex = Math.max(0, newFiltered.length - 1);
                 }
 
                 renderCard();
