@@ -975,26 +975,29 @@
             setTimeout(() => {
                 resetFlipState();
                 
-                // 1. On change le statut de la carte active actuelle
-                filtered[window.appState.currentIndex].status = status;
+                // 1. On récupère l'identifiant unique de la carte active actuelle
+                const currentFilteredList = getFilteredCards();
+                const currentCardId = currentFilteredList[window.appState.currentIndex].id;
+
+                // 2. On met à jour son statut dans le deck global
+                const deck = getCurrentDeck();
+                const cardInDeck = deck.cards.find(c => c.id === currentCardId);
+                if (cardInDeck) {
+                    cardInDeck.status = status;
+                }
                 if (window.saveToFirestore) window.saveToFirestore();
 
-                // 2. On récupère la liste mise à jour du filtre actif
+                // 3. On récupère la nouvelle liste filtrée
                 const newFiltered = getFilteredCards();
 
-                // 3. Gestion exacte de l'index :
-                // Si la liste est vide, on remet à 0
+                // 4. On ajuste l'index pour qu'il reste sur la carte suivante sans sauter au début
                 if (newFiltered.length === 0) {
                     window.appState.currentIndex = 0;
-                } 
-                // CRcial : Si on était sur la dernière carte du tableau et qu'elle disparaît, 
-                // l'index doit reculer d'un cran. 
-                else if (window.appState.currentIndex >= newFiltered.length) {
+                } else if (window.appState.currentIndex >= newFiltered.length) {
                     window.appState.currentIndex = newFiltered.length - 1;
                 }
-                // Si on était au milieu (ex: index 6 sur 30), cette carte s'en va. 
-                // La carte suivante monte à l'index 6. 
-                // On force un petit appel direct à renderCard() pour s'assurer que l'index ne bouge pas.
+                // Si on était au milieu (ex: index 6), la carte suivante monte 
+                // automatiquement à l'index 6 et s'affiche instantanément.
 
                 renderCard();
                 cardEl.classList.remove('fade-out');
