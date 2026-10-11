@@ -63,6 +63,12 @@
         .theme-btn { background: none; border: none; color: var(--text-muted); padding: 0.3rem 0.5rem; border-radius: 0.3rem; cursor: pointer; font-size: 0.85rem; }
         .theme-btn.active { background: var(--card-bg); color: var(--primary); font-weight: bold; box-shadow: var(--shadow); }
 
+        /* Gestion de l'affichage du sélecteur de thème selon l'écran */
+        .mobile-theme-selector { display: none; }
+        @media (min-width: 769px) {
+            .desktop-theme-selector { display: flex; }
+        }
+
         main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 1rem; position: relative; z-index: 1; display: flex; flex-direction: column; overflow: hidden; }
         .tab-content { display: none; flex: 1; flex-direction: column; overflow-y: auto; }
         .tab-content.active { display: flex; }
@@ -101,7 +107,7 @@
         .card-answer { font-size: 1.2rem; line-height: 1.4; margin-top: 0.4rem; font-weight: 500; }
         .card-precision { margin-top: 0.6rem; padding: 0.5rem 0.8rem; background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0.4rem; font-size: 0.85rem; color: var(--text-main); white-space: pre-line; }
 
-        .deck-header-info { margin-bottom: 0.3rem; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+        .deck-header-info { margin-bottom: 0.3rem; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; width: 100%; }
         .navigation-bar { display: flex; justify-content: space-between; align-items: center; max-width: 750px; margin: 0.2rem auto; gap: 0.5rem; width: 100%; flex-shrink: 0; }
         
         /* BOUTONS DE STATUTS */
@@ -193,6 +199,10 @@
             .card-answer { font-size: 1rem; }
             .library-grid { grid-template-columns: 1fr; }
             .range-filter-container { width: 100%; justify-content: space-between; }
+
+            /* Affichage unique du sélecteur mobile, collé tout à droite */
+            .desktop-theme-selector { display: none !important; }
+            .mobile-theme-selector { display: flex !important; margin-left: auto; }
         }
     </style>
 </head>
@@ -238,6 +248,7 @@
                 <span id="user-email-display" style="font-weight:600; color:var(--text-main); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
                 <button class="btn btn-secondary btn-sm" onclick="logoutFirebase()" title="Déconnexion"><i class="fa-solid fa-right-from-bracket"></i></button>
             </div>
+            <!-- Sélecteur de thème uniquement sur Desktop dans le header -->
             <div class="theme-selector desktop-theme-selector">
                 <button class="theme-btn" onclick="setTheme('light')" id="theme-light"><i class="fa-solid fa-sun"></i></button>
                 <button class="theme-btn" onclick="setTheme('dark')" id="theme-dark"><i class="fa-solid fa-moon"></i></button>
@@ -248,18 +259,18 @@
     <main>
         <section id="tab-revision" class="tab-content active">
             <div class="deck-header-info">
-                <div style="display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; width: 100%;">
                     <div>
                         <h2 id="current-deck-title" style="font-size: 1.2rem;">Sélectionnez un deck</h2>
                         <span id="current-deck-category" style="background:var(--primary-light); color:var(--primary); padding:0.15rem 0.5rem; border-radius:1rem; font-size:0.75rem; font-weight:600;">--</span>
                     </div>
-                    <!-- Sélecteur de thème déplacé ici pour visibilité immédiate -->
-                    <div class="theme-selector">
+                    <!-- Sélecteur de thème mobile collé tout à droite -->
+                    <div class="theme-selector mobile-theme-selector">
                         <button class="theme-btn" onclick="setTheme('light')" id="theme-light-mobile"><i class="fa-solid fa-sun"></i></button>
                         <button class="theme-btn" onclick="setTheme('dark')" id="theme-dark-mobile"><i class="fa-solid fa-moon"></i></button>
                     </div>
                 </div>
-                <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+                <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap; width: 100%; justify-content: space-between;">
                     <button class="btn btn-secondary btn-sm" id="btn-toggle-invert" onclick="toggleInvertFaces()"><i class="fa-solid fa-right-left"></i> Sens</button>
                     <select id="select-shortcut-mode" onchange="setShortcutMode(this.value)" class="btn btn-secondary btn-sm" style="font-weight:600; padding: 0.35rem;">
                         <option value="wxc">Clavier : W-X-C</option>
@@ -326,15 +337,14 @@
             </div>
         </section>
 
+        <!-- (Le reste des onglets bibliothèque, import, prompt, backup reste inchangé) -->
         <section id="tab-library" class="tab-content">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem; margin-bottom:1.2rem;">
                 <h2 style="font-size: 1.3rem;">Bibliothèque</h2>
-                
                 <div style="display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap; width: 100%;">
                     <select id="library-category-filter" onchange="renderLibrary()" style="flex: 1; min-width: 140px;">
                         <option value="all">Toutes les catégories</option>
                     </select>
-
                     <div class="range-filter-container" style="flex: 1; min-width: 220px;">
                         <span style="font-size:0.8rem; font-weight:600;"><i class="fa-solid fa-chart-line" style="color:var(--primary);"></i> <span id="slider-range-val">0% - 100%</span></span>
                         <div class="dual-slider-box">
@@ -343,7 +353,6 @@
                             <input type="range" id="slider-max" min="0" max="100" step="5" value="100" oninput="handleSliderInput()">
                         </div>
                     </div>
-
                     <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
                         <button class="btn btn-secondary btn-sm" id="btn-toggle-select-all" onclick="toggleSelectAllFilteredDecks()">
                             <i class="fa-solid fa-square-check"></i> <span id="toggle-select-all-label">Tout sélectionner</span>
@@ -357,7 +366,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="library-grid" id="library-grid"></div>
         </section>
 
@@ -377,11 +385,9 @@
                 <h2>Générateur de Prompt IA</h2>
                 <p style="color:var(--text-muted); font-size: 0.85rem;">Configurez votre besoin pour obtenir un prompt sur-mesure.</p>
             </div>
-
             <div class="prompt-grid">
                 <div class="prompt-panel">
                     <div class="prompt-panel-title"><i class="fa-solid fa-sliders"></i> Paramètres</div>
-
                     <div class="form-group">
                         <label>1. Type de source :</label>
                         <div class="radio-options">
@@ -389,17 +395,14 @@
                             <label class="radio-label"><input type="radio" name="source-type" value="topic" onchange="toggleSourceInput()"> Thème seul</label>
                         </div>
                     </div>
-
                     <div class="form-group" id="source-text-group">
                         <label for="prompt-source-text">Cours source *</label>
                         <textarea id="prompt-source-text" rows="3" placeholder="Collez votre cours..."></textarea>
                     </div>
-
                     <div class="form-group" id="source-topic-group" style="display:none;">
                         <label for="prompt-source-topic">Thème ou sujet *</label>
                         <input type="text" id="prompt-source-topic" placeholder="ex: Vocabulaire espagnol">
                     </div>
-
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem;">
                         <div class="form-group">
                             <label for="prompt-theme-title">Nom du Deck *</label>
@@ -410,7 +413,6 @@
                             <input type="text" id="prompt-category" placeholder="ex: Espagnol">
                         </div>
                     </div>
-
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem;">
                         <div class="form-group">
                             <label for="prompt-preset">Domaine *</label>
@@ -432,25 +434,20 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="prompt-max-cards">Max cartes (Vide = Exhaustif)</label>
                         <input type="number" id="prompt-max-cards" min="1" placeholder="Ex: 20">
                     </div>
-
                     <div class="form-group">
                         <label for="prompt-custom-details">Consignes spécifiques :</label>
                         <textarea id="prompt-custom-details" rows="2" placeholder="Instructions particulières..."></textarea>
                     </div>
-
                     <div class="form-group">
                         <label>Précisions spécifiques :</label>
                         <div class="checkbox-group" id="dynamic-precision-container"></div>
                     </div>
-
                     <button class="btn" style="width:100%; justify-content:center;" onclick="generatePrompt()"><i class="fa-solid fa-gears"></i> Générer le Prompt</button>
                 </div>
-
                 <div class="prompt-panel" style="display:flex; flex-direction:column;">
                     <div class="prompt-panel-title"><i class="fa-solid fa-code"></i> Résultat Prêt à Copier</div>
                     <div class="prompt-output-box" style="flex:1;">
@@ -464,13 +461,11 @@
         <section id="tab-backup" class="tab-content">
             <h2 style="font-size: 1.3rem;">Sauvegardes Cloud (Bulk)</h2>
             <p style="color:var(--text-muted); margin-bottom:1.2rem; font-size: 0.85rem;">Exportez ou restaurez l'intégralité de vos decks et progressions dans Firestore.</p>
-
             <div class="backup-card">
                 <h3><i class="fa-solid fa-download" style="color:var(--primary);"></i> Exporter mes données</h3>
                 <p>Télécharge un fichier `.json` de vos cartes Cloud.</p>
                 <button class="btn" onclick="exportFullBackup()"><i class="fa-solid fa-file-export"></i> Télécharger (.json)</button>
             </div>
-
             <div class="backup-card">
                 <h3><i class="fa-solid fa-upload" style="color:var(--success);"></i> Importer une sauvegarde</h3>
                 <p>Charge un fichier `.json` pour fusionner et ajouter les decks à votre bibliothèque Cloud.</p>
@@ -480,6 +475,7 @@
         </section>
     </main>
 
+    <!-- Modales -->
     <div class="modal-backdrop" id="modal-edit-card">
         <div class="modal-box">
             <div class="modal-header">
@@ -572,6 +568,7 @@
 
         let currentUser = null;
         let unsubscribeFirestore = null;
+        let isLocalSaving = false; // Drapeau pour éviter le reset d'index par onSnapshot
 
         window.handleAuth = async (e) => {
             e.preventDefault();
@@ -614,7 +611,12 @@
                         window.appState.decks = [];
                     }
                     if (typeof window.renderLibrary === 'function') window.renderLibrary();
-                    if (typeof window.loadCurrentDeck === 'function') window.loadCurrentDeck();
+                    
+                    // Si on sauvegarde localement, on ne réinitialise PAS l'index actuel
+                    if (!isLocalSaving && typeof window.loadCurrentDeck === 'function') {
+                        window.loadCurrentDeck();
+                    }
+                    isLocalSaving = false;
                 });
             } else {
                 currentUser = null;
@@ -628,9 +630,11 @@
         window.saveToFirestore = async () => {
             if (!currentUser) return;
             try {
+                isLocalSaving = true;
                 const userDocRef = doc(db, "users", currentUser.uid);
                 await setDoc(userDocRef, { decks: window.appState.decks }, { merge: true });
             } catch (err) {
+                isLocalSaving = false;
                 console.error("Erreur de sauvegarde Cloud :", err);
             }
         };
@@ -802,7 +806,6 @@
 
         function applyThemeUI(theme) {
             document.documentElement.setAttribute('data-theme', theme);
-            // Met à jour les deux sélecteurs (desktop et mobile)
             document.querySelectorAll('#theme-light, #theme-light-mobile').forEach(el => el.classList.toggle('active', theme === 'light'));
             document.querySelectorAll('#theme-dark, #theme-dark-mobile').forEach(el => el.classList.toggle('active', theme === 'dark'));
         }
@@ -816,12 +819,12 @@
             document.getElementById('main-nav').classList.remove('mobile-open');
 
             if (tabName === 'library') renderLibrary();
-            if (tabName === 'revision') loadCurrentDeck();
+            if (tabName === 'revision') loadCurrentDeck(true);
         }
 
         function getCurrentDeck() { return window.appState.decks.find(d => d.id === window.appState.currentDeckId); }
 
-        function loadCurrentDeck() {
+        function loadCurrentDeck(resetIndex = false) {
             const deck = getCurrentDeck();
             if (!deck) {
                 document.getElementById('current-deck-title').innerText = "Aucun deck sélectionné";
@@ -830,7 +833,9 @@
             }
             document.getElementById('current-deck-title').innerText = deck.title || deck.deckName;
             document.getElementById('current-deck-category').innerText = deck.category || 'Général';
-            window.appState.currentIndex = 0;
+            if (resetIndex) {
+                window.appState.currentIndex = 0;
+            }
             resetFlipState();
             updateFilterButtonsUI();
             renderCard();
