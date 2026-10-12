@@ -68,7 +68,7 @@
             .desktop-theme-selector { display: flex; }
         }
 
-        main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 1rem; position: relative; z-index: 1; display: flex; flex-direction: column; overflow: hidden; }
+        main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 0.8rem; position: relative; z-index: 1; display: flex; flex-direction: column; overflow: hidden; }
         .tab-content { display: none; flex: 1; flex-direction: column; overflow-y: auto; }
         .tab-content.active { display: flex; }
         #tab-revision.tab-content { overflow: hidden; justify-content: space-between; }
@@ -81,16 +81,17 @@
         .btn-danger:hover { background: #dc2626; }
         .btn-sm { padding: 0.35rem 0.6rem; font-size: 0.85rem; }
 
+        /* Filtres HAUT */
         .filter-bar { display: flex; gap: 0.4rem; flex-wrap: nowrap; justify-content: space-between; margin-bottom: 0.4rem; width: 100%; overflow: hidden; flex-shrink: 0; }
-        .filter-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 0.4rem 0.6rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.3rem; flex: 1; text-align: center; }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 0.5rem 0.4rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.3rem; flex: 1; text-align: center; }
         .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
         .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .filter-count { background: rgba(0,0,0,0.08); padding: 0.1rem 0.3rem; border-radius: 0.8rem; font-size: 0.7rem; }
+        .filter-count { background: rgba(0,0,0,0.08); padding: 0.15rem 0.4rem; border-radius: 0.8rem; font-size: 0.75rem; }
         .filter-btn.active .filter-count { background: rgba(255,255,255,0.25); color: white; }
 
-        /* Conteneur de carte adapté pour éliminer l'espace vide */
-        .card-container { perspective: 1000px; width: 100%; max-width: 700px; height: 320px; margin: 0.2rem auto; cursor: pointer; flex-shrink: 0; }
-        .flashcard { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease; box-shadow: var(--shadow-lg); border-radius: 1rem; border: 1px solid var(--border-color); }
+        /* Conteneur de carte fluide (flex: 1) pour s'adapter parfaitement sur mobile */
+        .card-container { perspective: 1000px; width: 100%; max-width: 700px; flex: 1; margin: 0.3rem auto; cursor: pointer; min-height: 200px; max-height: 420px; display: flex; }
+        .flashcard { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease; box-shadow: var(--shadow-lg); border-radius: 1rem; border: 1px solid var(--border-color); display: flex; flex-direction: column; }
         .flashcard.flipped { transform: rotateY(180deg); }
         .flashcard.fade-out { opacity: 0; }
         
@@ -105,11 +106,12 @@
         .card-answer { font-size: 1.2rem; line-height: 1.4; margin-top: 0.4rem; font-weight: 500; }
         .card-precision { margin-top: 0.6rem; padding: 0.5rem 0.8rem; background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0.4rem; font-size: 0.85rem; color: var(--text-main); white-space: pre-line; }
 
-        .deck-header-info { margin-bottom: 0.3rem; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; width: 100%; }
+        .deck-header-info { margin-bottom: 0.3rem; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem; width: 100%; }
         .navigation-bar { display: flex; justify-content: space-between; align-items: center; max-width: 750px; margin: 0.2rem auto; gap: 0.5rem; width: 100%; flex-shrink: 0; }
         
-        .action-buttons { display: flex; justify-content: center; gap: 0.6rem; max-width: 750px; margin: 0.2rem auto; width: 100%; flex-shrink: 0; }
-        .action-btn { flex: 1; padding: 0.8rem 0.5rem; border-radius: 0.6rem; font-weight: 600; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 0.5rem; font-size: 1rem; box-shadow: var(--shadow); transition: transform 0.1s; }
+        /* Boutons de statut plus grands et ergonomiques */
+        .action-buttons { display: flex; justify-content: center; gap: 0.6rem; max-width: 750px; margin: 0.3rem auto; width: 100%; flex-shrink: 0; }
+        .action-btn { flex: 1; padding: 0.9rem 0.5rem; border-radius: 0.6rem; font-weight: 600; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 0.5rem; font-size: 1.05rem; box-shadow: var(--shadow); transition: transform 0.1s; }
         .action-btn:active { transform: scale(0.98); }
         
         .btn-status-review { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger); }
@@ -118,12 +120,13 @@
 
         .badge-key { font-size: 0.65rem; opacity: 0.7; background: rgba(0,0,0,0.08); padding: 0.1rem 0.3rem; border-radius: 0.3rem; font-weight: 700; text-transform: uppercase; margin-left: 0.3rem; }
 
-        .progress-bar-container { max-width: 750px; margin: 0.3rem auto; height: 5px; background: var(--border-color); border-radius: 3px; overflow: hidden; width: 100%; flex-shrink: 0; }
+        .progress-bar-container { max-width: 750px; margin: 0.3rem auto; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; width: 100%; flex-shrink: 0; }
         .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
         
-        .stats-summary { display: flex; justify-content: space-around; max-width: 750px; margin: 0.2rem auto 0.2rem; text-align: center; gap: 0.4rem; width: 100%; flex-shrink: 0; }
-        .stat-box { background: var(--card-bg); padding: 0.4rem 0.2rem; border-radius: 0.4rem; border: 1px solid var(--border-color); flex: 1; font-size: 0.75rem; }
-        .stat-box div:last-child { font-size: 0.85rem; font-weight: bold; }
+        /* Statistiques plus imposantes */
+        .stats-summary { display: flex; justify-content: space-around; max-width: 750px; margin: 0.2rem auto 0.3rem; text-align: center; gap: 0.4rem; width: 100%; flex-shrink: 0; }
+        .stat-box { background: var(--card-bg); padding: 0.5rem 0.2rem; border-radius: 0.4rem; border: 1px solid var(--border-color); flex: 1; font-size: 0.8rem; }
+        .stat-box div:last-child { font-size: 0.95rem; font-weight: bold; }
 
         .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; margin-top: 1.2rem; }
         .deck-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
@@ -173,7 +176,7 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
         .auth-status { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: var(--text-muted); }
 
-        /* Adaptations mobiles strictes avec hauteur de carte optimisée */
+        /* Adaptations mobiles strictes avec filtres, boutons et stats proportionnés + carte élastique */
         @media (max-width: 768px) {
             header { padding: 0.6rem 1rem; }
             .logo { font-size: 1.1rem; }
@@ -183,18 +186,17 @@
             nav.mobile-open { display: flex; }
             .nav-btn { width: 100%; padding: 0.6rem 0.8rem; font-size: 0.9rem; }
 
-            main { padding: 0.5rem; }
+            main { padding: 0.4rem 0.5rem; }
             
             #select-shortcut-mode { display: none !important; }
             .badge-key { display: none !important; }
 
             .filter-text { display: none; }
-            .filter-btn { padding: 0.4rem 0.2rem; font-size: 0.75rem; }
+            .filter-btn { padding: 0.55rem 0.2rem; font-size: 0.8rem; }
 
-            /* Hauteur augmentée pour éliminer l'espace vide sous la carte */
-            .card-container { width: 100%; height: 310px; margin: 0.1rem auto; }
-            .card-question { font-size: 1.5rem; }
-            .card-answer { font-size: 1.1rem; }
+            .card-container { width: 100%; flex: 1; min-height: 200px; max-height: none; margin: 0.2rem auto; }
+            .card-question { font-size: 1.6rem; }
+            .card-answer { font-size: 1.15rem; }
             .library-grid { grid-template-columns: 1fr; }
             .range-filter-container { width: 100%; justify-content: space-between; }
 
@@ -306,7 +308,7 @@
                     </div>
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 0.2rem; flex-shrink: 0;">
+                <div style="display: flex; flex-direction: column; gap: 0.3rem; flex-shrink: 0;">
                     <div class="navigation-bar">
                         <button class="btn btn-secondary btn-sm" onclick="navigateCard(-1)"><i class="fa-solid fa-arrow-left"></i> Précédent</button>
                         <span style="font-size:0.75rem; color:var(--text-muted); text-align: center;">Cliquer / Swipe / Espace</span>
@@ -332,7 +334,7 @@
             </div>
         </section>
 
-        <!-- (Onglets bibliothèque, import, prompt, backup) -->
+        <!-- Onglets Bibliothèque, Import, Prompt, Backup -->
         <section id="tab-library" class="tab-content">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem; margin-bottom:1.2rem;">
                 <h2 style="font-size: 1.3rem;">Bibliothèque</h2>
