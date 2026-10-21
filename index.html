@@ -59,9 +59,9 @@
 
         .mobile-menu-toggle { display: none; background: none; border: 1px solid var(--border-color); color: var(--text-main); font-size: 1.2rem; padding: 0.4rem 0.6rem; border-radius: 0.5rem; cursor: pointer; }
 
-        .theme-selector { display: flex; align-items: center; gap: 0.2rem; background: var(--bg-color); padding: 0.2rem; border-radius: 0.5rem; border: 1px solid var(--border-color); }
-        .theme-btn { background: none; border: none; color: var(--text-muted); padding: 0.3rem 0.5rem; border-radius: 0.3rem; cursor: pointer; font-size: 0.85rem; }
-        .theme-btn.active { background: var(--card-bg); color: var(--primary); font-weight: bold; box-shadow: var(--shadow); }
+        .theme-selector, .view-toggle { display: flex; align-items: center; gap: 0.2rem; background: var(--bg-color); padding: 0.2rem; border-radius: 0.5rem; border: 1px solid var(--border-color); }
+        .theme-btn, .view-btn { background: none; border: none; color: var(--text-muted); padding: 0.3rem 0.6rem; border-radius: 0.3rem; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .theme-btn.active, .view-btn.active { background: var(--primary); color: white; font-weight: bold; box-shadow: var(--shadow); }
 
         .mobile-theme-selector { display: none; }
         @media (min-width: 769px) {
@@ -120,15 +120,23 @@
         .progress-bar-container { max-width: 750px; margin: 0.2rem auto; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; width: 100%; flex-shrink: 0; }
         .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
         
-        .stats-summary { display: flex; justify-content: space-around; max-width: 750px; margin: 0.2rem auto 0.3rem; text-align: center; gap: 0.5rem; width: 100%; flex-shrink: 0; }
-        .stat-box { background: var(--card-bg); padding: 0.7rem 0.3rem; border-radius: 0.6rem; border: 1px solid var(--border-color); flex: 1; font-size: 0.85rem; font-weight: 600; box-shadow: var(--shadow); }
-        .stat-box div:last-child { font-size: 1.2rem; font-weight: 800; margin-top: 0.2rem; }
+        .stats-summary { display: flex; justify-content: space-around; max-width: 750px; margin: 0.2rem auto 0.3rem; text-align: center; gap: 0.3rem; width: 100%; flex-shrink: 0; }
+        .stat-box { background: var(--card-bg); padding: 0.5rem 0.1rem; border-radius: 0.6rem; border: 1px solid var(--border-color); flex: 1; font-size: 0.65rem; font-weight: 700; box-shadow: var(--shadow); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .stat-box div:last-child { font-size: 1.1rem; font-weight: 800; margin-top: 0.15rem; }
 
         .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; margin-top: 1.2rem; }
-        .deck-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
+        .deck-card, .folder-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.8rem; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); cursor: grab; transition: transform 0.15s, opacity 0.15s; position: relative; }
+        .deck-card.dragging, .folder-card.dragging { opacity: 0.4; cursor: grabbing; }
         .deck-card-header { display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.8rem; }
         .deck-card-title { font-size: 1.05rem; font-weight: 700; flex: 1; word-break: break-word; }
-        .deck-card-checkbox { width: 18px; height: 18px; cursor: pointer; margin-top: 3px; }
+        .deck-card-checkbox, .folder-card-checkbox { width: 18px; height: 18px; cursor: pointer; margin-top: 3px; }
+
+        .folders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.2rem; }
+        .folder-card { cursor: default; }
+        .folder-card-clickable { cursor: pointer; }
+        .folder-card-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; flex: 1; }
+
+        .drag-handle { color: var(--text-muted); cursor: grab; padding: 0.2rem; }
 
         .range-filter-container { background: var(--card-bg); border: 1px solid var(--border-color); padding: 0.5rem 0.9rem; border-radius: 0.6rem; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
         .dual-slider-box { position: relative; width: 140px; height: 26px; display: flex; align-items: center; }
@@ -192,7 +200,7 @@
             .card-container { width: 100%; flex: 1; min-height: 150px; max-height: none; margin: 0.2rem auto; }
             .card-question { font-size: 1.5rem; }
             .card-answer { font-size: 1.1rem; }
-            .library-grid { grid-template-columns: 1fr; }
+            .library-grid, .folders-grid { grid-template-columns: 1fr; }
             .range-filter-container { width: 100%; justify-content: space-between; }
 
             .desktop-theme-selector { display: none !important; }
@@ -333,21 +341,30 @@
 
                     <div class="progress-bar-container"><div class="progress-bar" id="progress-bar"></div></div>
 
+                    <!-- Boîtes de stats avec libellés optimisés sur une seule ligne -->
                     <div class="stats-summary">
-                        <div class="stat-box"><div class="card-label" style="position:static; font-size:0.7rem;">Index</div><div id="stat-index">0/0</div></div>
-                        <div class="stat-box"><div class="card-label" style="position:static; font-size:0.7rem;">Non vus</div><div id="stat-unseen-pct" style="color:var(--text-muted);">0%</div></div>
-                        <div class="stat-box"><div class="card-label" style="position:static; font-size:0.7rem;">À revoir</div><div id="stat-review-pct" style="color:var(--danger);">0%</div></div>
-                        <div class="stat-box"><div class="card-label" style="position:static; font-size:0.7rem;">Renforcer</div><div id="stat-reinforce-pct" style="color:var(--warning);">0%</div></div>
-                        <div class="stat-box"><div class="card-label" style="position:static; font-size:0.7rem;">Maîtrisés</div><div id="stat-known-pct" style="color:var(--success);">0%</div></div>
+                        <div class="stat-box">INDEX<div id="stat-index">0/0</div></div>
+                        <div class="stat-box">NON VUS<div id="stat-unseen-pct" style="color:var(--text-muted);">0%</div></div>
+                        <div class="stat-box">À REVOIR<div id="stat-review-pct" style="color:var(--danger);">0%</div></div>
+                        <div class="stat-box">RENFORCE<div id="stat-reinforce-pct" style="color:var(--warning);">0%</div></div>
+                        <div class="stat-box">MAÎTRISÉS<div id="stat-known-pct" style="color:var(--success);">0%</div></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Onglet Bibliothèque -->
+        <!-- Onglet Bibliothèque avec titre fixe, toggle épuré et Drag & Drop global -->
         <section id="tab-library" class="tab-content">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem; margin-bottom:1.2rem;">
-                <h2 style="font-size: 1.3rem;">Bibliothèque</h2>
+                <div style="display:flex; align-items:center; gap:0.8rem;">
+                    <h2 style="font-size: 1.3rem;" id="library-title-heading">Bibliothèque</h2>
+                    <!-- Toggle épuré avec icônes et code couleur actif net -->
+                    <div class="view-toggle">
+                        <button class="view-btn active" onclick="setLibraryView('grid')" id="view-btn-grid" title="Vue Liste"><i class="fa-solid fa-list-ul"></i></button>
+                        <button class="view-btn" onclick="setLibraryView('folders')" id="view-btn-folders" title="Vue Dossiers"><i class="fa-solid fa-folder"></i></button>
+                    </div>
+                </div>
+
                 <div style="display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap; width: 100%;">
                     <select id="library-category-filter" onchange="renderLibrary()" style="flex: 1; min-width: 140px;">
                         <option value="all">Toutes les catégories</option>
@@ -361,21 +378,22 @@
                         </div>
                     </div>
                     <div style="display:flex; justify-content: space-between; align-items: center; width: 100%; gap: 0.5rem; flex-wrap: wrap;">
-                        <button class="btn btn-secondary btn-sm" id="btn-toggle-select-all" onclick="toggleSelectAllFilteredDecks()">
+                        <button class="btn btn-secondary btn-sm" id="btn-toggle-select-all" onclick="toggleSelectAllFiltered()">
                             <i class="fa-solid fa-square-check"></i> <span id="toggle-select-all-label">Tout sélectionner</span>
                         </button>
                         <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
                             <button class="btn btn-secondary btn-sm" id="btn-export-selected" onclick="openExportChoiceModal()" style="display:none;">
                                 <i class="fa-solid fa-file-export"></i> Exporter (<span id="selected-export-count">0</span>)
                             </button>
-                            <button class="btn btn-danger btn-sm" id="btn-delete-selected" onclick="deleteSelectedDecks()" style="display:none;">
+                            <button class="btn btn-danger btn-sm" id="btn-delete-selected" onclick="deleteSelected()" style="display:none;">
                                 <i class="fa-solid fa-trash"></i> Suppr. (<span id="selected-count">0</span>)
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="library-grid" id="library-grid"></div>
+            
+            <div id="library-content-container"></div>
         </section>
 
         <section id="tab-import" class="tab-content">
@@ -707,11 +725,15 @@
             currentIndex: 0,
             isFlipped: false,
             shortcutMode: 'wxc',
-            isInverted: false
+            isInverted: false,
+            libraryView: 'grid', // 'grid' ou 'folders'
+            activeFolder: null
         };
 
         let selectedDeckIds = new Set();
+        let selectedFolderNames = new Set();
         let openCardsPreviewId = null;
+        let draggedIndex = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             applyThemeUI(window.appState.theme);
@@ -1037,6 +1059,86 @@
             renderLibrary();
         }
 
+        function setLibraryView(view) {
+            window.appState.libraryView = view;
+            window.appState.activeFolder = null;
+            selectedDeckIds.clear();
+            selectedFolderNames.clear();
+            document.getElementById('view-btn-grid').classList.toggle('active', view === 'grid');
+            document.getElementById('view-btn-folders', ).classList.toggle('active', view === 'folders');
+            renderLibrary();
+        }
+
+        function openFolder(categoryName) {
+            window.appState.activeFolder = categoryName;
+            selectedDeckIds.clear();
+            renderLibrary();
+        }
+
+        function closeFolder() {
+            window.appState.activeFolder = null;
+            selectedDeckIds.clear();
+            renderLibrary();
+        }
+
+        // Logique Drag and Drop globale (Decks et Dossiers)
+        function handleDragStart(e, id, type) {
+            if (type === 'deck') {
+                draggedIndex = window.appState.decks.findIndex(d => d.id === id);
+            } else {
+                const categories = [...new Set(window.appState.decks.map(d => d.category || "Général"))];
+                draggedIndex = categories.indexOf(id);
+            }
+            e.dataTransfer.setData('text/plain', type);
+            e.dataTransfer.effectAllowed = 'move';
+            e.target.classList.add('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDropDeck(e, targetDeckId) {
+            e.preventDefault();
+            const targetIndex = window.appState.decks.findIndex(d => d.id === targetDeckId);
+            if (draggedIndex !== null && targetIndex !== -1 && draggedIndex !== targetIndex) {
+                const draggedItem = window.appState.decks.splice(draggedIndex, 1)[0];
+                window.appState.decks.splice(targetIndex, 0, draggedItem);
+                if (window.saveToFirestore) window.saveToFirestore();
+                renderLibrary();
+            }
+            draggedIndex = null;
+        }
+
+        function handleDropFolder(e, targetCategory) {
+            e.preventDefault();
+            const categories = [...new Set(window.appState.decks.map(d => d.category || "Général"))];
+            const targetIndex = categories.indexOf(targetCategory);
+
+            if (draggedIndex !== null && targetIndex !== -1 && draggedIndex !== targetIndex) {
+                const movedCategory = categories.splice(draggedIndex, 1)[0];
+                categories.splice(targetIndex, 0, movedCategory);
+
+                // Réordonner les decks selon le nouvel ordre des catégories
+                let newDecks = [];
+                categories.forEach(cat => {
+                    const decksInCat = window.appState.decks.filter(d => (d.category || "Général") === cat);
+                    newDecks.push(...decksInCat);
+                });
+                window.appState.decks = newDecks;
+
+                if (window.saveToFirestore) window.saveToFirestore();
+                renderLibrary();
+            }
+            draggedIndex = null;
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            draggedIndex = null;
+        }
+
         function getFilteredDecks() {
             const categorySelect = document.getElementById('library-category-filter');
             const currentCategory = categorySelect ? categorySelect.value : 'all';
@@ -1061,9 +1163,10 @@
         }
 
         function renderLibrary() {
-            const grid = document.getElementById('library-grid');
+            const container = document.getElementById('library-content-container');
             const categorySelect = document.getElementById('library-category-filter');
             const currentCategory = categorySelect.value;
+            const heading = document.getElementById('library-title-heading');
 
             const categories = [...new Set(window.appState.decks.map(d => d.category || "Général"))];
             categorySelect.innerHTML = '<option value="all">Toutes les catégories</option>';
@@ -1073,107 +1176,312 @@
 
             const filteredDecks = getFilteredDecks();
 
-            grid.innerHTML = '';
-            if (filteredDecks.length === 0) {
-                grid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-box-open" style="font-size:2rem; margin-bottom:0.5rem;"></i><p>Aucun deck ne correspond à ces critères.</p></div>`;
+            if (filteredDecks.length === 0 && window.appState.activeFolder === null && categories.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-box-open" style="font-size:2rem; margin-bottom:0.5rem;"></i><p>Aucun deck ne correspond à ces critères.</p></div>`;
                 updateLibraryActionButtonsUI();
                 return;
             }
 
-            filteredDecks.forEach(deck => {
-                const isChecked = selectedDeckIds.has(deck.id);
-                const isPreviewOpen = openCardsPreviewId === deck.id;
+            // Vue Liste (ou intérieur d'un dossier ouvert)
+            if (window.appState.libraryView === 'grid' || window.appState.activeFolder !== null) {
+                let decksToDisplay = filteredDecks;
                 
-                const totalCards = deck.cards.length;
-                const unseenCount = deck.cards.filter(c => (c.status || 'unseen') === 'unseen').length;
-                const reviewCount = deck.cards.filter(c => c.status === 'review').length;
-                const reinforceCount = deck.cards.filter(c => c.status === 'reinforce').length;
-                const knownCount = deck.cards.filter(c => c.status === 'known').length;
+                if (window.appState.activeFolder !== null) {
+                    heading.innerText = `Dossier : ${window.appState.activeFolder}`;
+                    decksToDisplay = filteredDecks.filter(d => (d.category || "Général") === window.appState.activeFolder);
+                } else {
+                    heading.innerText = "Bibliothèque";
+                }
 
-                const masteryPct = totalCards > 0 ? Math.round((knownCount / totalCards) * 100) : 0;
-                const deckTitle = deck.title || deck.deckName || "Sans titre";
+                let html = '';
+                if (window.appState.activeFolder !== null) {
+                    html += `
+                        <div style="margin-bottom: 1rem;">
+                            <button class="btn btn-secondary btn-sm" onclick="closeFolder()"><i class="fa-solid fa-arrow-left"></i> Retour aux dossiers</button>
+                        </div>
+                    `;
+                }
 
-                let cardsListHTML = '';
-                deck.cards.forEach(card => {
-                    const cardSt = card.status || 'unseen';
-                    cardsListHTML += `
-                        <div class="card-preview-item">
-                            <span style="font-weight:600; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; max-width:120px;">${card.question}</span>
-                            <div style="display:flex; gap:0.2rem; align-items:center;">
-                                <select class="status-select" onchange="changeIndividualCardStatus('${deck.id}', '${card.id}', this.value)">
-                                    <option value="unseen" ${cardSt === 'unseen' ? 'selected' : ''}>Non vu</option>
-                                    <option value="review" ${cardSt === 'review' ? 'selected' : ''}>À revoir</option>
-                                    <option value="reinforce" ${cardSt === 'reinforce' ? 'selected' : ''}>Renforcer</option>
-                                    <option value="known" ${cardSt === 'known' ? 'selected' : ''}>Maîtrisé</option>
-                                </select>
-                                <button class="btn btn-secondary btn-sm" onclick="openEditCardModal('${deck.id}', '${card.id}')" title="Éditer" style="padding:0.15rem 0.3rem;"><i class="fa-solid fa-pen"></i></button>
+                html += '<div class="library-grid" id="library-grid"></div>';
+                container.innerHTML = html;
+                const grid = document.getElementById('library-grid');
+
+                decksToDisplay.forEach(deck => {
+                    const isChecked = selectedDeckIds.has(deck.id);
+                    const isPreviewOpen = openCardsPreviewId === deck.id;
+                    const totalCards = deck.cards.length;
+                    const unseenCount = deck.cards.filter(c => (c.status || 'unseen') === 'unseen').length;
+                    const reviewCount = deck.cards.filter(c => c.status === 'review').length;
+                    const reinforceCount = deck.cards.filter(c => c.status === 'reinforce').length;
+                    const knownCount = deck.cards.filter(c => c.status === 'known').length;
+                    const masteryPct = totalCards > 0 ? Math.round((knownCount / totalCards) * 100) : 0;
+                    const deckTitle = deck.title || deck.deckName || "Sans titre";
+
+                    let cardsListHTML = '';
+                    deck.cards.forEach(card => {
+                        const cardSt = card.status || 'unseen';
+                        cardsListHTML += `
+                            <div class="card-preview-item">
+                                <span style="font-weight:600; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; max-width:120px;">${card.question}</span>
+                                <div style="display:flex; gap:0.2rem; align-items:center;">
+                                    <select class="status-select" onchange="changeIndividualCardStatus('${deck.id}', '${card.id}', this.value)">
+                                        <option value="unseen" ${cardSt === 'unseen' ? 'selected' : ''}>Non vu</option>
+                                        <option value="review" ${cardSt === 'review' ? 'selected' : ''}>À revoir</option>
+                                        <option value="reinforce" ${cardSt === 'reinforce' ? 'selected' : ''}>Renforcer</option>
+                                        <option value="known" ${cardSt === 'known' ? 'selected' : ''}>Maîtrisé</option>
+                                    </select>
+                                    <button class="btn btn-secondary btn-sm" onclick="openEditCardModal('${deck.id}', '${card.id}')" title="Éditer" style="padding:0.15rem 0.3rem;"><i class="fa-solid fa-pen"></i></button>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    const deckEl = document.createElement('div');
+                    deckEl.className = 'deck-card';
+                    deckEl.draggable = true;
+                    deckEl.ondragstart = (e) => handleDragStart(e, deck.id, 'deck');
+                    deckEl.ondragover = (e) => handleDragOver(e);
+                    deckEl.ondrop = (e) => handleDropDeck(e, deck.id);
+                    deckEl.ondragend = (e) => handleDragEnd(e);
+
+                    deckEl.innerHTML = `
+                        <div>
+                            <div class="deck-card-header">
+                                <span class="drag-handle" title="Maintenir pour glisser-déplacer"><i class="fa-solid fa-grip-vertical"></i></span>
+                                <input type="checkbox" class="deck-card-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleDeckSelection('${deck.id}', this.checked)">
+                                <div class="deck-card-title">${deckTitle}</div>
+                            </div>
+                            <p style="font-size:0.8rem; color:var(--text-muted);">${deck.category || "Général"} • ${totalCards} cartes</p>
+                            
+                            <div style="margin-top:0.5rem;">
+                                <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-weight:700;">
+                                    <span>Maîtrise globale</span>
+                                    <span style="color:var(--success);">${masteryPct}%</span>
+                                </div>
+                                <div class="deck-mastery-bar-bg">
+                                    <div class="deck-mastery-bar-fill" style="width:${masteryPct}%;"></div>
+                                </div>
+                            </div>
+
+                            <p style="font-size:0.75rem; margin-top:0.5rem; display:flex; gap:0.4rem; flex-wrap:wrap;">
+                                <span style="color:var(--text-muted);"><i class="fa-regular fa-circle"></i> ${unseenCount}</span>
+                                <span style="color:var(--danger);"><i class="fa-solid fa-xmark"></i> ${reviewCount}</span>
+                                <span style="color:var(--warning);"><i class="fa-solid fa-triangle-exclamation"></i> ${reinforceCount}</span>
+                                <span style="color:var(--success);"><i class="fa-solid fa-check"></i> ${knownCount}</span>
+                            </p>
+                        </div>
+
+                        <div style="margin-top:0.8rem;">
+                            <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
+                                <button class="btn btn-sm" style="flex:1;" onclick="selectDeck('${deck.id}')"><i class="fa-solid fa-play"></i> Réviser</button>
+                                <button class="btn btn-secondary btn-sm" onclick="openEditDeckInfoModal('${deck.id}')" title="Renommer"><i class="fa-solid fa-pen"></i></button>
+                                <button class="btn btn-secondary btn-sm" onclick="openEditJsonModal('${deck.id}')" title="JSON"><i class="fa-solid fa-code"></i></button>
+                                <button class="btn btn-secondary btn-sm" onclick="toggleCardsPreview('${deck.id}')" title="Cartes"><i class="fa-solid fa-list-check"></i></button>
+                                <button class="btn btn-secondary btn-sm" onclick="resetDeckProgress('${deck.id}')" title="Reset"><i class="fa-solid fa-rotate-left"></i></button>
+                                <button class="btn btn-secondary btn-sm" style="color:var(--danger);" onclick="deleteSingleDeck('${deck.id}')" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+
+                            <div class="cards-preview-list ${isPreviewOpen ? 'active' : ''}" id="preview-${deck.id}">
+                                ${cardsListHTML}
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(deckEl);
+                });
+            } else {
+                // Vue Dossiers avec Drag & Drop et Sélection Multiple de dossiers
+                heading.innerText = "Bibliothèque";
+                let foldersHTML = '<div class="folders-grid" id="folders-grid">';
+                const grouped = {};
+                categories.forEach(cat => grouped[cat] = []);
+                filteredDecks.forEach(deck => {
+                    const cat = deck.category || "Général";
+                    if (!grouped[cat]) grouped[cat] = [];
+                    grouped[cat].push(deck);
+                });
+
+                Object.keys(grouped).forEach(cat => {
+                    const deckCount = grouped[cat].length;
+                    let totalCardsInCat = 0;
+                    let totalKnownInCat = 0;
+
+                    grouped[cat].forEach(d => {
+                        totalCardsInCat += d.cards.length;
+                        totalKnownInCat += d.cards.filter(c => c.status === 'known').length;
+                    });
+
+                    const folderMastery = totalCardsInCat > 0 ? Math.round((totalKnownInCat / totalCardsInCat) * 100) : 0;
+                    const isFolderChecked = selectedFolderNames.has(cat);
+
+                    foldersHTML += `
+                        <div class="folder-card" draggable="true" ondragstart="handleDragStart(event, '${cat}', 'folder')" ondragover="handleDragOver(event)" ondrop="handleDropFolder(event, '${cat}')" ondragend="handleDragEnd(event)">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.6rem;">
+                                <span class="drag-handle" title="Maintenir pour glisser-déplacer"><i class="fa-solid fa-grip-vertical"></i></span>
+                                <input type="checkbox" class="folder-card-checkbox" ${isFolderChecked ? 'checked' : ''} onchange="toggleFolderSelection('${cat}', this.checked)">
+                            </div>
+                            <div class="folder-card-clickable" onclick="openFolder('${cat}')">
+                                <div class="folder-card-title">
+                                    <i class="fa-solid fa-folder" style="font-size:1.3rem;"></i>
+                                    <span>${cat}</span>
+                                </div>
+                                <p style="font-size:0.85rem; color:var(--text-muted);">${deckCount} deck${deckCount > 1 ? 's' : ''} • ${totalCardsInCat} cartes</p>
+                            </div>
+                            <div style="margin-top:1rem;" class="folder-card-clickable" onclick="openFolder('${cat}')">
+                                <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:700;">
+                                    <span>Maîtrise globale</span>
+                                    <span style="color:var(--success);">${folderMastery}%</span>
+                                </div>
+                                <div class="deck-mastery-bar-bg">
+                                    <div class="deck-mastery-bar-fill" style="width:${folderMastery}%;"></div>
+                                </div>
                             </div>
                         </div>
                     `;
                 });
-
-                const deckEl = document.createElement('div');
-                deckEl.className = 'deck-card';
-                deckEl.innerHTML = `
-                    <div>
-                        <div class="deck-card-header">
-                            <input type="checkbox" class="deck-card-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleDeckSelection('${deck.id}', this.checked)">
-                            <div class="deck-card-title">${deckTitle}</div>
-                        </div>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">${deck.category || "Général"} • ${totalCards} cartes</p>
-                        
-                        <div style="margin-top:0.5rem;">
-                            <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-weight:700;">
-                                <span>Maîtrise globale</span>
-                                <span style="color:var(--success);">${masteryPct}%</span>
-                            </div>
-                            <div class="deck-mastery-bar-bg">
-                                <div class="deck-mastery-bar-fill" style="width:${masteryPct}%;"></div>
-                            </div>
-                        </div>
-
-                        <p style="font-size:0.75rem; margin-top:0.5rem; display:flex; gap:0.4rem; flex-wrap:wrap;">
-                            <span style="color:var(--text-muted);"><i class="fa-regular fa-circle"></i> ${unseenCount}</span>
-                            <span style="color:var(--danger);"><i class="fa-solid fa-xmark"></i> ${reviewCount}</span>
-                            <span style="color:var(--warning);"><i class="fa-solid fa-triangle-exclamation"></i> ${reinforceCount}</span>
-                            <span style="color:var(--success);"><i class="fa-solid fa-check"></i> ${knownCount}</span>
-                        </p>
-                    </div>
-
-                    <div style="margin-top:0.8rem;">
-                        <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
-                            <button class="btn btn-sm" style="flex:1;" onclick="selectDeck('${deck.id}')"><i class="fa-solid fa-play"></i> Réviser</button>
-                            <button class="btn btn-secondary btn-sm" onclick="openEditDeckInfoModal('${deck.id}')" title="Renommer"><i class="fa-solid fa-pen"></i></button>
-                            <button class="btn btn-secondary btn-sm" onclick="openEditJsonModal('${deck.id}')" title="JSON"><i class="fa-solid fa-code"></i></button>
-                            <button class="btn btn-secondary btn-sm" onclick="toggleCardsPreview('${deck.id}')" title="Cartes"><i class="fa-solid fa-list-check"></i></button>
-                            <button class="btn btn-secondary btn-sm" onclick="resetDeckProgress('${deck.id}')" title="Reset"><i class="fa-solid fa-rotate-left"></i></button>
-                            <button class="btn btn-secondary btn-sm" style="color:var(--danger);" onclick="deleteSingleDeck('${deck.id}')" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-
-                        <div class="cards-preview-list ${isPreviewOpen ? 'active' : ''}" id="preview-${deck.id}">
-                            ${cardsListHTML}
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(deckEl);
-            });
+                foldersHTML += '</div>';
+                container.innerHTML = foldersHTML;
+            }
 
             updateLibraryActionButtonsUI();
         }
 
-        function toggleSelectAllFilteredDecks() {
-            const filteredDecks = getFilteredDecks();
-            if (filteredDecks.length === 0) return;
-
-            const allFilteredSelected = filteredDecks.every(deck => selectedDeckIds.has(deck.id));
-
-            if (allFilteredSelected) {
-                filteredDecks.forEach(deck => selectedDeckIds.delete(deck.id));
+        function toggleSelectAllFiltered() {
+            const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
+            if (isFoldersView) {
+                const categories = [...new Set(window.appState.decks.map(d => d.category || "Général"))];
+                const allSelected = categories.every(cat => selectedFolderNames.has(cat));
+                if (allSelected) selectedFolderNames.clear();
+                else categories.forEach(cat => selectedFolderNames.add(cat));
             } else {
-                filteredDecks.forEach(deck => selectedDeckIds.add(deck.id));
+                const filteredDecks = getFilteredDecks();
+                if (filteredDecks.length === 0) return;
+                const allSelected = filteredDecks.every(deck => selectedDeckIds.has(deck.id));
+                if (allSelected) filteredDecks.forEach(deck => selectedDeckIds.delete(deck.id));
+                else filteredDecks.forEach(deck => selectedDeckIds.add(deck.id));
+            }
+            renderLibrary();
+        }
+
+        function toggleDeckSelection(deckId, isChecked) {
+            if (isChecked) selectedDeckIds.add(deckId);
+            else selectedDeckIds.delete(deckId);
+            renderLibrary();
+        }
+
+        function toggleFolderSelection(catName, isChecked) {
+            if (isChecked) selectedFolderNames.add(catName);
+            else selectedFolderNames.delete(catName);
+            renderLibrary();
+        }
+
+        function updateLibraryActionButtonsUI() {
+            const deleteBtn = document.getElementById('btn-delete-selected');
+            const exportBtn = document.getElementById('btn-export-selected');
+            const toggleSelectBtnLabel = document.getElementById('toggle-select-all-label');
+            const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
+            
+            const totalSelectedCount = isFoldersView ? selectedFolderNames.size : selectedDeckIds.size;
+
+            document.getElementById('selected-count').innerText = totalSelectedCount;
+            document.getElementById('selected-export-count').innerText = totalSelectedCount;
+
+            deleteBtn.style.display = totalSelectedCount > 0 ? 'inline-flex' : 'none';
+            exportBtn.style.display = totalSelectedCount > 0 ? 'inline-flex' : 'none';
+
+            if (isFoldersView) {
+                const categories = [...new Set(window.appState.decks.map(d => d.category || "Général"))];
+                if (categories.length > 0 && categories.every(cat => selectedFolderNames.has(cat))) {
+                    toggleSelectBtnLabel.innerText = "Tout désélectionner";
+                } else {
+                    toggleSelectBtnLabel.innerText = "Tout sélectionner";
+                }
+            } else {
+                const filteredDecks = getFilteredDecks();
+                if (filteredDecks.length > 0 && filteredDecks.every(deck => selectedDeckIds.has(deck.id))) {
+                    toggleSelectBtnLabel.innerText = "Tout désélectionner";
+                } else {
+                    toggleSelectBtnLabel.innerText = "Tout sélectionner";
+                }
+            }
+        }
+
+        function deleteSelected() {
+            const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
+            if (isFoldersView) {
+                if (selectedFolderNames.size === 0) return;
+                if (confirm(`Supprimer les ${selectedFolderNames.size} dossier(s) et tous leurs decks ?`)) {
+                    window.appState.decks = window.appState.decks.filter(d => !selectedFolderNames.has(d.category || "Général"));
+                    selectedFolderNames.clear();
+                    window.appState.currentDeckId = window.appState.decks.length > 0 ? window.appState.decks[0].id : null;
+                    if (window.saveToFirestore) window.saveToFirestore();
+                    renderLibrary();
+                }
+            } else {
+                if (selectedDeckIds.size === 0) return;
+                if (confirm(`Supprimer les ${selectedDeckIds.size} deck(s) sélectionnés ?`)) {
+                    window.appState.decks = window.appState.decks.filter(d => !selectedDeckIds.has(d.id));
+                    if (selectedDeckIds.has(window.appState.currentDeckId)) {
+                        window.appState.currentDeckId = window.appState.decks.length > 0 ? window.appState.decks[0].id : null;
+                    }
+                    selectedDeckIds.clear();
+                    if (window.saveToFirestore) window.saveToFirestore();
+                    renderLibrary();
+                }
+            }
+        }
+
+        function openExportChoiceModal() {
+            const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
+            const count = isFoldersView ? selectedFolderNames.size : selectedDeckIds.size;
+            if (count === 0) return;
+            document.getElementById('modal-export-choice').classList.add('active');
+        }
+
+        function executeExport(keepStatus) {
+            closeModal('modal-export-choice');
+            const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
+            
+            let decksToExport = [];
+            if (isFoldersView) {
+                decksToExport = window.appState.decks
+                    .filter(d => selectedFolderNames.has(d.category || "Général"))
+                    .map(deck => ({
+                        deckName: deck.title || deck.deckName,
+                        category: deck.category || "Général",
+                        cards: deck.cards.map(c => ({
+                            id: c.id,
+                            question: c.question,
+                            answer: c.answer,
+                            precision: c.precision || "",
+                            status: keepStatus ? (c.status || "unseen") : "unseen"
+                        }))
+                    }));
+            } else {
+                decksToExport = window.appState.decks
+                    .filter(d => selectedDeckIds.has(d.id))
+                    .map(deck => ({
+                        deckName: deck.title || deck.deckName,
+                        category: deck.category || "Général",
+                        cards: deck.cards.map(c => ({
+                            id: c.id,
+                            question: c.question,
+                            answer: c.answer,
+                            precision: c.precision || "",
+                            status: keepStatus ? (c.status || "unseen") : "unseen"
+                        }))
+                    }));
             }
 
-            renderLibrary();
+            if (decksToExport.length === 0) return;
+
+            const payload = decksToExport.length === 1 ? decksToExport[0] : { decks: decksToExport };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+            const a = document.createElement('a');
+            a.href = dataStr;
+            a.download = `smartcards_share_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
         }
 
         function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
@@ -1322,31 +1630,6 @@
             }
         }
 
-        function toggleDeckSelection(deckId, isChecked) {
-            if (isChecked) selectedDeckIds.add(deckId);
-            else selectedDeckIds.delete(deckId);
-            renderLibrary();
-        }
-
-        function updateLibraryActionButtonsUI() {
-            const deleteBtn = document.getElementById('btn-delete-selected');
-            const exportBtn = document.getElementById('btn-export-selected');
-            const toggleSelectBtnLabel = document.getElementById('toggle-select-all-label');
-            
-            document.getElementById('selected-count').innerText = selectedDeckIds.size;
-            document.getElementById('selected-export-count').innerText = selectedDeckIds.size;
-
-            deleteBtn.style.display = selectedDeckIds.size > 0 ? 'inline-flex' : 'none';
-            exportBtn.style.display = selectedDeckIds.size > 0 ? 'inline-flex' : 'none';
-
-            const filteredDecks = getFilteredDecks();
-            if (filteredDecks.length > 0 && filteredDecks.every(deck => selectedDeckIds.has(deck.id))) {
-                toggleSelectBtnLabel.innerText = "Tout désélectionner";
-            } else {
-                toggleSelectBtnLabel.innerText = "Tout sélectionner";
-            }
-        }
-
         function deleteSingleDeck(deckId) {
             if (confirm("Supprimer ce deck ?")) {
                 window.appState.decks = window.appState.decks.filter(d => d.id !== deckId);
@@ -1357,52 +1640,6 @@
                 if (window.saveToFirestore) window.saveToFirestore();
                 renderLibrary();
             }
-        }
-
-        function deleteSelectedDecks() {
-            if (selectedDeckIds.size === 0) return;
-            if (confirm(`Supprimer les ${selectedDeckIds.size} deck(s) sélectionnés ?`)) {
-                window.appState.decks = window.appState.decks.filter(d => !selectedDeckIds.has(d.id));
-                if (selectedDeckIds.has(window.appState.currentDeckId)) {
-                    window.appState.currentDeckId = window.appState.decks.length > 0 ? window.appState.decks[0].id : null;
-                }
-                selectedDeckIds.clear();
-                if (window.saveToFirestore) window.saveToFirestore();
-                renderLibrary();
-            }
-        }
-
-        function openExportChoiceModal() {
-            if (selectedDeckIds.size === 0) return;
-            document.getElementById('modal-export-choice').classList.add('active');
-        }
-
-        function executeExport(keepStatus) {
-            closeModal('modal-export-choice');
-            if (selectedDeckIds.size === 0) return;
-            
-            const decksToExport = window.appState.decks
-                .filter(d => selectedDeckIds.has(d.id))
-                .map(deck => ({
-                    deckName: deck.title || deck.deckName,
-                    category: deck.category || "Général",
-                    cards: deck.cards.map(c => ({
-                        id: c.id,
-                        question: c.question,
-                        answer: c.answer,
-                        precision: c.precision || "",
-                        status: keepStatus ? (c.status || "unseen") : "unseen"
-                    }))
-                }));
-
-            const payload = decksToExport.length === 1 ? decksToExport[0] : { decks: decksToExport };
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
-            const a = document.createElement('a');
-            a.href = dataStr;
-            a.download = `smartcards_share_${new Date().toISOString().slice(0, 10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
         }
 
         function selectDeck(deckId) {
