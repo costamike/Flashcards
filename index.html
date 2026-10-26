@@ -170,7 +170,7 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
         .auth-status { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: var(--text-muted); }
 
-        /* BIBLIOTHÈQUE & DISPOSITION (PC/Mac et Mobile harmonisés en face-à-face) */
+        /* BIBLIOTHÈQUE & DISPOSITION */
         .library-top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 0.8rem; }
         .library-top-right { display: flex; align-items: center; gap: 0.8rem; }
         .search-box-wrapper { position: relative; width: 280px; }
@@ -180,14 +180,17 @@
         .search-clear-btn:hover { color: var(--danger); }
 
         .library-bottom-filters { display: flex; gap: 0.8rem; align-items: stretch; width: 100%; margin-bottom: 0.8rem; }
-        .library-bottom-filters select { height: 42px; line-height: 1.2; flex: 1; }
-        .mastery-slider-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.4rem 0.8rem; flex: 1; display: flex; flex-direction: column; justify-content: center; height: 42px; }
+        .library-bottom-filters select { height: 42px; line-height: 1.2; flex: 1; max-width: 320px; }
         
-        /* UNE SEULE BARRE UNIFIÉE AVEC LES DEUX CURSEURS (MIN ET MAX SUR LE MÊME AXE) */
+        /* CURSEUR DE MAÎTRISE OPTIMISÉ (PLUS COMPACT ET POIGNÉES AGRANDIES / VISIBLES) */
+        .mastery-slider-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.4rem 0.8rem; flex: 1; max-width: 450px; display: flex; flex-direction: column; justify-content: center; height: 42px; }
         .mastery-single-track { position: relative; width: 100%; height: 20px; display: flex; align-items: center; }
         .mastery-single-track input[type="range"] { position: absolute; width: 100%; pointer-events: none; background: none; appearance: none; -webkit-appearance: none; margin: 0; }
-        .mastery-single-track input[type="range"]::-webkit-slider-thumb { pointer-events: auto; cursor: pointer; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); border: 2px solid white; box-shadow: var(--shadow); }
-        .mastery-single-track input[type="range"]::-moz-range-thumb { pointer-events: auto; cursor: pointer; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); border: 2px solid white; box-shadow: var(--shadow); }
+        
+        /* Poignées (thumbs) agrandies et bien contrastées pour Desktop et Mobile */
+        .mastery-single-track input[type="range"]::-webkit-slider-thumb { pointer-events: auto; cursor: pointer; width: 22px; height: 22px; border-radius: 50%; background: var(--primary); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.25); }
+        .mastery-single-track input[type="range"]::-moz-range-thumb { pointer-events: auto; cursor: pointer; width: 22px; height: 22px; border-radius: 50%; background: var(--primary); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.25); }
+        
         .mastery-track-visual { position: absolute; width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; z-index: 1; }
         .mastery-track-fill { position: absolute; height: 6px; background: var(--primary); border-radius: 3px; z-index: 2; }
 
@@ -228,10 +231,9 @@
             .library-top-right { width: 100%; justify-content: space-between; }
             .search-box-wrapper { width: 100%; flex: 1; }
             
-            /* Forcer les filtres du dessous en face-à-face sur mobile également */
             .library-bottom-filters { flex-direction: row; align-items: stretch; gap: 0.5rem; }
-            .library-bottom-filters select { flex: 1; min-width: 0; }
-            .mastery-slider-box { flex: 1; min-width: 0; padding: 0.4rem 0.5rem; }
+            .library-bottom-filters select { flex: 1; max-width: none; min-width: 0; }
+            .mastery-slider-box { flex: 1; max-width: none; min-width: 0; padding: 0.4rem 0.5rem; }
 
             .desktop-theme-selector { display: none !important; }
             .mobile-theme-selector { display: flex !important; margin-left: auto; }
@@ -261,7 +263,6 @@
         </div>
     </div>
 
-    <!-- Modale unifiée d'import / création de deck -->
     <div id="modal-import" class="modal-backdrop">
         <div class="modal-box" style="max-width: 580px;">
             <div class="modal-header">
@@ -274,7 +275,6 @@
                 <button type="button" class="btn btn-secondary btn-sm" id="tab-mode-empty" onclick="switchImportModalMode('empty')"><i class="fa-solid fa-folder-plus"></i> Créer un deck vide</button>
             </div>
 
-            <!-- Mode 1 : Import JSON / Fichier -->
             <div id="import-mode-section">
                 <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Collez le JSON brut généré par le prompt IA ou chargez un fichier `.json` depuis votre ordinateur.</p>
                 <form onsubmit="handleModalImport(event)">
@@ -300,7 +300,6 @@
                 </form>
             </div>
 
-            <!-- Mode 2 : Création de deck vide -->
             <div id="empty-mode-section" style="display:none;">
                 <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Créez un nouveau deck vide en renseignant son nom et sa catégorie.</p>
                 <form onsubmit="handleCreateEmptyDeckFromModal(event)">
@@ -321,7 +320,6 @@
         </div>
     </div>
 
-    <!-- Modale de switch rapide de deck -->
     <div id="modal-quick-switch" class="modal-backdrop">
         <div class="modal-box" style="max-width: 450px;">
             <div class="modal-header">
@@ -336,7 +334,6 @@
         </div>
     </div>
 
-    <!-- Modale de choix d'exportation -->
     <div id="modal-export-choice" class="modal-backdrop">
         <div class="modal-box" style="max-width: 450px;">
             <div class="modal-header">
@@ -484,7 +481,6 @@
                 </div>
             </div>
 
-            <!-- Ligne inférieure en face-à-face sur PC/Mac ET mobile avec la seule barre unifiée (deux curseurs) -->
             <div class="library-bottom-filters" id="library-bottom-filters">
                 <select id="library-category-filter" onchange="renderLibrary()">
                     <option value="all">Catégories</option>
@@ -602,7 +598,6 @@
         </section>
     </main>
 
-    <!-- Modale d'édition de carte -->
     <div class="modal-backdrop" id="modal-edit-card">
         <div class="modal-box">
             <div class="modal-header">
@@ -1363,7 +1358,6 @@
             switchTab('revision');
         }
 
-        /* DOUBLE CURSEUR DE % SUR UNE SEULE BARRE UNIFIÉE */
         function handleMasteryRangeInput() {
             let minVal = parseInt(document.getElementById('mastery-min-range').value, 10);
             let maxVal = parseInt(document.getElementById('mastery-max-range').value, 10);
@@ -1412,17 +1406,19 @@
             const categorySelect = document.getElementById('library-category-filter');
             const currentCategory = categorySelect.value;
             const heading = document.getElementById('library-title-heading');
+            
+            // CORRECTION DE LA RÉGRESSION : topRow, bottomFilters et actionsRow RESTENT TOUJOURS VISIBLES !
             const topRow = document.getElementById('library-top-row');
             const bottomFilters = document.getElementById('library-bottom-filters');
             const actionsRow = document.getElementById('library-actions-row');
 
+            if (topRow) topRow.style.display = 'flex';
+            if (bottomFilters) bottomFilters.style.display = 'flex';
+            if (actionsRow) actionsRow.style.display = 'flex';
+
             const q = window.appState.searchQuery;
 
             if (q) {
-                if (topRow) topRow.style.display = 'none';
-                if (bottomFilters) bottomFilters.style.display = 'none';
-                if (actionsRow) actionsRow.style.display = 'none';
-
                 heading.innerText = `Résultats de recherche`;
                 let matchedCards = [];
 
@@ -1479,10 +1475,6 @@
                 container.innerHTML = searchHTML;
                 return;
             }
-
-            if (topRow) topRow.style.display = 'flex';
-            if (bottomFilters) bottomFilters.style.display = 'flex';
-            if (actionsRow) actionsRow.style.display = 'flex';
 
             const categories = [...new Set(window.appState.decks.map(d => d.category || "Général"))];
             categorySelect.innerHTML = '<option value="all">Catégories</option>';
