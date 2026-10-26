@@ -138,12 +138,6 @@
 
         .drag-handle { color: var(--text-muted); cursor: grab; padding: 0.2rem; }
 
-        .range-filter-container { background: var(--card-bg); border: 1px solid var(--border-color); padding: 0.5rem 0.9rem; border-radius: 0.6rem; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
-        .dual-slider-box { position: relative; width: 140px; height: 26px; display: flex; align-items: center; }
-        .slider-track-visual { position: absolute; width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; top: 10px; }
-        .dual-slider-box input[type="range"] { position: absolute; width: 100%; pointer-events: none; -webkit-appearance: none; background: none; top: 5px; }
-        .dual-slider-box input[type="range"]::-webkit-slider-thumb { pointer-events: auto; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); -webkit-appearance: none; cursor: pointer; border: 2px solid var(--card-bg); box-shadow: var(--shadow); }
-
         .deck-mastery-bar-bg { height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; margin-top: 0.5rem; }
         .deck-mastery-bar-fill { height: 100%; background: var(--success); transition: width 0.3s; }
 
@@ -176,19 +170,37 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
         .auth-status { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: var(--text-muted); }
 
-        /* NOUVEAUX STYLES HARMONISÉS DE LA BIBLIOTHÈQUE ET DE LA RECHERCHE */
-        .library-top-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .library-top-left { display: flex; align-items: center; gap: 0.8rem; }
-        .library-top-right { display: flex; align-items: center; gap: 0.8rem; margin-left: auto; }
-
-        .search-box-wrapper { position: relative; width: 220px; }
+        /* BIBLIOTHÈQUE & DISPOSITION (PC/Mac et Mobile harmonisés en face-à-face) */
+        .library-top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 0.8rem; }
+        .library-top-right { display: flex; align-items: center; gap: 0.8rem; }
+        .search-box-wrapper { position: relative; width: 280px; }
         .search-icon-inside { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; pointer-events: none; }
-        .search-input { padding-left: 2.1rem !important; padding-right: 2rem !important; height: 38px; border-radius: 0.6rem !important; font-size: 0.85rem !important; }
+        .search-input { padding-left: 2.1rem !important; padding-right: 2rem !important; height: 42px; border-radius: 0.5rem !important; font-size: 0.9rem !important; }
         .search-clear-btn { position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; display: none; font-size: 0.85rem; }
         .search-clear-btn:hover { color: var(--danger); }
+
+        .library-bottom-filters { display: flex; gap: 0.8rem; align-items: stretch; width: 100%; margin-bottom: 0.8rem; }
+        .library-bottom-filters select { height: 42px; line-height: 1.2; flex: 1; }
+        .mastery-slider-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.4rem 0.8rem; flex: 1; display: flex; flex-direction: column; justify-content: center; height: 42px; }
         
+        /* UNE SEULE BARRE UNIFIÉE AVEC LES DEUX CURSEURS (MIN ET MAX SUR LE MÊME AXE) */
+        .mastery-single-track { position: relative; width: 100%; height: 20px; display: flex; align-items: center; }
+        .mastery-single-track input[type="range"] { position: absolute; width: 100%; pointer-events: none; background: none; appearance: none; -webkit-appearance: none; margin: 0; }
+        .mastery-single-track input[type="range"]::-webkit-slider-thumb { pointer-events: auto; cursor: pointer; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); border: 2px solid white; box-shadow: var(--shadow); }
+        .mastery-single-track input[type="range"]::-moz-range-thumb { pointer-events: auto; cursor: pointer; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); border: 2px solid white; box-shadow: var(--shadow); }
+        .mastery-track-visual { position: absolute; width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; z-index: 1; }
+        .mastery-track-fill { position: absolute; height: 6px; background: var(--primary); border-radius: 3px; z-index: 2; }
+
         .search-result-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.6rem; padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; cursor: pointer; transition: transform 0.15s, border-color 0.15s; box-shadow: var(--shadow); }
         .search-result-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+        .revision-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; width: 100%; flex-wrap: wrap; background: var(--card-bg); border: 1px solid var(--border-color); padding: 0.4rem 0.8rem; border-radius: 0.6rem; box-shadow: var(--shadow); }
+
+        .deck-autocomplete-container { position: relative; width: 100%; }
+        .deck-autocomplete-dropdown { position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; max-height: 160px; overflow-y: auto; z-index: 100; box-shadow: var(--shadow-lg); display: none; }
+        .deck-autocomplete-dropdown.active { display: block; }
+        .deck-autocomplete-item { padding: 0.6rem 0.8rem; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid var(--border-color); }
+        .deck-autocomplete-item:hover { background: var(--primary-light); color: var(--primary); }
 
         @media (max-width: 768px) {
             header { padding: 0.6rem 1rem; }
@@ -211,16 +223,18 @@
             .card-question { font-size: 1.5rem; }
             .card-answer { font-size: 1.1rem; }
             .library-grid, .folders-grid { grid-template-columns: 1fr; }
-            .range-filter-container { width: 100%; justify-content: space-between; }
+            
+            .library-top-row { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+            .library-top-right { width: 100%; justify-content: space-between; }
+            .search-box-wrapper { width: 100%; flex: 1; }
+            
+            /* Forcer les filtres du dessous en face-à-face sur mobile également */
+            .library-bottom-filters { flex-direction: row; align-items: stretch; gap: 0.5rem; }
+            .library-bottom-filters select { flex: 1; min-width: 0; }
+            .mastery-slider-box { flex: 1; min-width: 0; padding: 0.4rem 0.5rem; }
 
             .desktop-theme-selector { display: none !important; }
             .mobile-theme-selector { display: flex !important; margin-left: auto; }
-
-            /* Adaptation responsive mobile de l'en-tête de la bibliothèque */
-            .library-top-bar { flex-direction: column; align-items: stretch; gap: 0.6rem; }
-            .library-top-left { justify-content: space-between; width: 100%; }
-            .library-top-right { width: 100%; justify-content: space-between; margin-left: 0; gap: 0.5rem; }
-            .search-box-wrapper { width: 100%; flex: 1; }
         }
     </style>
 </head>
@@ -247,35 +261,78 @@
         </div>
     </div>
 
-    <!-- Modale d'import unifiée -->
+    <!-- Modale unifiée d'import / création de deck -->
     <div id="modal-import" class="modal-backdrop">
-        <div class="modal-box" style="max-width: 550px;">
+        <div class="modal-box" style="max-width: 580px;">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-cloud-arrow-up" style="color:var(--primary);"></i> Ajouter / Importer un Deck</h3>
+                <h3><i class="fa-solid fa-cloud-arrow-up" style="color:var(--primary);"></i> <span id="import-modal-title">Ajouter / Importer un Deck</span></h3>
                 <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-import')"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Collez le JSON brut généré par le prompt IA ou chargez un fichier `.json` depuis votre ordinateur.</p>
-            <form onsubmit="handleModalImport(event)">
-                <div class="form-group">
-                    <textarea id="modal-import-json" rows="8" style="font-family:monospace; font-size:0.8rem;" placeholder='{"deckName": "Vocabulaire", "category": "Langues", "cards": []}'></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox-label" style="font-weight:600; color:var(--text-main);">
-                        <input type="checkbox" id="modal-import-keep-status"> Conserver la progression (statuts) existante
-                    </label>
-                    <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-left:1.5rem; margin-top:0.2rem;">Si décoché (par défaut), toutes les cartes réimportées passent au statut "Non vu".</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:1rem; margin-top:1rem;">
-                    <div>
-                        <input type="file" id="modal-import-file-input" accept=".json" style="display:none;" onchange="handleModalFileSelect(event)">
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('modal-import-file-input').click()"><i class="fa-solid fa-folder-open"></i> Fichier .json</button>
+            
+            <div style="display:flex; gap:0.5rem; margin-bottom:1rem; border-bottom:1px solid var(--border-color); padding-bottom:0.6rem;">
+                <button type="button" class="btn btn-sm" id="tab-mode-import" onclick="switchImportModalMode('import')"><i class="fa-solid fa-code"></i> Importer JSON / Fichier</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="tab-mode-empty" onclick="switchImportModalMode('empty')"><i class="fa-solid fa-folder-plus"></i> Créer un deck vide</button>
+            </div>
+
+            <!-- Mode 1 : Import JSON / Fichier -->
+            <div id="import-mode-section">
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Collez le JSON brut généré par le prompt IA ou chargez un fichier `.json` depuis votre ordinateur.</p>
+                <form onsubmit="handleModalImport(event)">
+                    <div class="form-group">
+                        <textarea id="modal-import-json" rows="7" style="font-family:monospace; font-size:0.8rem;" placeholder='{"deckName": "Vocabulaire", "category": "Langues", "cards": []}'></textarea>
                     </div>
-                    <div style="display:flex; gap:0.5rem;">
+                    <div class="form-group">
+                        <label class="checkbox-label" style="font-weight:600; color:var(--text-main); align-items: flex-start;">
+                            <input type="checkbox" id="modal-import-keep-status" style="margin-top: 3px;"> 
+                            <span>Conserver la progression (statuts) existante<br><span style="font-weight:normal; font-size:0.8rem; color:var(--text-muted);">Si décoché (par défaut), toutes les cartes réimportées passent au statut "Non vu".</span></span>
+                        </label>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:1rem; margin-top:1rem;">
+                        <div>
+                            <input type="file" id="modal-import-file-input" accept=".json" style="display:none;" onchange="handleModalFileSelect(event)">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('modal-import-file-input').click()"><i class="fa-solid fa-folder-open"></i> Fichier .json</button>
+                        </div>
+                        <div style="display:flex; gap:0.5rem;">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-import')">Annuler</button>
+                            <button type="submit" class="btn"><i class="fa-solid fa-plus"></i> Importer</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Mode 2 : Création de deck vide -->
+            <div id="empty-mode-section" style="display:none;">
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Créez un nouveau deck vide en renseignant son nom et sa catégorie.</p>
+                <form onsubmit="handleCreateEmptyDeckFromModal(event)">
+                    <div class="form-group">
+                        <label>Nom du Deck *</label>
+                        <input type="text" id="empty-deck-title" placeholder="ex: Verbes irréguliers">
+                    </div>
+                    <div class="form-group">
+                        <label>Catégorie *</label>
+                        <input type="text" id="empty-deck-category" placeholder="ex: Hébreu">
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem; border-top:1px solid var(--border-color); padding-top:1rem;">
                         <button type="button" class="btn btn-secondary" onclick="closeModal('modal-import')">Annuler</button>
-                        <button type="submit" class="btn"><i class="fa-solid fa-plus"></i> Importer</button>
+                        <button type="submit" class="btn"><i class="fa-solid fa-check"></i> Créer le deck</button>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale de switch rapide de deck -->
+    <div id="modal-quick-switch" class="modal-backdrop">
+        <div class="modal-box" style="max-width: 450px;">
+            <div class="modal-header">
+                <h3>Changer de deck rapidement</h3>
+                <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-quick-switch')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="form-group">
+                <input type="text" id="quick-switch-search" placeholder="Tapez le nom d'un deck..." oninput="filterQuickSwitchList(this.value)">
+            </div>
+            <div id="quick-switch-list" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem;">
+            </div>
         </div>
     </div>
 
@@ -309,6 +366,7 @@
             <button class="nav-btn active" id="nav-revision" onclick="switchTab('revision')"><i class="fa-solid fa-graduation-cap"></i> Révision</button>
             <button class="nav-btn" id="nav-library" onclick="switchTab('library')"><i class="fa-solid fa-book-bookmark"></i> Bibliothèque</button>
             <button class="nav-btn" id="nav-prompt" onclick="switchTab('prompt')"><i class="fa-solid fa-wand-magic-sparkles"></i> Prompt IA</button>
+            <button class="nav-btn" onclick="forceAppRefresh()" style="color:var(--primary); display:none;" id="mobile-sync-btn"><i class="fa-solid fa-rotate"></i> Synchroniser</button>
         </nav>
 
         <div style="display:flex; align-items:center; gap:0.8rem;">
@@ -326,23 +384,25 @@
     <main>
         <section id="tab-revision" class="tab-content active">
             <div class="deck-header-info">
-                <div style="display: flex; align-items: center; width: 100%;">
-                    <div>
+                <div style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
+                    <div onclick="openQuickSwitchModal()" style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem;" title="Changer de deck rapidement">
                         <h2 id="current-deck-title" style="font-size: 1.2rem;">Sélectionnez un deck</h2>
-                        <span id="current-deck-category" style="background:var(--primary-light); color:var(--primary); padding:0.15rem 0.5rem; border-radius:1rem; font-size:0.75rem; font-weight:600;">--</span>
+                        <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem; color: var(--primary);"></i>
+                        <span id="current-deck-category" style="background:var(--primary-light); color:var(--primary); padding:0.15rem 0.5rem; border-radius:1rem; font-size:0.75rem; font-weight:600; margin-left: 0.4rem;">--</span>
                     </div>
                     <div class="theme-selector mobile-theme-selector">
                         <button class="theme-btn" onclick="setTheme('light')" id="theme-light-mobile"><i class="fa-solid fa-sun"></i></button>
                         <button class="theme-btn" onclick="setTheme('dark')" id="theme-dark-mobile"><i class="fa-solid fa-moon"></i></button>
                     </div>
                 </div>
-                <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap; width: 100%; justify-content: space-between;">
+                
+                <div class="revision-toolbar">
                     <button class="btn btn-secondary btn-sm" id="btn-toggle-invert" onclick="toggleInvertFaces()"><i class="fa-solid fa-right-left"></i> Sens</button>
-                    <select id="select-shortcut-mode" onchange="setShortcutMode(this.value)" class="btn btn-secondary btn-sm" style="font-weight:600; padding: 0.35rem;">
+                    <button class="btn btn-secondary btn-sm" onclick="shuffleCurrentDeck()"><i class="fa-solid fa-shuffle"></i> Mélanger</button>
+                    <select id="select-shortcut-mode" onchange="setShortcutMode(this.value)" class="btn btn-secondary btn-sm" style="font-weight:600; padding: 0.35rem; width: auto;">
                         <option value="wxc">Clavier : W-X-C</option>
                         <option value="123">Clavier : 1-2-3</option>
                     </select>
-                    <button class="btn btn-secondary btn-sm" onclick="shuffleCurrentDeck()"><i class="fa-solid fa-shuffle"></i> Mélanger</button>
                 </div>
             </div>
 
@@ -403,11 +463,10 @@
             </div>
         </section>
 
-        <!-- Onglet Bibliothèque réorganisé visuellement -->
+        <!-- Onglet Bibliothèque -->
         <section id="tab-library" class="tab-content">
-            <!-- Rangée 1 de l'en-tête de la bibliothèque (Titre + Vues à gauche, Recherche discrète + Ajouter à droite) -->
-            <div class="library-top-bar">
-                <div class="library-top-left">
+            <div class="library-top-row" id="library-top-row">
+                <div style="display:flex; align-items:center; gap:0.8rem;">
                     <h2 style="font-size: 1.3rem;" id="library-title-heading">Bibliothèque</h2>
                     <div class="view-toggle">
                         <button class="view-btn active" onclick="setLibraryView('grid')" id="view-btn-grid" title="Vue Liste"><i class="fa-solid fa-list-ul"></i></button>
@@ -416,33 +475,35 @@
                 </div>
 
                 <div class="library-top-right">
-                    <!-- Recherche discrète avec loupe intégrée -->
                     <div class="search-box-wrapper">
                         <i class="fa-solid fa-magnifying-glass search-icon-inside"></i>
                         <input type="text" id="global-search-input" class="search-input" placeholder="Rechercher carte..." oninput="handleGlobalSearchInput(this.value)">
                         <button class="search-clear-btn" id="search-clear-btn" onclick="clearGlobalSearch()" title="Vider"><i class="fa-solid fa-xmark"></i></button>
                     </div>
-                    <!-- Bouton Ajouter placé tout à droite -->
                     <button class="btn btn-sm" onclick="openImportModal()"><i class="fa-solid fa-plus"></i> Ajouter</button>
                 </div>
             </div>
 
-            <!-- Rangée 2 : Filtres (Catégorie, Slider) et Sélections/Actions (Positionnées aux extrémités opposées) -->
-            <div style="display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap; width: 100%; margin-bottom: 0.8rem;" id="library-filters-row">
-                <select id="library-category-filter" onchange="renderLibrary()" style="flex: 1; min-width: 140px;">
-                    <option value="all">Toutes les catégories</option>
+            <!-- Ligne inférieure en face-à-face sur PC/Mac ET mobile avec la seule barre unifiée (deux curseurs) -->
+            <div class="library-bottom-filters" id="library-bottom-filters">
+                <select id="library-category-filter" onchange="renderLibrary()">
+                    <option value="all">Catégories</option>
                 </select>
-                <div class="range-filter-container" style="flex: 1; min-width: 220px;">
-                    <span style="font-size:0.8rem; font-weight:600;"><i class="fa-solid fa-chart-line" style="color:var(--primary);"></i> <span id="slider-range-val">0% - 100%</span></span>
-                    <div class="dual-slider-box">
-                        <div class="slider-track-visual"></div>
-                        <input type="range" id="slider-min" min="0" max="100" step="5" value="0" oninput="handleSliderInput()">
-                        <input type="range" id="slider-max" min="0" max="100" step="5" value="100" oninput="handleSliderInput()">
+
+                <div class="mastery-slider-box">
+                    <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; font-weight:600; color:var(--text-muted); margin-bottom:0.1rem;">
+                        <span style="display:flex; align-items:center; gap:0.3rem;"><i class="fa-solid fa-chart-line" style="color:var(--primary);"></i> Maîtrise</span>
+                        <span id="mastery-range-label">0% - 100%</span>
+                    </div>
+                    <div class="mastery-single-track">
+                        <div class="mastery-track-visual"></div>
+                        <div class="mastery-track-fill" id="mastery-track-fill"></div>
+                        <input type="range" id="mastery-min-range" min="0" max="100" value="0" step="5" oninput="handleMasteryRangeInput()">
+                        <input type="range" id="mastery-max-range" min="0" max="100" value="100" step="5" oninput="handleMasteryRangeInput()">
                     </div>
                 </div>
             </div>
 
-            <!-- Rangée d'actions de sélection : "Tout sélectionner" / "Exporter" à gauche, "Supprimer" complètement séparé à droite -->
             <div style="display:flex; justify-content: space-between; align-items: center; width: 100%; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.4rem;" id="library-actions-row">
                 <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                     <button class="btn btn-secondary btn-sm" id="btn-toggle-select-all" onclick="toggleSelectAllFiltered()">
@@ -453,7 +514,6 @@
                     </button>
                 </div>
                 <div>
-                    <!-- Bouton Supprimer isolé et repoussé tout à droite -->
                     <button class="btn btn-danger btn-sm" id="btn-delete-selected" onclick="deleteSelected()" style="display:none;">
                         <i class="fa-solid fa-trash"></i> Supprimer (<span id="selected-count">0</span>)
                     </button>
@@ -542,7 +602,7 @@
         </section>
     </main>
 
-    <!-- Modales -->
+    <!-- Modale d'édition de carte -->
     <div class="modal-backdrop" id="modal-edit-card">
         <div class="modal-box">
             <div class="modal-header">
@@ -552,6 +612,7 @@
             <form onsubmit="saveCardEdit(event)">
                 <input type="hidden" id="edit-card-deck-id">
                 <input type="hidden" id="edit-card-id">
+                <input type="hidden" id="edit-card-target-deck-id" value="">
                 <div class="form-group">
                     <label>Question (Recto)</label>
                     <input type="text" id="edit-card-question" required>
@@ -564,6 +625,27 @@
                     <label>Précision</label>
                     <textarea id="edit-card-precision" rows="3"></textarea>
                 </div>
+                
+                <div class="form-group">
+                    <label>Déplacer vers un autre Deck</label>
+                    <div class="deck-autocomplete-container">
+                        <input type="text" id="edit-card-deck-search" placeholder="Tapez pour chercher un deck..." onclick="prepareDeckSearchInput(this)" oninput="filterCardTargetDecks(this.value)" autocomplete="off">
+                        <div class="deck-autocomplete-dropdown" id="edit-card-deck-dropdown"></div>
+                    </div>
+                </div>
+
+                <div id="group-new-deck-fields" style="display:none; background:var(--bg-color); padding:0.8rem; border-radius:0.5rem; border:1px solid var(--border-color); margin-bottom:1rem;">
+                    <div style="font-weight:700; font-size:0.85rem; color:var(--primary); margin-bottom:0.6rem;"><i class="fa-solid fa-folder-plus"></i> Nouveau deck à la volée</div>
+                    <div class="form-group" style="margin-bottom:0.6rem;">
+                        <label style="font-size:0.8rem;">Nom du nouveau deck *</label>
+                        <input type="text" id="edit-card-new-deck-title" placeholder="ex: Verbes approfondis">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label style="font-size:0.8rem;">Catégorie *</label>
+                        <input type="text" id="edit-card-new-deck-category" placeholder="ex: Hébreu approfondi">
+                    </div>
+                </div>
+
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.2rem; border-top:1px solid var(--border-color); padding-top:1rem;">
                     <button type="button" class="btn btn-danger btn-sm" onclick="deleteCardFromModal()"><i class="fa-solid fa-trash"></i> Supprimer la carte</button>
                     <div style="display:flex; gap:0.5rem;">
@@ -775,6 +857,7 @@
         let selectedFolderNames = new Set();
         let openCardsPreviewId = null;
         let draggedIndex = null;
+        let hasClearedSearchOnce = false;
 
         document.addEventListener('DOMContentLoaded', () => {
             applyThemeUI(window.appState.theme);
@@ -784,11 +867,37 @@
             setupKeyboardShortcuts();
             setupTouchSwipe();
             updateDynamicPrecisions();
+            checkMobileSyncButtonVisibility();
+            handleMasteryRangeInput();
+
+            document.addEventListener('click', (e) => {
+                const autocomplete = document.getElementById('edit-card-deck-dropdown');
+                if (autocomplete && !e.target.closest('.deck-autocomplete-container')) {
+                    autocomplete.classList.remove('active');
+                }
+            });
         });
+
+        function checkMobileSyncButtonVisibility() {
+            const syncBtn = document.getElementById('mobile-sync-btn');
+            if (!syncBtn) return;
+            const isMobile = window.innerWidth <= 768;
+            syncBtn.style.display = isMobile ? 'flex' : 'none';
+        }
+
+        window.addEventListener('resize', checkMobileSyncButtonVisibility);
 
         function toggleMobileMenu() {
             const nav = document.getElementById('main-nav');
             nav.classList.toggle('mobile-open');
+        }
+
+        function forceAppRefresh() {
+            renderLibrary();
+            loadCurrentDeck(false);
+            alert("Application synchronisée avec succès !");
+            const nav = document.getElementById('main-nav');
+            if (nav) nav.classList.remove('mobile-open');
         }
 
         function setupKeyboardShortcuts() {
@@ -1086,20 +1195,6 @@
             }
         }
 
-        function handleSliderInput() {
-            let minVal = parseInt(document.getElementById('slider-min').value);
-            let maxVal = parseInt(document.getElementById('slider-max').value);
-
-            if (minVal > maxVal) {
-                const tmp = minVal;
-                minVal = maxVal;
-                maxVal = tmp;
-            }
-
-            document.getElementById('slider-range-val').innerText = `${minVal}% - ${maxVal}%`;
-            renderLibrary();
-        }
-
         function setLibraryView(view) {
             window.appState.libraryView = view;
             window.appState.activeFolder = null;
@@ -1178,7 +1273,64 @@
             draggedIndex = null;
         }
 
-        /* FONCTIONNALITÉ : RECHERCHE GLOBALE AVEC MASQUAGE DE LA BARRE D'ACTIONS ET DES FILTRES */
+        function openQuickSwitchModal() {
+            document.getElementById('quick-switch-search').value = '';
+            renderQuickSwitchList('');
+            document.getElementById('modal-quick-switch').classList.add('active');
+            setTimeout(() => {
+                const searchInput = document.getElementById('quick-switch-search');
+                if (searchInput) searchInput.focus();
+            }, 50);
+        }
+
+        function filterQuickSwitchList(query) {
+            renderQuickSwitchList(query.trim().toLowerCase());
+        }
+
+        function renderQuickSwitchList(query) {
+            const listContainer = document.getElementById('quick-switch-list');
+            listContainer.innerHTML = '';
+
+            if (!query) {
+                listContainer.innerHTML = `<div style="text-align:center; padding:1.5rem; color:var(--text-muted); font-size:0.85rem;">Commencez à taper pour rechercher un deck...</div>`;
+                return;
+            }
+
+            const filtered = window.appState.decks.filter(d => {
+                const title = (d.title || d.deckName || '').toLowerCase();
+                const cat = (d.category || '').toLowerCase();
+                return title.includes(query) || cat.includes(query);
+            });
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = `<div style="text-align:center; padding:1.5rem; color:var(--text-muted); font-size:0.85rem;">Aucun deck trouvé</div>`;
+                return;
+            }
+
+            filtered.forEach(deck => {
+                const isCurrent = deck.id === window.appState.currentDeckId;
+                const title = deck.title || deck.deckName || "Sans titre";
+                const cat = deck.category || "Général";
+                const count = deck.cards.length;
+
+                const item = document.createElement('div');
+                item.style.cssText = `padding: 0.6rem 0.8rem; border-radius: 0.5rem; background: ${isCurrent ? 'var(--primary-light)' : 'var(--card-bg)'}; border: 1px solid var(--border-color); cursor: pointer; display: flex; justify-content: space-between; align-items: center;`;
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.9rem; color: ${isCurrent ? 'var(--primary)' : 'var(--text-main)'};">${title}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">${cat} • ${count} cartes</div>
+                    </div>
+                    ${isCurrent ? '<i class="fa-solid fa-check" style="color:var(--primary);"></i>' : ''}
+                `;
+                item.onclick = () => {
+                    window.appState.currentDeckId = deck.id;
+                    closeModal('modal-quick-switch');
+                    loadCurrentDeck(true);
+                };
+                listContainer.appendChild(item);
+            });
+        }
+
         function handleGlobalSearchInput(query) {
             window.appState.searchQuery = query.trim().toLowerCase();
             const clearBtn = document.getElementById('search-clear-btn');
@@ -1211,11 +1363,34 @@
             switchTab('revision');
         }
 
+        /* DOUBLE CURSEUR DE % SUR UNE SEULE BARRE UNIFIÉE */
+        function handleMasteryRangeInput() {
+            let minVal = parseInt(document.getElementById('mastery-min-range').value, 10);
+            let maxVal = parseInt(document.getElementById('mastery-max-range').value, 10);
+
+            if (minVal > maxVal) {
+                [minVal, maxVal] = [maxVal, minVal];
+            }
+
+            document.getElementById('mastery-range-label').innerText = `${minVal}% - ${maxVal}%`;
+            
+            const fill = document.getElementById('mastery-track-fill');
+            if (fill) {
+                fill.style.left = `${minVal}%`;
+                fill.style.width = `${maxVal - minVal}%`;
+            }
+
+            renderLibrary();
+        }
+
         function getFilteredDecks() {
             const categorySelect = document.getElementById('library-category-filter');
             const currentCategory = categorySelect ? categorySelect.value : 'all';
-            const minPct = document.getElementById('slider-min') ? parseInt(document.getElementById('slider-min').value) : 0;
-            const maxPct = document.getElementById('slider-max') ? parseInt(document.getElementById('slider-max').value) : 100;
+            
+            const minVal = parseInt(document.getElementById('mastery-min-range').value, 10);
+            const maxVal = parseInt(document.getElementById('mastery-max-range').value, 10);
+            const realMin = Math.min(minVal, maxVal);
+            const realMax = Math.max(minVal, maxVal);
 
             let filteredDecks = currentCategory === 'all' 
                 ? window.appState.decks 
@@ -1223,12 +1398,10 @@
 
             filteredDecks = filteredDecks.filter(deck => {
                 const total = deck.cards.length;
-                if (total === 0) return minPct === 0;
+                if (total === 0) return realMin === 0;
                 const knownCount = deck.cards.filter(c => c.status === 'known').length;
                 const masteryPct = Math.round((knownCount / total) * 100);
-                const low = Math.min(minPct, maxPct);
-                const high = Math.max(minPct, maxPct);
-                return masteryPct >= low && masteryPct <= high;
+                return masteryPct >= realMin && masteryPct <= realMax;
             });
 
             return filteredDecks;
@@ -1239,14 +1412,15 @@
             const categorySelect = document.getElementById('library-category-filter');
             const currentCategory = categorySelect.value;
             const heading = document.getElementById('library-title-heading');
-            const filtersRow = document.getElementById('library-filters-row');
+            const topRow = document.getElementById('library-top-row');
+            const bottomFilters = document.getElementById('library-bottom-filters');
             const actionsRow = document.getElementById('library-actions-row');
 
             const q = window.appState.searchQuery;
 
-            // MASQUAGE DES BARRES DE FILTRES ET D'ACTIONS PENDANT LA RECHERCHE
             if (q) {
-                if (filtersRow) filtersRow.style.display = 'none';
+                if (topRow) topRow.style.display = 'none';
+                if (bottomFilters) bottomFilters.style.display = 'none';
                 if (actionsRow) actionsRow.style.display = 'none';
 
                 heading.innerText = `Résultats de recherche`;
@@ -1273,8 +1447,8 @@
                     container.innerHTML = `
                         <div class="empty-state">
                             <i class="fa-solid fa-magnifying-glass" style="font-size:2rem; margin-bottom:0.5rem;"></i>
-                            <p>Aucune carte ne correspond à "${q}" (recherche sur recto et verso).</p>
-                            <button class="btn btn-secondary btn-sm" style="margin-top:1rem;" onclick="clearGlobalSearch()"><i class="fa-solid fa-xmark"></i> Fermer la recherche</button>
+                            <p>Aucune carte ne correspond à "${q}".</p>
+                            <button class="btn btn-secondary btn-sm" style="margin-top:1.0rem;" onclick="clearGlobalSearch()"><i class="fa-solid fa-xmark"></i> Fermer la recherche</button>
                         </div>`;
                     return;
                 }
@@ -1306,12 +1480,12 @@
                 return;
             }
 
-            // RÉAFFICHAGE DES BARRES EN MODE BIBLIOTHÈQUE NORMALE
-            if (filtersRow) filtersRow.style.display = 'flex';
+            if (topRow) topRow.style.display = 'flex';
+            if (bottomFilters) bottomFilters.style.display = 'flex';
             if (actionsRow) actionsRow.style.display = 'flex';
 
             const categories = [...new Set(window.appState.decks.map(d => d.category || "Général"))];
-            categorySelect.innerHTML = '<option value="all">Toutes les catégories</option>';
+            categorySelect.innerHTML = '<option value="all">Catégories</option>';
             categories.forEach(cat => {
                 categorySelect.innerHTML += `<option value="${cat}" ${cat === currentCategory ? 'selected' : ''}>${cat}</option>`;
             });
@@ -1632,9 +1806,34 @@
         }
 
         function openImportModal() {
+            switchImportModalMode('import');
             document.getElementById('modal-import-json').value = '';
             document.getElementById('modal-import-keep-status').checked = false;
             document.getElementById('modal-import').classList.add('active');
+        }
+
+        function switchImportModalMode(mode) {
+            const importSec = document.getElementById('import-mode-section');
+            const emptySec = document.getElementById('empty-mode-section');
+            const btnImport = document.getElementById('tab-mode-import');
+            const btnEmpty = document.getElementById('tab-mode-empty');
+            const titleEl = document.getElementById('import-modal-title');
+
+            if (mode === 'import') {
+                importSec.style.display = 'block';
+                emptySec.style.display = 'none';
+                btnImport.className = 'btn btn-sm';
+                btnEmpty.className = 'btn btn-secondary btn-sm';
+                titleEl.innerText = "Ajouter / Importer un Deck";
+            } else {
+                importSec.style.display = 'none';
+                emptySec.style.display = 'block';
+                btnImport.className = 'btn btn-secondary btn-sm';
+                btnEmpty.className = 'btn btn-sm';
+                titleEl.innerText = "Créer un Deck Vide";
+                document.getElementById('empty-deck-title').value = '';
+                document.getElementById('empty-deck-category').value = '';
+            }
         }
 
         function handleModalFileSelect(e) {
@@ -1699,6 +1898,27 @@
             }
         }
 
+        function handleCreateEmptyDeckFromModal(e) {
+            e.preventDefault();
+            const title = document.getElementById('empty-deck-title').value.trim();
+            const category = document.getElementById('empty-deck-category').value.trim();
+            if (!title || !category) return;
+
+            const newDeck = {
+                id: 'deck_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                title: title,
+                category: category,
+                cards: []
+            };
+
+            window.appState.decks.push(newDeck);
+            window.appState.currentDeckId = newDeck.id;
+            if (window.saveToFirestore) window.saveToFirestore();
+            closeModal('modal-import');
+            renderLibrary();
+            switchTab('revision');
+        }
+
         function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
 
         function openEditDeckInfoModal(deckId) {
@@ -1735,26 +1955,114 @@
             document.getElementById('edit-card-question').value = card.question;
             document.getElementById('edit-card-answer').value = card.answer;
             document.getElementById('edit-card-precision').value = card.precision || '';
+
+            document.getElementById('edit-card-target-deck-id').value = deckId;
+            document.getElementById('edit-card-deck-search').value = deck.title || deck.deckName || 'Sans titre';
+            hasClearedSearchOnce = false;
+
+            document.getElementById('group-new-deck-fields').style.display = 'none';
+            document.getElementById('edit-card-new-deck-title').value = '';
+            document.getElementById('edit-card-new-deck-category').value = deck.category || 'Général';
+
             document.getElementById('modal-edit-card').classList.add('active');
+        }
+
+        function prepareDeckSearchInput(input) {
+            if (!hasClearedSearchOnce) {
+                input.value = '';
+                hasClearedSearchOnce = true;
+                filterCardTargetDecks('');
+            }
+        }
+
+        function filterCardTargetDecks(query) {
+            const dropdown = document.getElementById('edit-card-deck-dropdown');
+            dropdown.innerHTML = '';
+            const q = query.trim().toLowerCase();
+
+            let matches = window.appState.decks.filter(d => {
+                const title = (d.title || d.deckName || '').toLowerCase();
+                const cat = (d.category || '').toLowerCase();
+                return title.includes(q) || cat.includes(q);
+            });
+
+            let html = '';
+            matches.forEach(d => {
+                const title = d.title || d.deckName || 'Sans titre';
+                html += `<div class="deck-autocomplete-item" onclick="selectCardTargetDeck('${d.id}', '${title.replace(/'/g, "\\'")}')"><strong>${title}</strong> (${d.category || 'Général'})</div>`;
+            });
+
+            html += `<div class="deck-autocomplete-item" style="color:var(--primary); font-weight:700;" onclick="selectCardTargetNewDeck('${query}')"><i class="fa-solid fa-folder-plus"></i> + Créer un nouveau deck "${query || '...'}"</div>`;
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('active');
+        }
+
+        function selectCardTargetDeck(deckId, deckTitle) {
+            document.getElementById('edit-card-target-deck-id').value = deckId;
+            document.getElementById('edit-card-deck-search').value = deckTitle;
+            hasClearedSearchOnce = false;
+            document.getElementById('group-new-deck-fields').style.display = 'none';
+            document.getElementById('edit-card-deck-dropdown').classList.remove('active');
+        }
+
+        function selectCardTargetNewDeck(query) {
+            document.getElementById('edit-card-target-deck-id').value = 'new';
+            document.getElementById('edit-card-deck-search').value = "Nouveau deck : " + query;
+            document.getElementById('group-new-deck-fields').style.display = 'block';
+            document.getElementById('edit-card-new-deck-title').value = query;
+            const currentDeck = window.appState.decks.find(d => d.id === document.getElementById('edit-card-deck-id').value);
+            document.getElementById('edit-card-new-deck-category').value = currentDeck ? (currentDeck.category || 'Général') : 'Général';
+            document.getElementById('edit-card-deck-dropdown').classList.remove('active');
         }
 
         function saveCardEdit(e) {
             e.preventDefault();
             const deckId = document.getElementById('edit-card-deck-id').value;
             const cardId = document.getElementById('edit-card-id').value;
-            const deck = window.appState.decks.find(d => d.id === deckId);
-            if (deck) {
-                const card = deck.cards.find(c => c.id === cardId);
-                if (card) {
-                    card.question = document.getElementById('edit-card-question').value.trim();
-                    card.answer = document.getElementById('edit-card-answer').value.trim();
-                    card.precision = document.getElementById('edit-card-precision').value.trim();
-                    if (window.saveToFirestore) window.saveToFirestore();
-                    renderLibrary();
-                    if (window.appState.currentDeckId === deckId) renderCard();
+            const currentDeck = window.appState.decks.find(d => d.id === deckId);
+            if (!currentDeck) return;
+
+            const cardIndex = currentDeck.cards.findIndex(c => c.id === cardId);
+            if (cardIndex === -1) return;
+
+            const card = currentDeck.cards[cardIndex];
+            card.question = document.getElementById('edit-card-question').value.trim();
+            card.answer = document.getElementById('edit-card-answer').value.trim();
+            card.precision = document.getElementById('edit-card-precision').value.trim();
+
+            const targetVal = document.getElementById('edit-card-target-deck-id').value;
+            let finalTargetDeckId = deckId;
+
+            if (targetVal === 'new') {
+                const newTitle = document.getElementById('edit-card-new-deck-title').value.trim();
+                const newCategory = document.getElementById('edit-card-new-deck-category').value.trim();
+                if (newTitle && newCategory) {
+                    const newDeck = {
+                        id: 'deck_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                        title: newTitle,
+                        category: newCategory,
+                        cards: []
+                    };
+                    window.appState.decks.push(newDeck);
+                    finalTargetDeckId = newDeck.id;
+                }
+            } else {
+                finalTargetDeckId = targetVal;
+            }
+
+            if (finalTargetDeckId !== deckId) {
+                currentDeck.cards.splice(cardIndex, 1);
+                const targetDeck = window.appState.decks.find(d => d.id === finalTargetDeckId);
+                if (targetDeck) {
+                    targetDeck.cards.push(card);
                 }
             }
+
+            if (window.saveToFirestore) window.saveToFirestore();
             closeModal('modal-edit-card');
+            renderLibrary();
+            if (window.appState.currentDeckId) loadCurrentDeck(false);
         }
 
         function deleteCardFromModal() {
@@ -1918,7 +2226,7 @@ RÈGLES DE RÉDACTION STRICTES :
    ${selectedPrecisions.map(p => "• " + p).join('\n   ')}
 4. SYNTAXE & SANITISATION :
    - Pas de guillemets doubles dans les textes (utiliser des guillemets simples).
-   - Remplacer TOUS les sauts de ligne dans les champs textes par le symbole '\\n' sur me seule ligne continue par champ.
+   - Remplacer TOUS les sauts de ligne dans les champs textes par le symbole '\\n' sur une seule ligne continue par champ.
 ${customDetails ? `5. CONSIGNES SPÉCIFIQUES : ${customDetails}` : ''}
 
 Quantité : ${quantityRule}
