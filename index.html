@@ -75,8 +75,8 @@
 
         .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s; font-size: 0.95rem; }
         .btn:hover { background: var(--primary-hover); }
-        .btn-secondary { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); }
-        .btn-secondary:hover { background: var(--border-color); }
+        .btn-secondary { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .btn-secondary:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
         .btn-danger { background: var(--danger); color: white; }
         .btn-danger:hover { background: #dc2626; }
         .btn-sm { padding: 0.35rem 0.6rem; font-size: 0.85rem; }
@@ -182,14 +182,13 @@
         .library-bottom-filters { display: flex; gap: 0.8rem; align-items: stretch; width: 100%; margin-bottom: 0.8rem; }
         .library-bottom-filters select { height: 42px; line-height: 1.2; flex: 1; max-width: 320px; }
         
-        /* CURSEUR DE MAÎTRISE OPTIMISÉ (PLUS COMPACT ET POIGNÉES AGRANDIES / VISIBLES) */
-        .mastery-slider-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.4rem 0.8rem; flex: 1; max-width: 450px; display: flex; flex-direction: column; justify-content: center; height: 42px; }
+        /* CURSEUR DE MAÎTRISE AMÉLIORÉ */
+        .mastery-slider-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.4rem 0.8rem; flex: 1; max-width: 450px; display: flex; flex-direction: column; justify-content: center; height: 42px; box-shadow: var(--shadow); }
         .mastery-single-track { position: relative; width: 100%; height: 20px; display: flex; align-items: center; }
         .mastery-single-track input[type="range"] { position: absolute; width: 100%; pointer-events: none; background: none; appearance: none; -webkit-appearance: none; margin: 0; }
         
-        /* Poignées (thumbs) agrandies et bien contrastées pour Desktop et Mobile */
-        .mastery-single-track input[type="range"]::-webkit-slider-thumb { pointer-events: auto; cursor: pointer; width: 22px; height: 22px; border-radius: 50%; background: var(--primary); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.25); }
-        .mastery-single-track input[type="range"]::-moz-range-thumb { pointer-events: auto; cursor: pointer; width: 22px; height: 22px; border-radius: 50%; background: var(--primary); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.25); }
+        .mastery-single-track input[type="range"]::-webkit-slider-thumb { pointer-events: auto; cursor: pointer; width: 24px; height: 24px; border-radius: 50%; background: var(--primary); border: 3px solid #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+        .mastery-single-track input[type="range"]::-moz-range-thumb { pointer-events: auto; cursor: pointer; width: 24px; height: 24px; border-radius: 50%; background: var(--primary); border: 3px solid #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
         
         .mastery-track-visual { position: absolute; width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; z-index: 1; }
         .mastery-track-fill { position: absolute; height: 6px; background: var(--primary); border-radius: 3px; z-index: 2; }
@@ -197,7 +196,10 @@
         .search-result-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.6rem; padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; cursor: pointer; transition: transform 0.15s, border-color 0.15s; box-shadow: var(--shadow); }
         .search-result-card:hover { border-color: var(--primary); transform: translateY(-2px); }
 
+        /* REVISION TOOLBAR BOUTONS REHAUSSÉS */
         .revision-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; width: 100%; flex-wrap: wrap; background: var(--card-bg); border: 1px solid var(--border-color); padding: 0.4rem 0.8rem; border-radius: 0.6rem; box-shadow: var(--shadow); }
+        .revision-toolbar .btn-secondary { background: var(--primary-light); color: var(--primary); border-color: var(--border-color); font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .revision-toolbar .btn-secondary:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
         .deck-autocomplete-container { position: relative; width: 100%; }
         .deck-autocomplete-dropdown { position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; max-height: 160px; overflow-y: auto; z-index: 100; box-shadow: var(--shadow-lg); display: none; }
@@ -320,6 +322,25 @@
         </div>
     </div>
 
+    <!-- MODAL DE CORBEILLE -->
+    <div id="modal-trash" class="modal-backdrop">
+        <div class="modal-box" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-trash-can" style="color:var(--danger);"></i> Corbeille temporaire (24h)</h3>
+                <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-trash')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Les decks supprimés ici sont conservés 24h avant destruction définitive automatique.</p>
+            
+            <div id="trash-list-container" style="max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem;">
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:1rem;">
+                <button class="btn btn-danger btn-sm" onclick="emptyTrashCompletely()"><i class="fa-solid fa-broom"></i> Tout vider maintenant</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-trash')">Fermer</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-quick-switch" class="modal-backdrop">
         <div class="modal-box" style="max-width: 450px;">
             <div class="modal-header">
@@ -330,25 +351,6 @@
                 <input type="text" id="quick-switch-search" placeholder="Tapez le nom d'un deck..." oninput="filterQuickSwitchList(this.value)">
             </div>
             <div id="quick-switch-list" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem;">
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-export-choice" class="modal-backdrop">
-        <div class="modal-box" style="max-width: 450px;">
-            <div class="modal-header">
-                <h3>Options d'exportation</h3>
-                <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-export-choice')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Choisissez le format de sortie pour les decks sélectionnés :</p>
-            <div style="display:flex; flex-direction:column; gap:0.6rem; margin-bottom:1.2rem;">
-                <label class="checkbox-label" style="font-weight:600;">
-                    <input type="checkbox" id="export-keep-status" checked> Conserver la progression (statuts) actuels
-                </label>
-            </div>
-            <div style="display:flex; flex-direction:column; gap:0.8rem;">
-                <button class="btn" onclick="executeExportMode('combined')" style="justify-content:center;"><i class="fa-solid fa-box-archive"></i> 1 fichier combiné</button>
-                <button class="btn btn-secondary" onclick="executeExportMode('individual')" style="justify-content:center;"><i class="fa-solid fa-files"></i> Autant de fichiers que de decks sélectionnés</button>
             </div>
         </div>
     </div>
@@ -477,7 +479,14 @@
                         <input type="text" id="global-search-input" class="search-input" placeholder="Rechercher carte..." oninput="handleGlobalSearchInput(this.value)">
                         <button class="search-clear-btn" id="search-clear-btn" onclick="clearGlobalSearch()" title="Vider"><i class="fa-solid fa-xmark"></i></button>
                     </div>
+                    
+                    <!-- BOUTON AJOUTER -->
                     <button class="btn btn-sm" onclick="openImportModal()"><i class="fa-solid fa-plus"></i> Ajouter</button>
+
+                    <!-- BOUTON CORBEILLE DISCRET (ICÔNE ROUGE + COMPTEUR) -->
+                    <button class="btn btn-secondary btn-sm" id="btn-trash-header" onclick="openTrashModal()" title="Corbeille" style="display:none; color:var(--danger); border-color:var(--danger);">
+                        <i class="fa-solid fa-trash-can"></i> (<span id="trash-count-badge">0</span>)
+                    </button>
                 </div>
             </div>
 
@@ -504,9 +513,6 @@
                 <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                     <button class="btn btn-secondary btn-sm" id="btn-toggle-select-all" onclick="toggleSelectAllFiltered()">
                         <i class="fa-solid fa-square-check"></i> <span id="toggle-select-all-label">Tout sélectionner</span>
-                    </button>
-                    <button class="btn btn-secondary btn-sm" id="btn-export-selected" onclick="openExportChoiceModal()" style="display:none;">
-                        <i class="fa-solid fa-file-export"></i> Exporter (<span id="selected-export-count">0</span>)
                     </button>
                 </div>
                 <div>
@@ -751,11 +757,23 @@
                 unsubscribeFirestore = onSnapshot(userDocRef, (docSnap) => {
                     if (docSnap.exists() && docSnap.data().decks) {
                         window.appState.decks = docSnap.data().decks;
+                        window.appState.trash = docSnap.data().trash || [];
+                        
+                        // Nettoyage automatique de la corbeille (> 24h)
+                        const now = Date.now();
+                        const twentyFourHours = 24 * 60 * 60 * 1000;
+                        const initialTrashCount = window.appState.trash.length;
+                        window.appState.trash = window.appState.trash.filter(item => (now - item.deletedAt) < twentyFourHours);
+                        if (window.appState.trash.length !== initialTrashCount) {
+                            window.saveToFirestore();
+                        }
+
                         if (!window.appState.currentDeckId && window.appState.decks.length > 0) {
                             window.appState.currentDeckId = window.appState.decks[0].id;
                         }
                     } else {
                         window.appState.decks = [];
+                        window.appState.trash = [];
                     }
                     if (typeof window.renderLibrary === 'function') window.renderLibrary();
                     
@@ -770,6 +788,7 @@
                 authModal.classList.add('active');
                 userProfile.style.display = 'none';
                 window.appState.decks = [];
+                window.appState.trash = [];
             }
         });
 
@@ -778,7 +797,10 @@
             try {
                 isLocalSaving = true;
                 const userDocRef = doc(db, "users", currentUser.uid);
-                await setDoc(userDocRef, { decks: window.appState.decks }, { merge: true });
+                await setDoc(userDocRef, { 
+                    decks: window.appState.decks,
+                    trash: window.appState.trash || []
+                }, { merge: true });
             } catch (err) {
                 isLocalSaving = false;
                 console.error("Erreur de sauvegarde Cloud :", err);
@@ -837,6 +859,7 @@
         window.appState = {
             theme: 'light',
             decks: [],
+            trash: [],
             currentDeckId: null,
             filter: 'unseen',
             currentIndex: 0,
@@ -1407,7 +1430,6 @@
             const currentCategory = categorySelect.value;
             const heading = document.getElementById('library-title-heading');
             
-            // CORRECTION DE LA RÉGRESSION : topRow, bottomFilters et actionsRow RESTENT TOUJOURS VISIBLES !
             const topRow = document.getElementById('library-top-row');
             const bottomFilters = document.getElementById('library-bottom-filters');
             const actionsRow = document.getElementById('library-actions-row');
@@ -1415,6 +1437,13 @@
             if (topRow) topRow.style.display = 'flex';
             if (bottomFilters) bottomFilters.style.display = 'flex';
             if (actionsRow) actionsRow.style.display = 'flex';
+
+            const trashCount = (window.appState.trash || []).length;
+            const trashBtn = document.getElementById('btn-trash-header');
+            if (trashBtn) {
+                trashBtn.style.display = trashCount > 0 ? 'inline-flex' : 'none';
+                document.getElementById('trash-count-badge').innerText = trashCount;
+            }
 
             const q = window.appState.searchQuery;
 
@@ -1659,7 +1688,7 @@
                 if (allSelected) selectedFolderNames.clear();
                 else categories.forEach(cat => selectedFolderNames.add(cat));
             } else {
-                const filteredDecks = getFilteredDecks();
+                const filteredDecks = getFilteredDecks().filter(d => window.appState.activeFolder === null || (d.category || "Général") === window.appState.activeFolder);
                 if (filteredDecks.length === 0) return;
                 const allSelected = filteredDecks.every(deck => selectedDeckIds.has(deck.id));
                 if (allSelected) filteredDecks.forEach(deck => selectedDeckIds.delete(deck.id));
@@ -1682,7 +1711,6 @@
 
         function updateLibraryActionButtonsUI() {
             const deleteBtn = document.getElementById('btn-delete-selected');
-            const exportBtn = document.getElementById('btn-export-selected');
             const toggleSelectBtnLabel = document.getElementById('toggle-select-all-label');
             const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
             
@@ -1691,10 +1719,6 @@
             if (deleteBtn) {
                 document.getElementById('selected-count').innerText = totalSelectedCount;
                 deleteBtn.style.display = totalSelectedCount > 0 ? 'inline-flex' : 'none';
-            }
-            if (exportBtn) {
-                document.getElementById('selected-export-count').innerText = totalSelectedCount;
-                exportBtn.style.display = totalSelectedCount > 0 ? 'inline-flex' : 'none';
             }
 
             if (toggleSelectBtnLabel) {
@@ -1706,7 +1730,7 @@
                         toggleSelectBtnLabel.innerText = "Tout sélectionner";
                     }
                 } else {
-                    const filteredDecks = getFilteredDecks();
+                    const filteredDecks = getFilteredDecks().filter(d => window.appState.activeFolder === null || (d.category || "Général") === window.appState.activeFolder);
                     if (filteredDecks.length > 0 && filteredDecks.every(deck => selectedDeckIds.has(deck.id))) {
                         toggleSelectBtnLabel.innerText = "Tout désélectionner";
                     } else {
@@ -1720,7 +1744,11 @@
             const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
             if (isFoldersView) {
                 if (selectedFolderNames.size === 0) return;
-                if (confirm(`Supprimer les ${selectedFolderNames.size} dossier(s) et tous leurs decks ?`)) {
+                if (confirm(`Envoyer les ${selectedFolderNames.size} dossier(s) à la corbeille ?`)) {
+                    const decksToTrash = window.appState.decks.filter(d => selectedFolderNames.has(d.category || "Général"));
+                    decksToTrash.forEach(d => {
+                        window.appState.trash.push({ ...d, deletedAt: Date.now() });
+                    });
                     window.appState.decks = window.appState.decks.filter(d => !selectedFolderNames.has(d.category || "Général"));
                     selectedFolderNames.clear();
                     window.appState.currentDeckId = window.appState.decks.length > 0 ? window.appState.decks[0].id : null;
@@ -1729,7 +1757,11 @@
                 }
             } else {
                 if (selectedDeckIds.size === 0) return;
-                if (confirm(`Supprimer les ${selectedDeckIds.size} deck(s) sélectionnés ?`)) {
+                if (confirm(`Envoyer les ${selectedDeckIds.size} deck(s) sélectionnés à la corbeille ?`)) {
+                    const decksToTrash = window.appState.decks.filter(d => selectedDeckIds.has(d.id));
+                    decksToTrash.forEach(d => {
+                        window.appState.trash.push({ ...d, deletedAt: Date.now() });
+                    });
                     window.appState.decks = window.appState.decks.filter(d => !selectedDeckIds.has(d.id));
                     if (selectedDeckIds.has(window.appState.currentDeckId)) {
                         window.appState.currentDeckId = window.appState.decks.length > 0 ? window.appState.decks[0].id : null;
@@ -1741,60 +1773,73 @@
             }
         }
 
-        function openExportChoiceModal() {
-            const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
-            const count = isFoldersView ? selectedFolderNames.size : selectedDeckIds.size;
-            if (count === 0) return;
-            document.getElementById('modal-export-choice').classList.add('active');
+        function openTrashModal() {
+            renderTrashList();
+            document.getElementById('modal-trash').classList.add('active');
         }
 
-        function executeExportMode(mode) {
-            closeModal('modal-export-choice');
-            const keepStatus = document.getElementById('export-keep-status').checked;
-            const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
-            
-            let rawDecksToExport = [];
-            if (isFoldersView) {
-                rawDecksToExport = window.appState.decks.filter(d => selectedFolderNames.has(d.category || "Général"));
-            } else {
-                rawDecksToExport = window.appState.decks.filter(d => selectedDeckIds.has(d.id));
+        function renderTrashList() {
+            const container = document.getElementById('trash-list-container');
+            container.innerHTML = '';
+
+            const trash = window.appState.trash || [];
+
+            if (trash.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:1.5rem; color:var(--text-muted); font-size:0.85rem;">La corbeille est vide.</div>`;
+                return;
             }
 
-            if (rawDecksToExport.length === 0) return;
+            trash.forEach(deck => {
+                const title = deck.title || deck.deckName || "Sans titre";
+                const cat = deck.category || "Général";
+                const count = deck.cards.length;
+                const hoursLeft = Math.max(1, Math.round((24 * 60 * 60 * 1000 - (Date.now() - deck.deletedAt)) / (1000 * 60 * 60)));
 
-            const formattedDecks = rawDecksToExport.map(deck => ({
-                deckName: deck.title || deck.deckName,
-                category: deck.category || "Général",
-                cards: deck.cards.map(c => ({
-                    id: c.id,
-                    question: c.question,
-                    answer: c.answer,
-                    precision: c.precision || "",
-                    status: keepStatus ? (c.status || "unseen") : "unseen"
-                }))
-            }));
+                const item = document.createElement('div');
+                item.style.cssText = `padding: 0.6rem 0.8rem; border-radius: 0.5rem; background: var(--bg-color); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; gap:0.5rem;`;
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">${title}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">${cat} • ${count} cartes • Supprimé il y a ~${24 - hoursLeft}h (reste ~${hoursLeft}h)</div>
+                    </div>
+                    <div style="display:flex; gap:0.4rem;">
+                        <button class="btn btn-secondary btn-sm" onclick="restoreDeckFromTrash('${deck.id}')" title="Restaurer"><i class="fa-solid fa-rotate-left"></i> Restaurer</button>
+                        <button class="btn btn-danger btn-sm" onclick="permanentlyDeleteDeck('${deck.id}')" title="Supprimer définitivement"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
 
-            if (mode === 'combined') {
-                const payload = formattedDecks.length === 1 ? formattedDecks[0] : { decks: formattedDecks };
-                downloadJsonObject(payload, `smartcards_export_combine_${new Date().toISOString().slice(0, 10)}.json`);
-            } else {
-                formattedDecks.forEach((deckData, idx) => {
-                    setTimeout(() => {
-                        const cleanTitle = (deckData.deckName || 'deck').replace(/[^a-z0-9]/gi, '_').toLowerCase();
-                        downloadJsonObject(deckData, `smartcards_${cleanTitle}.json`);
-                    }, idx * 250);
-                });
+        function restoreDeckFromTrash(deckId) {
+            const index = window.appState.trash.findIndex(d => d.id === deckId);
+            if (index !== -1) {
+                const restored = window.appState.trash.splice(index, 1)[0];
+                delete restored.deletedAt;
+                window.appState.decks.push(restored);
+                if (window.saveToFirestore) window.saveToFirestore();
+                renderTrashList();
+                renderLibrary();
             }
         }
 
-        function downloadJsonObject(obj, filename) {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj, null, 2));
-            const a = document.createElement('a');
-            a.href = dataStr;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
+        function permanentlyDeleteDeck(deckId) {
+            if (confirm("Supprimer ce deck définitivement maintenant ?")) {
+                window.appState.trash = window.appState.trash.filter(d => d.id !== deckId);
+                if (window.saveToFirestore) window.saveToFirestore();
+                renderTrashList();
+                renderLibrary();
+            }
+        }
+
+        function emptyTrashCompletely() {
+            if ((window.appState.trash || []).length === 0) return;
+            if (confirm("Vider définitivement TOUTE la corbeille ? Cette action est irréversible.")) {
+                window.appState.trash = [];
+                if (window.saveToFirestore) window.saveToFirestore();
+                renderTrashList();
+                renderLibrary();
+            }
         }
 
         function openImportModal() {
@@ -2146,14 +2191,18 @@
         }
 
         function deleteSingleDeck(deckId) {
-            if (confirm("Supprimer ce deck ?")) {
-                window.appState.decks = window.appState.decks.filter(d => d.id !== deckId);
-                selectedDeckIds.delete(deckId);
-                if (window.appState.currentDeckId === deckId) {
-                    window.appState.currentDeckId = window.appState.decks.length > 0 ? window.appState.decks[0].id : null;
+            if (confirm("Envoyer ce deck à la corbeille ?")) {
+                const deck = window.appState.decks.find(d => d.id === deckId);
+                if (deck) {
+                    window.appState.trash.push({ ...deck, deletedAt: Date.now() });
+                    window.appState.decks = window.appState.decks.filter(d => d.id !== deckId);
+                    selectedDeckIds.delete(deckId);
+                    if (window.appState.currentDeckId === deckId) {
+                        window.appState.currentDeckId = window.appState.decks.length > 0 ? window.appState.decks[0].id : null;
+                    }
+                    if (window.saveToFirestore) window.saveToFirestore();
+                    renderLibrary();
                 }
-                if (window.saveToFirestore) window.saveToFirestore();
-                renderLibrary();
             }
         }
 
