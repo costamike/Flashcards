@@ -103,7 +103,6 @@
         .card-question { font-size: 1.8rem; font-weight: 700; line-height: 1.3; padding: 0 1rem; word-break: break-word; }
         .card-answer { font-size: 1.1rem; line-height: 1.4; margin-top: 0.4rem; font-weight: 500; }
         
-        /* INDENTATION ET DÉCALAGES POUR LA PRÉCISION */
         .card-precision { 
             margin-top: 0.5rem; 
             padding: 0.5rem 0.8rem; 
@@ -114,13 +113,6 @@
             color: var(--text-main); 
             white-space: pre-wrap; 
             line-height: 1.5;
-        }
-        .card-precision ul, .card-precision ol {
-            padding-left: 1.2rem;
-            margin: 0.2rem 0;
-        }
-        .card-precision li {
-            margin-bottom: 0.2rem;
         }
 
         .deck-header-info { margin-bottom: 0.3rem; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem; width: 100%; }
@@ -189,7 +181,6 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
         .auth-status { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: var(--text-muted); }
 
-        /* BIBLIOTHÈQUE & DISPOSITION */
         .library-top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 0.8rem; }
         .library-top-right { display: flex; align-items: center; gap: 0.8rem; }
         .search-box-wrapper { position: relative; width: 280px; }
@@ -201,7 +192,6 @@
         .library-bottom-filters { display: flex; gap: 0.8rem; align-items: stretch; width: 100%; margin-bottom: 0.8rem; }
         .library-bottom-filters select { height: 42px; line-height: 1.2; flex: 1; max-width: 320px; }
         
-        /* CURSEUR DE MAÎTRISE AMÉLIORÉ */
         .mastery-slider-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.4rem 0.8rem; flex: 1; max-width: 450px; display: flex; flex-direction: column; justify-content: center; height: 42px; box-shadow: var(--shadow); }
         .mastery-single-track { position: relative; width: 100%; height: 20px; display: flex; align-items: center; }
         .mastery-single-track input[type="range"] { position: absolute; width: 100%; pointer-events: none; background: none; appearance: none; -webkit-appearance: none; margin: 0; }
@@ -215,7 +205,6 @@
         .search-result-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.6rem; padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; cursor: pointer; transition: transform 0.15s, border-color 0.15s; box-shadow: var(--shadow); }
         .search-result-card:hover { border-color: var(--primary); transform: translateY(-2px); }
 
-        /* REVISION TOOLBAR BOUTONS REHAUSSÉS */
         .revision-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; width: 100%; flex-wrap: wrap; background: var(--card-bg); border: 1px solid var(--border-color); padding: 0.4rem 0.8rem; border-radius: 0.6rem; box-shadow: var(--shadow); }
         .revision-toolbar .btn-secondary { background: var(--primary-light); color: var(--primary); border-color: var(--border-color); font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
         .revision-toolbar .btn-secondary:hover { background: var(--primary); color: white; border-color: var(--primary); }
@@ -379,6 +368,53 @@
         </div>
     </div>
 
+    <!-- MODAL SESSION PERSONNALISÉE MULTI-DECKS -->
+    <div id="modal-custom-session" class="modal-backdrop">
+        <div class="modal-box" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-sliders" style="color:var(--primary);"></i> Session Personnalisée</h3>
+                <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-custom-session')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Configurez les critères de révision pour les decks sélectionnés :</p>
+            
+            <div class="form-group">
+                <label>1. Statuts des cartes à inclure :</label>
+                <div style="display:flex; flex-direction:column; gap:0.4rem; background:var(--bg-color); padding:0.8rem; border-radius:0.5rem; border:1px solid var(--border-color);">
+                    <label class="checkbox-label" style="font-weight:700;">
+                        <input type="checkbox" id="cs-status-all" checked onchange="toggleCustomSessionStatusAll(this.checked)"> 📚 Tous les statuts
+                    </label>
+                    <hr style="border:none; border-top:1px solid var(--border-color); margin:0.2rem 0;">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem;">
+                        <label class="checkbox-label"><input type="checkbox" class="cs-status-cb" value="unseen" checked onchange="updateCustomSessionPool()"> ⚪ Non vu</label>
+                        <label class="checkbox-label"><input type="checkbox" class="cs-status-cb" value="review" checked onchange="updateCustomSessionPool()"> ❌ À revoir</label>
+                        <label class="checkbox-label"><input type="checkbox" class="cs-status-cb" value="reinforce" checked onchange="updateCustomSessionPool()"> ⚠️ Renforcer</label>
+                        <label class="checkbox-label"><input type="checkbox" class="cs-status-cb" value="known" checked onchange="updateCustomSessionPool()"> ✅ Maîtrisé</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top:1.2rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                    <label style="margin:0;">2. Volume de cartes à réviser :</label>
+                    <span id="cs-pool-info" style="font-size:0.8rem; font-weight:700; color:var(--primary);">0 cartes dispo</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.8rem; background:var(--bg-color); padding:0.8rem; border-radius:0.5rem; border:1px solid var(--border-color);">
+                    <input type="range" id="cs-pct-range" min="1" max="100" value="100" style="flex:1;" oninput="syncCustomSessionPctToCount(this.value)">
+                    <div style="display:flex; align-items:center; gap:0.3rem; width:110px;">
+                        <input type="number" id="cs-count-input" min="1" style="padding:0.3rem 0.5rem; text-align:center; font-weight:700;" oninput="syncCustomSessionCountToPct(this.value)">
+                        <span style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">cartes</span>
+                    </div>
+                </div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.3rem; text-align:right;" id="cs-pct-display">100% de la sélection</div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem; border-top:1px solid var(--border-color); padding-top:1rem;">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('modal-custom-session')">Annuler</button>
+                <button type="button" class="btn" onclick="startCustomSession()"><i class="fa-solid fa-play"></i> Lancer la révision</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-quick-switch" class="modal-backdrop">
         <div class="modal-box" style="max-width: 450px;">
             <div class="modal-header">
@@ -424,7 +460,7 @@
                 <div style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
                     <div onclick="openQuickSwitchModal()" style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem;" title="Changer de deck rapidement">
                         <h2 id="current-deck-title" style="font-size: 1.2rem;">Sélectionnez un deck</h2>
-                        <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem; color: var(--primary);"></i>
+                        <i class="fa-solid fa-chevron-down" id="current-deck-chevron" style="font-size: 0.8rem; color: var(--primary);"></i>
                         <span id="current-deck-category" style="background:var(--primary-light); color:var(--primary); padding:0.15rem 0.5rem; border-radius:1rem; font-size:0.75rem; font-weight:600; margin-left: 0.4rem;">--</span>
                     </div>
                     <div class="theme-selector mobile-theme-selector">
@@ -434,6 +470,7 @@
                 </div>
                 
                 <div class="revision-toolbar">
+                    <button class="btn btn-secondary btn-sm" id="btn-exit-custom-session" onclick="exitCustomSession()" style="display:none; color:var(--danger);"><i class="fa-solid fa-arrow-left"></i> Quitter Session</button>
                     <button class="btn btn-secondary btn-sm" id="btn-toggle-invert" onclick="toggleInvertFaces()"><i class="fa-solid fa-right-left"></i> Sens</button>
                     <button class="btn btn-secondary btn-sm" onclick="shuffleCurrentDeck()"><i class="fa-solid fa-shuffle"></i> Mélanger</button>
                     <select id="select-shortcut-mode" onchange="setShortcutMode(this.value)" class="btn btn-secondary btn-sm" style="font-weight:600; padding: 0.35rem; width: auto;">
@@ -518,10 +555,8 @@
                         <button class="search-clear-btn" id="search-clear-btn" onclick="clearGlobalSearch()" title="Vider"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                     
-                    <!-- BOUTON AJOUTER -->
                     <button class="btn btn-sm" onclick="openImportModal()"><i class="fa-solid fa-plus"></i> Ajouter</button>
 
-                    <!-- BOUTON CORBEILLE DISCRET (ICÔNE ROUGE + COMPTEUR) -->
                     <button class="btn btn-secondary btn-sm" id="btn-trash-header" onclick="openTrashModal()" title="Corbeille" style="display:none; color:var(--danger); border-color:var(--danger);">
                         <i class="fa-solid fa-trash-can"></i> (<span id="trash-count-badge">0</span>)
                     </button>
@@ -551,6 +586,10 @@
                 <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                     <button class="btn btn-secondary btn-sm" id="btn-toggle-select-all" onclick="toggleSelectAllFiltered()">
                         <i class="fa-solid fa-square-check"></i> <span id="toggle-select-all-label">Tout sélectionner</span>
+                    </button>
+                    <!-- BOUTON REVISER SELECTION (APPARAÎT QUAND DES DECKS SONT SÉLECTIONNÉS) -->
+                    <button class="btn btn-sm" id="btn-custom-session-selected" onclick="openCustomSessionModal()" style="display:none; background:var(--primary);">
+                        <i class="fa-solid fa-play"></i> Réviser la sélection (<span id="custom-session-selected-count">0</span>)
                     </button>
                     <!-- BOUTON EXPORTER (APPARAÎT QUAND DES DECKS SONT SÉLECTIONNÉS) -->
                     <button class="btn btn-secondary btn-sm" id="btn-export-selected" onclick="openExportModal()" style="display:none;">
@@ -801,7 +840,6 @@
                         window.appState.decks = docSnap.data().decks;
                         window.appState.trash = docSnap.data().trash || [];
                         
-                        // Nettoyage automatique de la corbeille (> 24h)
                         const now = Date.now();
                         const twentyFourHours = 24 * 60 * 60 * 1000;
                         const initialTrashCount = window.appState.trash.length;
@@ -910,7 +948,8 @@
             isInverted: false,
             libraryView: 'grid',
             activeFolder: null,
-            searchQuery: ''
+            searchQuery: '',
+            customSession: null // null ou { cards: [], totalAvailable: 0 }
         };
 
         let selectedDeckIds = new Set();
@@ -918,6 +957,8 @@
         let openCardsPreviewId = null;
         let draggedIndex = null;
         let hasClearedSearchOnce = false;
+
+        let currentCustomSessionPool = []; // vivier filtré pour la modale
 
         document.addEventListener('DOMContentLoaded', () => {
             applyThemeUI(window.appState.theme);
@@ -1068,14 +1109,39 @@
         function getCurrentDeck() { return window.appState.decks.find(d => d.id === window.appState.currentDeckId); }
 
         function loadCurrentDeck(resetIndex = false) {
-            const deck = getCurrentDeck();
-            if (!deck) {
-                document.getElementById('current-deck-title').innerText = "Aucun deck sélectionné";
-                document.getElementById('current-deck-category').innerText = "--";
+            const titleEl = document.getElementById('current-deck-title');
+            const catEl = document.getElementById('current-deck-category');
+            const exitBtn = document.getElementById('btn-exit-custom-session');
+            const filterBar = document.getElementById('filter-buttons-container');
+            const chevron = document.getElementById('current-deck-chevron');
+
+            if (window.appState.customSession) {
+                // MODE SESSION PERSONNALISÉE
+                titleEl.innerText = "⚡ Session Multi-Decks";
+                catEl.innerText = `${window.appState.customSession.cards.length} cartes`;
+                if (exitBtn) exitBtn.style.display = 'inline-flex';
+                if (filterBar) filterBar.style.display = 'none';
+                if (chevron) chevron.style.display = 'none';
+
+                if (resetIndex) window.appState.currentIndex = 0;
+                resetFlipState();
+                renderCard();
                 return;
             }
-            document.getElementById('current-deck-title').innerText = deck.title || deck.deckName;
-            document.getElementById('current-deck-category').innerText = deck.category || 'Général';
+
+            // MODE DECK UNIQUE NORMAL
+            if (exitBtn) exitBtn.style.display = 'none';
+            if (filterBar) filterBar.style.display = 'flex';
+            if (chevron) chevron.style.display = 'inline-block';
+
+            const deck = getCurrentDeck();
+            if (!deck) {
+                titleEl.innerText = "Sélectionnez un deck";
+                catEl.innerText = "--";
+                return;
+            }
+            titleEl.innerText = deck.title || deck.deckName;
+            catEl.innerText = deck.category || 'Général';
             if (resetIndex) {
                 window.appState.currentIndex = 0;
             }
@@ -1084,7 +1150,24 @@
             renderCard();
         }
 
+        function exitCustomSession() {
+            window.appState.customSession = null;
+            loadCurrentDeck(true);
+        }
+
         function shuffleCurrentDeck() {
+            if (window.appState.customSession) {
+                const list = window.appState.customSession.cards;
+                for (let i = list.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [list[i], list[j]] = [list[j], list[i]];
+                }
+                window.appState.currentIndex = 0;
+                resetFlipState();
+                renderCard();
+                return;
+            }
+
             const deck = getCurrentDeck();
             if (!deck || deck.cards.length <= 1) return;
             for (let i = deck.cards.length - 1; i > 0; i--) {
@@ -1103,6 +1186,7 @@
         }
 
         function setFilter(filterType) {
+            if (window.appState.customSession) return;
             window.appState.filter = filterType;
             window.appState.currentIndex = 0;
             updateFilterButtonsUI();
@@ -1111,6 +1195,7 @@
         }
 
         function updateFilterButtonsUI() {
+            if (window.appState.customSession) return;
             const deck = getCurrentDeck();
             if (!deck) return;
 
@@ -1132,6 +1217,9 @@
         }
 
         function getFilteredCards() {
+            if (window.appState.customSession) {
+                return window.appState.customSession.cards;
+            }
             const deck = getCurrentDeck();
             if (!deck) return [];
             if (window.appState.filter === 'all') return deck.cards;
@@ -1140,11 +1228,14 @@
 
         function renderCard() {
             const filtered = getFilteredCards();
-            updateFilterButtonsUI();
+            
+            if (!window.appState.customSession) {
+                updateFilterButtonsUI();
+            }
             updateStatsPercentages();
 
             if (filtered.length === 0) {
-                document.getElementById('card-question').innerText = "Aucune carte dans ce filtre.";
+                document.getElementById('card-question').innerText = "Aucune carte dans cette session.";
                 document.getElementById('card-answer').innerText = "--";
                 document.getElementById('card-precision').style.display = 'none';
                 document.getElementById('front-status-badge').innerText = "--";
@@ -1182,14 +1273,22 @@
         }
 
         function updateStatsPercentages() {
-            const deck = getCurrentDeck();
-            if (!deck || deck.cards.length === 0) return;
-            const total = deck.cards.length;
+            let cardsList = [];
+            if (window.appState.customSession) {
+                cardsList = window.appState.customSession.cards;
+            } else {
+                const deck = getCurrentDeck();
+                if (!deck) return;
+                cardsList = deck.cards;
+            }
 
-            const unseenPct = Math.round((deck.cards.filter(c => (c.status || 'unseen') === 'unseen').length / total) * 100);
-            const reviewPct = Math.round((deck.cards.filter(c => c.status === 'review').length / total) * 100);
-            const reinforcePct = Math.round((deck.cards.filter(c => c.status === 'reinforce').length / total) * 100);
-            const knownPct = Math.round((deck.cards.filter(c => c.status === 'known').length / total) * 100);
+            if (cardsList.length === 0) return;
+            const total = cardsList.length;
+
+            const unseenPct = Math.round((cardsList.filter(c => (c.status || 'unseen') === 'unseen').length / total) * 100);
+            const reviewPct = Math.round((cardsList.filter(c => c.status === 'review').length / total) * 100);
+            const reinforcePct = Math.round((cardsList.filter(c => c.status === 'reinforce').length / total) * 100);
+            const knownPct = Math.round((cardsList.filter(c => c.status === 'known').length / total) * 100);
 
             document.getElementById('stat-unseen-pct').innerText = `${unseenPct}%`;
             document.getElementById('stat-review-pct').innerText = `${reviewPct}%`;
@@ -1230,7 +1329,18 @@
                 resetFlipState();
                 
                 let currentIndex = window.appState.currentIndex;
-                filtered[currentIndex].status = status;
+                const currentCard = filtered[currentIndex];
+                currentCard.status = status;
+
+                // SI SESSION PERSONNALISÉE MULTI-DECKS : RÉPERCUTER SUR LE DECK SOURCE
+                if (window.appState.customSession && currentCard._sourceDeckId) {
+                    const sourceDeck = window.appState.decks.find(d => d.id === currentCard._sourceDeckId);
+                    if (sourceDeck) {
+                        const targetCard = sourceDeck.cards.find(c => c.id === currentCard.id);
+                        if (targetCard) targetCard.status = status;
+                    }
+                }
+
                 if (window.saveToFirestore) window.saveToFirestore();
 
                 const newFiltered = getFilteredCards();
@@ -1251,7 +1361,8 @@
             if (filtered.length === 0) return;
             const currentCard = filtered[window.appState.currentIndex];
             if (currentCard) {
-                openEditCardModal(window.appState.currentDeckId, currentCard.id);
+                const targetDeckId = currentCard._sourceDeckId || window.appState.currentDeckId;
+                openEditCardModal(targetDeckId, currentCard.id);
             }
         }
 
@@ -1334,6 +1445,7 @@
         }
 
         function openQuickSwitchModal() {
+            if (window.appState.customSession) return;
             document.getElementById('quick-switch-search').value = '';
             renderQuickSwitchList('');
             document.getElementById('modal-quick-switch').classList.add('active');
@@ -1383,6 +1495,7 @@
                     ${isCurrent ? '<i class="fa-solid fa-check" style="color:var(--primary);"></i>' : ''}
                 `;
                 item.onclick = () => {
+                    window.appState.customSession = null;
                     window.appState.currentDeckId = deck.id;
                     closeModal('modal-quick-switch');
                     loadCurrentDeck(true);
@@ -1408,6 +1521,7 @@
         }
 
         function jumpToCardResult(deckId, cardId) {
+            window.appState.customSession = null;
             window.appState.currentDeckId = deckId;
             window.appState.filter = 'all';
 
@@ -1754,6 +1868,7 @@
         function updateLibraryActionButtonsUI() {
             const deleteBtn = document.getElementById('btn-delete-selected');
             const exportBtn = document.getElementById('btn-export-selected');
+            const customSessionBtn = document.getElementById('btn-custom-session-selected');
             const toggleSelectBtnLabel = document.getElementById('toggle-select-all-label');
             const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
             
@@ -1767,6 +1882,11 @@
             if (exportBtn) {
                 document.getElementById('export-selected-count').innerText = totalSelectedCount;
                 exportBtn.style.display = totalSelectedCount > 0 ? 'inline-flex' : 'none';
+            }
+
+            if (customSessionBtn) {
+                document.getElementById('custom-session-selected-count').innerText = totalSelectedCount;
+                customSessionBtn.style.display = totalSelectedCount > 0 ? 'inline-flex' : 'none';
             }
 
             if (toggleSelectBtnLabel) {
@@ -1786,6 +1906,115 @@
                     }
                 }
             }
+        }
+
+        // --- GESTION DE LA SESSION PERSONNALISÉE MULTI-DECKS ---
+        function getSelectedDecksList() {
+            const isFoldersView = window.appState.libraryView === 'folders' && window.appState.activeFolder === null;
+            if (isFoldersView) {
+                return window.appState.decks.filter(d => selectedFolderNames.has(d.category || "Général"));
+            }
+            return window.appState.decks.filter(d => selectedDeckIds.has(d.id));
+        }
+
+        function openCustomSessionModal() {
+            const selectedDecks = getSelectedDecksList();
+            if (selectedDecks.length === 0) return;
+
+            document.getElementById('cs-status-all').checked = true;
+            document.querySelectorAll('.cs-status-cb').forEach(cb => cb.checked = true);
+            document.getElementById('cs-pct-range').value = 100;
+
+            updateCustomSessionPool();
+            document.getElementById('modal-custom-session').classList.add('active');
+        }
+
+        function toggleCustomSessionStatusAll(isChecked) {
+            document.querySelectorAll('.cs-status-cb').forEach(cb => cb.checked = isChecked);
+            updateCustomSessionPool();
+        }
+
+        function updateCustomSessionPool() {
+            const selectedDecks = getSelectedDecksList();
+            const allowedStatuses = new Set();
+            document.querySelectorAll('.cs-status-cb:checked').forEach(cb => allowedStatuses.add(cb.value));
+
+            // Mettre à jour l'état de la case "Tous"
+            const allCbs = document.querySelectorAll('.cs-status-cb');
+            const checkedCbs = document.querySelectorAll('.cs-status-cb:checked');
+            document.getElementById('cs-status-all').checked = (allCbs.length === checkedCbs.length);
+
+            // Collecter toutes les cartes qui correspondent aux statuts cochés
+            currentCustomSessionPool = [];
+            selectedDecks.forEach(deck => {
+                deck.cards.forEach(card => {
+                    const st = card.status || 'unseen';
+                    if (allowedStatuses.has(st)) {
+                        currentCustomSessionPool.push({
+                            ...card,
+                            _sourceDeckId: deck.id
+                        });
+                    }
+                });
+            });
+
+            const totalAvail = currentCustomSessionPool.length;
+            document.getElementById('cs-pool-info').innerText = `${totalAvail} carte${totalAvail > 1 ? 's' : ''} disponible${totalAvail > 1 ? 's' : ''}`;
+
+            const pct = parseInt(document.getElementById('cs-pct-range').value, 10);
+            syncCustomSessionPctToCount(pct);
+        }
+
+        function syncCustomSessionPctToCount(pctVal) {
+            const totalAvail = currentCustomSessionPool.length;
+            const count = totalAvail === 0 ? 0 : Math.max(1, Math.round((pctVal / 100) * totalAvail));
+            
+            document.getElementById('cs-count-input').value = count;
+            document.getElementById('cs-pct-display').innerText = `${pctVal}% de la sélection (${count}/${totalAvail})`;
+        }
+
+        function syncCustomSessionCountToPct(countVal) {
+            const totalAvail = currentCustomSessionPool.length;
+            if (totalAvail === 0) {
+                document.getElementById('cs-pct-range').value = 100;
+                document.getElementById('cs-pct-display').innerText = `0% de la sélection`;
+                return;
+            }
+
+            let num = parseInt(countVal, 10);
+            if (isNaN(num) || num < 1) num = 1;
+            if (num > totalAvail) num = totalAvail;
+
+            const pct = Math.round((num / totalAvail) * 100);
+            document.getElementById('cs-pct-range').value = pct;
+            document.getElementById('cs-pct-display').innerText = `${pct}% de la sélection (${num}/${totalAvail})`;
+        }
+
+        function startCustomSession() {
+            if (currentCustomSessionPool.length === 0) {
+                alert("Aucune carte ne correspond aux statuts sélectionnés.");
+                return;
+            }
+
+            const targetCount = parseInt(document.getElementById('cs-count-input').value, 10) || currentCustomSessionPool.length;
+
+            // Mélange aléatoire (Fisher-Yates) du vivier complet
+            const poolCopy = [...currentCustomSessionPool];
+            for (let i = poolCopy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [poolCopy[i], poolCopy[j]] = [poolCopy[j], poolCopy[i]];
+            }
+
+            // Extraction du nombre de cartes demandé
+            const selectedCards = poolCopy.slice(0, targetCount);
+
+            window.appState.customSession = {
+                cards: selectedCards,
+                totalAvailable: currentCustomSessionPool.length
+            };
+
+            closeModal('modal-custom-session');
+            switchTab('revision');
         }
 
         function openExportModal() {
@@ -2202,7 +2431,7 @@
             if (window.saveToFirestore) window.saveToFirestore();
             closeModal('modal-edit-card');
             renderLibrary();
-            if (window.appState.currentDeckId) loadCurrentDeck(false);
+            loadCurrentDeck(false);
         }
 
         function deleteCardFromModal() {
@@ -2213,12 +2442,16 @@
             const deck = window.appState.decks.find(d => d.id === deckId);
             if (deck) {
                 deck.cards = deck.cards.filter(c => c.id !== cardId);
+                
+                // Si en session personnalisée, retirer aussi de la session éphémère
+                if (window.appState.customSession) {
+                    window.appState.customSession.cards = window.appState.customSession.cards.filter(c => c.id !== cardId);
+                }
+
                 if (window.saveToFirestore) window.saveToFirestore();
                 closeModal('modal-edit-card');
                 renderLibrary();
-                if (window.appState.currentDeckId === deckId) {
-                    loadCurrentDeck(false);
-                }
+                loadCurrentDeck(false);
             }
         }
 
@@ -2310,6 +2543,7 @@
         }
 
         function selectDeck(deckId) {
+            window.appState.customSession = null;
             window.appState.currentDeckId = deckId;
             switchTab('revision');
         }
