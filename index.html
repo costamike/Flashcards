@@ -994,11 +994,7 @@
         }
 
         function forceAppRefresh() {
-            renderLibrary();
-            loadCurrentDeck(false);
-            alert("Application synchronisée avec succès !");
-            const nav = document.getElementById('main-nav');
-            if (nav) nav.classList.remove('mobile-open');
+         window.location.reload(true);
         }
 
         function setupKeyboardShortcuts() {
